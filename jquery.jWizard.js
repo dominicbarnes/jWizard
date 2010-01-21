@@ -3,7 +3,7 @@
  * @author	Dominic Barnes
  * @desc	A wizard plugin that actually works with minimal configuration. (per jQuery's design philosophy)
  * @type	jQuery
- * @version	0.7b
+ * @version	0.7.1b
  */
 (function($){
 	var jWizard = function(element, options) {
@@ -280,7 +280,11 @@
 
 		buttons.build();
 
-		w.children('div').addClass(options.cssClasses.steps.all);	// Add the assigned class to the Step <div>'s
+		w.children('div').addClass(options.cssClasses.steps.all).each(function(x) {
+			$this = $(this);
+			if ($this.attr('id') == '')
+				$this.attr('id', 'step' + x);
+		});	
 		w.itemCount = w.find(selStepsAll).size();
 
 		w.find(selStepsAll).hide();
