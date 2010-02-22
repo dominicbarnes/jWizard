@@ -3,7 +3,7 @@
  * @author	Dominic Barnes
  * @desc	A wizard plugin that actually works with minimal configuration. (per jQuery's design philosophy)
  * @type	jQuery
- * @version	0.9.0b
+ * @version	0.9.1b
  */
 (function($){
 	var jWizard = function(element, options) {
@@ -66,22 +66,21 @@
 				onFinish: function(e) { return true; }
 			}
 		};
-		
-		log("Start init for:", element);
-		log("Options passed in:", options);
 
 		/* Assign our Default Parameters (override with anything the end-user supplies) */
 		var options = $.extend(true, {}, defaults, options);
 
 		var w = $(element);	// Create a reference to the wizard itself
 
+		_log("Start init for:", element);
+
 		var	selStepsAll = 'div.' + options.cssClasses.steps.all;
 
 		w.changeStep = function(nextStep, isInit) {
 			if (typeof nextStep === 'number')
 			{
-				log("changeStep() called with a numeric index passed:", nextStep);
-				
+				_log("changeStep() called with a numeric index passed:", nextStep);
+
 				if (nextStep < 0 || nextStep > (w.itemCount - 1))
 				{
 					alert('Index ' + nextStep + ' Out of Range');
@@ -92,8 +91,8 @@
 			}
 			else if (typeof nextStep === 'object')
 			{
-				log("changeStep() called with an object passed:", nextStep);
-			
+				_log("changeStep() called with an object passed:", nextStep);
+
 				if ( !nextStep.is(selStepsAll) )
 				{
 					alert('Supplied Element is NOT one of the Wizard Steps');
@@ -105,11 +104,11 @@
 			{
 				if (w.currentStep.triggerHandler('onDeactivate') === false)
 				{
-					log("onDeactivate() returned false, cancelling changeStep()", w.currentStep, nextStep);
+					_log("onDeactivate() returned false, cancelling changeStep()", w.currentStep, nextStep);
 					return false;
 				}
 			}
-				
+
 			w.currentStep.hide();
 			if (!options.hideTitle)	w.titleBox.text(nextStep.attr('title'));
 
@@ -121,14 +120,14 @@
 			buttons.update();
 			if (options.enableMenu)	menu.update();
 			if (options.counter.enable)	counter.update();
-			
-			log("changeStep() complete", nextStep);
+
+			_log("changeStep() complete", nextStep);
 		};
-		
-		function log() {
+
+		function _log() {
 			if (options.debug)
 			{
-				window.console && console.log[console.firebug ? 'apply' : 'call'](console, "jWizard Log:", Array.prototype.slice.call(arguments));
+				window.console && console._log[console.firebug ? 'apply' : 'call'](console, "jWizard _log:", Array.prototype.slice.call(arguments));
 			}
 		}
 
@@ -258,19 +257,19 @@
 				w.finishButton = $('<button id="jw-btnFinish" type="' + options.finishButtonType + '" class="' + options.cssClasses.buttons.finish + '">' + options.buttonText.finish + '</button>');
 
 				w.nextButton.click(function() {
-					log("Next Button Clicked");
+					_log("Next Button Clicked");
 					w.changeStep(w.currentStep.next(selStepsAll));
 				});
 				w.previousButton.click(function() {
-					log("Previous Button Clicked");
+					_log("Previous Button Clicked");
 					w.changeStep(w.currentStep.prev(selStepsAll));
 				});
 				w.cancelButton.click(function() {
-					log("Cancel Button Clicked!");
+					_log("Cancel Button Clicked!");
 					w.trigger('onCancel');
 				});
 				w.finishButton.click(function() {
-					log("Finish Button Clicked!");
+					_log("Finish Button Clicked!");
 					w.trigger('onFinish');
 				});
 
@@ -309,16 +308,16 @@
 		w.bind('onCancel', options.events.onCancel);
 
 		buttons.build();
-		
+
 		var steps = w.children("div");
-		log("Steps found for wizard", steps);
+		_log("Steps found for wizard", steps);
 
 		steps.addClass(options.cssClasses.steps.all).each(function(x) {
 			$this = $(this);
 			if ($this.attr('id') == '')
 				$this.attr('id', 'step' + x);
 		});
-		
+
 		if (options.validateSteps)
 		{
 			steps.bind('onDeactivate', function(e) {
@@ -330,7 +329,7 @@
 				return isValid;
 			});
 		}
-		
+
 		w.itemCount = steps.length;
 
 		steps.hide();
