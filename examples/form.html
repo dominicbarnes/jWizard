@@ -3,14 +3,50 @@
 
 <head>
 
-<link rel="stylesheet" type="text/css" href="css/redmond/jquery-ui-1.8.custom.css" />
+<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/base/jquery-ui.css" />
+<link rel="stylesheet" type="text/css" href="css/clearfix.css" />
 <link rel="stylesheet" type="text/css" href="../jWizard.base.css" />
+
+<style type="text/css">
+fieldset {
+	border: none;
+}
+legend {
+	display: none;
+}
+
+.error {
+	color: red;
+}
+
+.required {
+	font-weight: bold;
+}
+div.field {
+	padding: .5em;
+	border-bottom: 1px dashed #ccc;
+	margin-bottom: .5em;
+}
+	div.field label {
+		display: block;
+		width: 15em;
+		float: left;
+	}
+	div.radio label {
+		width: auto;
+		margin-right: 2em;
+	}
+	div.field input {
+		display: inline;
+	}
+</style>
 
 </head>
 
 <body>
 
-<button id="btnTest">TEST</button>
+<div id="switcher"></div>
+<br />
 
 <form id="jWizard" method="POST">
 	<div title="Welcome">
@@ -81,13 +117,38 @@
 
 <script type="text/javascript" src="js/jquery.min.js"></script>
 <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/jquery.validate.js"></script>
+<script type="text/javascript" src="js/jquery-ui.themeswitcher.js"></script>
 <script type="text/javascript" src="../jquery.jWizard.js"></script>
+
 <script type="text/javascript">
 $(document).ready(function() {
-	$("#jWizard").jWizard({ debug: true });
+	$('#switcher').themeswitcher();
 
-	$("#btnTest").click(function() {
-		$("#jWizard").jWizard("option", "buttons.nextText", "Something Else!");
+	$("#jWizard").jWizard({
+		validate: true,
+		debug: true,
+		buttons: {
+			cancelType: "reset",	// Resets the form when the Cancel Button is clicked (use in conjunction with onCancel to jump to the first step)
+			finishType: "submit"	// Will POST the form when the Finish Button is clicked
+		},
+		events: {
+			onCancel: function() {
+				$("#jWizard").jWizard("firstStep");	// Jumps to the first step in the Wizard after being cancelled
+			}
+		}
+	}).validate({
+		rules: {
+			name: {
+				required: true,
+				minlength: 2
+			},
+			quest: {
+				required: true,
+				minlength: 5
+			},
+			gender: "required"
+		}
 	});
 });
 </script>

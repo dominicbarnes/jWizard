@@ -70,6 +70,16 @@
 			}
 		},
 
+		/**  */
+		firstStep: function() {
+			this._changeStep(0);
+		},
+
+		/**  */
+		lastStep: function() {
+			this._changeStep(this._stepCount - 1);
+		},
+
 		/** Proceeds to the next `step` in the collection */
 		nextStep: function() {
 			this._changeStep(this._stepIndex + 1);
@@ -157,7 +167,13 @@
 
 			if (this.options.validate) {
 				$steps.bind("onDeactivate", function(e) {
-					return $(this).valid();
+					var $inputs = $(this).find(":input");
+
+					if ($inputs.length > 0) {
+						return Boolean($inputs.valid());
+					}
+
+					return true;
 				});
 			}
 
@@ -176,6 +192,9 @@
 				$steps = this._cache.steps,
 				$currentStep = this._cache.currentStep,
 				bIsFirstStep = bIsFirstStep || false;
+
+			if (typeof $currentStep !== "undefined" && $currentStep.triggerHandler("onDeactivate") === false)
+				return false;
 
 			if (bIsFirstStep && this.options.effects.step.enable)
 				this.options.effects.step.enable = false;
@@ -200,9 +219,6 @@
 			this._cache.currentStep = nextStep;
 
 			if (typeof $currentStep !== "undefined") {
-				if ($currentStep.triggerHandler("onDeactivate") === false)
-					return false;
-
 				this.options.effects.step.hide.callback = $.proxy(function() {
 					this._effect(nextStep, "step", "show", "show");
 				}, this);
@@ -215,8 +231,6 @@
 			} else {
 				this._effect(nextStep, "step", "show", "show");
 			}
-
-			this._log(this.options.buttons.nextText);
 
 			if (bIsFirstStep && !this.options.effects.step.enable)
 				this.options.effects.step.enable = true;
@@ -235,10 +249,12 @@
 		 * 	Binds a click event to each of the <li> that will change the step accordingly
 		 */
 		_buildMenu: function() {
+			this._cache.wizard.addClass("jw-hasmenu");
+
 			var tmpHtml = ['<div id="jw-menu-wrap"><div id="jw-menu"><ol>'];
 
 			this._cache.steps.each(function(x) {
-				tmpHtml.push('<li class="' + ((x === 0) ? "current ui-state-highlight" : "inactive ui-state-disabled") + ' ui-corner-all"><a step="' + x + '">' + $(this).attr('title') + '</a></li>');
+				tmpHtml.push('<li class="' + ((x === 0) ? "jw-current ui-state-highlight" : "jw-inactive ui-state-disabled") + ' ui-corner-all"><a step="' + x + '">' + $(this).attr('title') + '</a></li>');
 			});
 			tmpHtml.push("</ol></div></div>");
 
@@ -248,7 +264,7 @@
 				$target = $(event.target);
 				var iNextStep = parseInt($target.attr("step"));
 
-				if ($target.parent().hasClass("active"))
+				if ($target.parent().hasClass("jw-active"))
 					this._changeStep(iNextStep, iNextStep <= this._stepIndex);
 			}, this));
 		},
@@ -264,7 +280,7 @@
 			var iCurrentStepIndex = this._stepIndex,
 				$currentStep = this._cache.currentStep,
 				$menu = this._cache.menu,
-				menuItemStatus = "active";
+				menuItemStatus = "jw-active";
 
 			this._effect(this._cache.menu.find("li:eq(" + iCurrentStepIndex + ")"), "menu", "change");
 
@@ -275,11 +291,11 @@
 					sClass = "";
 
 				if ( iStep < iCurrentStepIndex ) {
-					sClass += "active ui-state-default ui-corner-all";
+					sClass += "jw-active ui-state-default ui-corner-all";
 				} else if ( iStep == iCurrentStepIndex ) {
-					sClass += "current ui-state-highlight ui-corner-all";
+					sClass += "jw-current ui-state-highlight ui-corner-all";
 				} else if ( iStep > iCurrentStepIndex ) {
-					sClass += "inactive ui-state-disabled ui-corner-all";
+					sClass += "jw-inactive ui-state-disabled ui-corner-all";
 					$a.removeAttr("href");
 				}
 
@@ -293,15 +309,15 @@
 		 * 	A new <span> is created and used as the main element
 		 */
 		_buildCounter: function() {
-			$counter = this._cache.counter = $('<span id="jw-counter" class="ui-widget-content ui-corner-all ' + this.options.counter.orientText + '" />'),
+			$counter = this._cache.counter = $('<span id="jw-counter" class="ui-widget-content ui-corner-all jw-' + this.options.counter.orientText + '" />'),
 				$wizard = this._cache.wizard,
 				$footer = this._cache.footer;
 
 			$footer.prepend($counter);
 
-			if (this.options.counter.startCount)
+			if (!this.options.counter.startCount)
 				this._stepCount--;
-			if (this.options.counter.finishCount)
+			if (!this.options.counter.finishCount)
 				this._stepCount--;
 
 			if (this.options.counter.startCount && this._stepIndex > 0)
@@ -324,15 +340,30 @@
 			$wizard = this._cache.wizard,
 				$counter = this._cache.counter,
 				counterOptions = this.options.counter,
-				percentage = Math.round((this._stepIndex / this._stepCount) * 100),
-				counterText = "";
+				counterText = "",
+				actualIndex = this._stepIndex,
+				actualCount = this._stepCount;
+
+			if (!counterOptions.startCount) {
+				actualIndex--;
+				actualCount--;
+			}
 
 			this._effect($counter, "counter", "change");
+
+			var percentage = Math.round((actualIndex / actualCount) * 100);
 
 			if (counterOptions.type == "percentage") {
 				counterText = ((percentage <= "100") ? percentage : "100") + "%";
 			} else if (counterOptions.type == "count") {
-				counterText = ((this._stepIndex <= this._stepCount) ? this._stepIndex : this._stepCount) + " of " + this._stepCount;
+				if (actualIndex < 0)
+					counterText = 0;
+				else if (actualIndex > actualCount)
+					counterText = actualCount;
+				else
+					counterText = actualIndex;
+
+				counterText += " of " + actualCount;
 			} else {
 				counterText = "N/A";
 			}
@@ -365,7 +396,7 @@
 			buttonOptions = this.options.buttons;
 
 			var cancelButton = this._cache.cancelButton = $('<button id="jw-btnCancel" class="ui-state-default ui-priority-secondary ui-corner-all" type="' + buttonOptions.cancelType + '">' + buttonOptions.cancelText + '</button>')
-				.click($.proxy(this.options.onCancel, this));
+				.click($.proxy(this.options.events.onCancel, this));
 
 			var previousButton = this._cache.previousButton = $('<button id="jw-btnPrevious" class="ui-state-default ui-corner-all" type="button">' + buttonOptions.previousText + '</button>')
 				.click($.proxy(this, 'previousStep'));
@@ -374,7 +405,7 @@
 				.click($.proxy(this, 'nextStep'));
 
 			var finishButton = this._cache.finishButton = $('<button id="jw-btnFinish" class="ui-state-default ui-state-highlight ui-corner-all" type="' + buttonOptions.finishType + '">' + buttonOptions.finishText + '</button>')
-				.click($.proxy(this.options.onFinish, this));
+				.click($.proxy(this.options.events.onFinish, this));
 
 			$footer = this._cache.footer = $('<div id="jw-footer" class="ui-widget-header ui-corner-bottom" />');
 			$wizard.append(
@@ -426,7 +457,7 @@
 			debug: false,
 
 			titleHide: false,
-			menuEnable: true,
+			menuEnable: false,
 
 			buttons: {
 				cancelHide: false,
@@ -454,7 +485,7 @@
 				enable: false,
 				step: {
 					enable: true,
-					show: {
+					hide: {
 						type: "slide",
 						options: {
 							direction: "left"
@@ -462,7 +493,7 @@
 						duration: "normal",
 						callback: $.noop
 					},
-					hide: {
+					show: {
 						type: "slide",
 						options: {
 							direction: "left"
@@ -473,13 +504,13 @@
 				},
 				title: {
 					enable: true,
-					show: {
+					hide: {
 						type: "slide",
 						options: {},
 						duration: "normal",
 						callback: $.noop
 					},
-					hide: {
+					show: {
 						type: "slide",
 						options: {},
 						duration: "normal",

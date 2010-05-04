@@ -1,33 +1,3 @@
-fieldset {
-	border: none;
-}
-legend {
-	display: none;
-}
-
-.required {
-	font-weight: bold;
-}
-div.field {
-	padding: .5em;
-	border-bottom: 1px dashed #ccc;
-	margin-bottom: .5em;
-}
-	div.field label {
-		display: block;
-		width: 15em;
-		float: left;
-	}
-	div.radio label {
-		width: auto;
-		margin-right: 2em;
-	}
-	div.field input {
-		display: inline;
-	}
-
-
-
 /* Wizard-specific configuration */
 #jWizard {
 	width: 800px;
@@ -58,10 +28,12 @@ div.field {
 					padding: .25em .5em;
 					margin-bottom: .25em;
 				}
+		#jWizard.jw-hasmenu #jw-steps-wrap {
+			margin-left: 10em;
+		}
 		#jw-steps-wrap {
 			height: 15em;
 			overflow: auto;
-			margin-left: 10em;
 			padding: .5em;
 		}
 			#jw-content p {
@@ -76,34 +48,36 @@ div.field {
 		#jw-counter {
 			float: left;
 			padding: .2em;
-			width: 10em;
 		}
 			/* Text: Left -- Bar: Right */
-			#jw-counter.left #jw-counter-text {
+			#jw-counter.jw-left #jw-counter-text {
 				float: left;
 				padding: .4em;
 			}
-			#jw-counter.left #jw-counter-progressbar {
+			#jw-counter.jw-left #jw-counter-progressbar {
 				display: block;
 				width: 6em;
 				float: right;
 			}
 			/* Text Center-aligned over Progress Bar */
-			#jw-counter.center #jw-counter-text {
+			#jw-counter.jw-center #jw-counter-text {
 				float: left;
 				width: 10em;
-				text-align: center;
 				padding: .4em;
+				text-align: center;
 			}
-			#jw-counter.center #jw-counter-progressbar {
+			#jw-counter.jw-center #jw-counter-progressbar {
 				display: block;
 			}
 			/* Bar: Left -- Text: Right */
-			#jw-counter.right #jw-counter-text {
+			#jw-counter.jw-right {
+				text-align: right;
+			}
+			#jw-counter.jw-right #jw-counter-text {
 				float: right;
 				padding: .4em;
 			}
-			#jw-counter.right #jw-counter-progressbar {
+			#jw-counter.jw-right #jw-counter-progressbar {
 				display: block;
 				width: 6em;
 				float: left;
@@ -115,25 +89,3 @@ div.field {
 				padding: .5em 1em;
 				margin-left: 1em;
 			}
-
-/* Clearfix */
-.clearfix:after {
-	content: ".";
-	display: block;
-	clear: both;
-	visibility: hidden;
-	line-height: 0;
-	height: 0;
-}
-
-.clearfix {
-	display: inline-block;
-}
-
-html[xmlns] .clearfix {
-	display: block;
-}
-
-* html .clearfix {
-	height: 1%;
-}
