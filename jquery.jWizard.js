@@ -220,6 +220,7 @@
 
 			if (typeof $currentStep !== "undefined") {
 				this.options.effects.step.hide.callback = $.proxy(function() {
+					nextStep.trigger("onActivate");
 					this._effect(nextStep, "step", "show", "show");
 				}, this);
 
@@ -229,6 +230,7 @@
 
 				this._effect($currentStep, "step", "hide", "hide");
 			} else {
+				nextStep.trigger("onActivate");
 				this._effect(nextStep, "step", "show", "show");
 			}
 
