@@ -1,426 +1,515 @@
 /**
- * @name	jWizard Plugin
+ * A wizard widget that actually works with minimal configuration. (per jQuery's design philosophy)
+ *
+ * @name	jWizard jQuery Widget
  * @author	Dominic Barnes
- * @desc	A wizard plugin that actually works with minimal configuration. (per jQuery's design philosophy)
- * @type	jQuery
- * @version	0.9.1b
- 
- Copyright (c) 2010 Dominic Barnes
-
- Permission is hereby granted, free of charge, to any person
- obtaining a copy of this software and associated documentation
- files (the "Software"), to deal in the Software without
- restriction, including without limitation the rights to use,
- copy, modify, merge, publish, distribute, sublicense, and/or sell
- copies of the Software, and to permit persons to whom the
- Software is furnished to do so, subject to the following
- conditions:
-
- The above copyright notice and this permission notice shall be
- included in all copies or substantial portions of the Software.
-
- THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
- EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
- OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
- NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
- HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
- WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
- FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
- OTHER DEALINGS IN THE SOFTWARE.
+ *
+ * @requires jQuery
+ * @requires jQuery UI (Widget Factory)
+ * @version	0.10.0b
+ *
  */
-(function($){
-	var jWizard = function(element, options) {
-		var defaults = {
-			startStep: 0,
-			enableThemeRoller: false,
-			hideTitle: false,
-			validateSteps: false,
+(function($) {
+	/**
+	 * @class The jWizard object will be fed into $.widget()
+	 */
+	$.widget("ui.jWizard", {
+		/**
+		 * @private
+		 * @property object _cache This is a central place for jQuery() objects can be cached for later use
+		 */
+		_cache: {},
+
+		/**
+		 * @private
+		 * @property int _stepIndex Represents the index of the current active/visible step
+		 */
+		_stepIndex: 0,
+
+		/**
+		 * @private
+		 * @property int _stepIndex Represents the `functional` number of steps (only used for calculating status, `this._cache.steps.length` is an `actual` count)
+		 */
+		_stepCount: 0,
+
+		/**
+		 * @constructor
+		 * @description Initializes the jWizard widget
+		 */
+		_create: function() {
+			$wizard = this._cache.wizard = $(this.element);
+
+			this._buildSteps();
+			if (!this.options.titleHide)		this._buildTitle();
+			if (this.options.menuEnable)		this._buildMenu();
+			this._buildButtons();
+			if (this.options.counter.enable)	this._buildCounter();
+
+			$wizard.addClass("ui-widget");
+
+			$wizard.find(".ui-state-default").live("mouseover mouseout", function(event) {
+				if (event.type == "mouseover") {
+					$(this).addClass("ui-state-hover");
+				} else {
+					$(this).removeClass("ui-state-hover");
+				}
+			});
+
+			this._changeStep(parseInt(this._stepIndex), true);
+		},
+
+		/** Additional processing before destroying the widget */
+		destroy: function() {
+		},
+
+		 _setOption: function(key, value) {
+			switch (key) {
+				default:
+					this.options[key] = value;
+					break;
+			}
+		},
+
+		/** Proceeds to the next `step` in the collection */
+		nextStep: function() {
+			this._changeStep(this._stepIndex + 1);
+		},
+		/** Goes back one `step` in the collection */
+		previousStep: function() {
+			this._changeStep(this._stepIndex - 1);
+		},
+		/** Goes to an arbitrary `step` in the collection based on input */
+		changeStep: function(nextStep) {
+			this._changeStep(nextStep);
+		},
+
+		_effect: function($element, action, subset, type) {
+			type = type || "effect";
+			var opt = this.options.effects[action][subset];
+
+			if (!this.options.effects.enable || !this.options.effects[action].enable) {
+				opt.duration = -1;
+			}
+
+			$element[type](opt.type, opt.options, opt.duration, opt.callback);
+		},
+
+
+		/**
+		 * @private
+		 * @description Wrapper for internal logging (and potentially debugging)
+		 */
+		_log: function() {
+			if (this.options.debug)
+				window.console && console.log[console.firebug ? "apply" : "call"](console,Array.prototype.slice.call(arguments));
+		},
+
+		/**
+		 * @private
+		 * @description Generates the title region
+		 */
+		_buildTitle: function() {
+			$header = this._cache.header = $('<div id="jw-header" class="ui-widget-header ui-corner-top"><h2 id="jw-title" /></div>');
+			this._cache.title = $header.find("#jw-title");
+			this._cache.wizard.prepend($header);
+		},
+
+		/**
+		 * @private
+		 * @description Updates the title region
+		 */
+		_updateTitle: function(bIsFirstStep) {
+			$title = this._cache.title;
+
+			if (!bIsFirstStep)
+				this._effect($title, "title", "hide", "hide");
+
+			$title.text(this._cache.currentStep.attr("title"));
+
+			if (!bIsFirstStep)
+				this._effect($title, "title", "show", "show");
+
+		},
+
+		/**
+		 * @private
+		 * @description Initializes the step collection.
+		 * 	Any direct children <div> are considered steps, and there should be no other sibling elements.
+		 * 	All steps without a specified `id` attribute are assigned one based on their index in the collection.
+		 * 	If the validation plugin is going to be used, a callback is bound to the "onDeactivate" of each step that tests that step's collection of input's against the validation plugin rules.
+		 * 	Lastly, a <div> is wrapped around all the steps to isolate them from the rest of the widget.
+		 */
+		_buildSteps: function() {
+			$wizard = this._cache.wizard;
+
+			var $steps = this._cache.steps = $wizard.children("div, fieldset");
+
+			this._stepCount = $steps.length;
+
+			$steps.each(function(x) {
+				$step = $(this);
+				if ($step.attr("id") == "")
+					$step.attr("id", "jw-step" + x);
+
+				if (this.tagName.toLowerCase() == "fieldset")
+					$step.attr("title", $step.find("legend").text());
+			});
+
+			if (this.options.validate) {
+				$steps.bind("onDeactivate", function(e) {
+					return $(this).valid();
+				});
+			}
+
+			this._cache.steps = $steps.hide().wrapAll('<div id="jw-content" class="ui-widget-content clearfix"><div id="jw-steps-wrap" /></div>');
+			this._cache.content = $wizard.find("#jw-content");
+		},
+
+		/**
+		 * @private
+		 * @description Changes the "active" step.
+		 * @param number|jQuery nextStep Either an index or a jQuery object/element
+		 * @param bool isInit Behavior needs to change if this is called during _init (as opposed to manually through the global setter)
+		 */
+		_changeStep: function(nextStep, bIsFirstStep) {
+			$wizard = this._cache.wizard,
+				$steps = this._cache.steps,
+				$currentStep = this._cache.currentStep,
+				bIsFirstStep = bIsFirstStep || false;
+
+			if (bIsFirstStep && this.options.effects.step.enable)
+				this.options.effects.step.enable = false;
+
+			if (typeof nextStep === "number") {
+				if (nextStep < 0 || nextStep > ($steps.length - 1)) {
+					alert("Index " + nextStep + " Out of Range");
+					return false;
+				}
+
+				this._stepIndex = nextStep;
+				nextStep = $steps.eq(nextStep);
+			} else if (typeof nextStep === "object") {
+				if ( !nextStep.is($steps.selector) ) {
+					alert("Supplied Element is NOT one of the Wizard Steps");
+					return false;
+				}
+
+				this._stepIndex = $steps.index(nextStep);
+			}
+
+			this._cache.currentStep = nextStep;
+
+			if (typeof $currentStep !== "undefined") {
+				if ($currentStep.triggerHandler("onDeactivate") === false)
+					return false;
+
+				this.options.effects.step.hide.callback = $.proxy(function() {
+					this._effect(nextStep, "step", "show", "show");
+				}, this);
+
+				this.options.effects.step.show.callback = $.proxy(function() {
+					this._cache.currentStep.siblings().hide();
+				}, this);
+
+				this._effect($currentStep, "step", "hide", "hide");
+			} else {
+				this._effect(nextStep, "step", "show", "show");
+			}
+
+			this._log(this.options.buttons.nextText);
+
+			if (bIsFirstStep && !this.options.effects.step.enable)
+				this.options.effects.step.enable = true;
+
+			this._updateButtons();
+			if (!this.options.titleHide)		this._updateTitle(bIsFirstStep);
+			if (this.options.menuEnable)		this._updateMenu();
+			if (this.options.counter.enable)	this._updateCounter();
+		},
+
+		/**
+		 * @private
+		 * @description Initializes the menu
+		 * 	Builds the menu based on the collection of steps
+		 * 	Assigns some CSS properties for the layout
+		 * 	Binds a click event to each of the <li> that will change the step accordingly
+		 */
+		_buildMenu: function() {
+			var tmpHtml = ['<div id="jw-menu-wrap"><div id="jw-menu"><ol>'];
+
+			this._cache.steps.each(function(x) {
+				tmpHtml.push('<li class="' + ((x === 0) ? "current ui-state-highlight" : "inactive ui-state-disabled") + ' ui-corner-all"><a step="' + x + '">' + $(this).attr('title') + '</a></li>');
+			});
+			tmpHtml.push("</ol></div></div>");
+
+			this._cache.content.prepend(this._cache.menu = $(tmpHtml.join("")));
+
+			this._cache.menu.find("a").click($.proxy(function(event) {
+				$target = $(event.target);
+				var iNextStep = parseInt($target.attr("step"));
+
+				if ($target.parent().hasClass("active"))
+					this._changeStep(iNextStep, iNextStep <= this._stepIndex);
+			}, this));
+		},
+
+		/**
+		 * @private
+		 * @description Updates the menu at the end of each call to _changeStep()
+		 * 	Each <a> is looped over, along with the parent <li>
+		 * 	Status (current, active, inactive) set depending on progress through wizard
+		 * @see this.changeStep()
+		 */
+		_updateMenu: function() {
+			var iCurrentStepIndex = this._stepIndex,
+				$currentStep = this._cache.currentStep,
+				$menu = this._cache.menu,
+				menuItemStatus = "active";
+
+			this._effect(this._cache.menu.find("li:eq(" + iCurrentStepIndex + ")"), "menu", "change");
+
+			$menu.find("a").each(function(x) {
+				var $li = $(this).parent(),
+					$a = $(this),
+					iStep = parseInt($a.attr("step")),
+					sClass = "";
+
+				if ( iStep < iCurrentStepIndex ) {
+					sClass += "active ui-state-default ui-corner-all";
+				} else if ( iStep == iCurrentStepIndex ) {
+					sClass += "current ui-state-highlight ui-corner-all";
+				} else if ( iStep > iCurrentStepIndex ) {
+					sClass += "inactive ui-state-disabled ui-corner-all";
+					$a.removeAttr("href");
+				}
+
+				$li.removeClass().addClass(sClass);
+			});
+		},
+
+		/**
+		 * @private
+		 * @description Initializes the step counter.
+		 * 	A new <span> is created and used as the main element
+		 */
+		_buildCounter: function() {
+			$counter = this._cache.counter = $('<span id="jw-counter" class="ui-widget-content ui-corner-all ' + this.options.counter.orientText + '" />'),
+				$wizard = this._cache.wizard,
+				$footer = this._cache.footer;
+
+			$footer.prepend($counter);
+
+			if (this.options.counter.startCount)
+				this._stepCount--;
+			if (this.options.counter.finishCount)
+				this._stepCount--;
+
+			if (this.options.counter.startCount && this._stepIndex > 0)
+				this._stepIndex++;
+
+			if (this.options.counter.progressbar) {
+				$counter.append('<span id="jw-counter-text" />').append('<span id="jw-counter-progressbar" />');
+				this._cache.progressbar = $counter.find("#jw-counter-progressbar").progressbar()
+				this._cache.progresstext = $counter.find("#jw-counter-text");
+			}
+		},
+
+		/**
+		 * @private
+		 * @description This is run at the end of every call to this.changeStep()
+		 * 	TODO: ...
+		 * @see this.changeStep()
+		 */
+		_updateCounter: function() {
+			$wizard = this._cache.wizard,
+				$counter = this._cache.counter,
+				counterOptions = this.options.counter,
+				percentage = Math.round((this._stepIndex / this._stepCount) * 100),
+				counterText = "";
+
+			this._effect($counter, "counter", "change");
+
+			if (counterOptions.type == "percentage") {
+				counterText = ((percentage <= "100") ? percentage : "100") + "%";
+			} else if (counterOptions.type == "count") {
+				counterText = ((this._stepIndex <= this._stepCount) ? this._stepIndex : this._stepCount) + " of " + this._stepCount;
+			} else {
+				counterText = "N/A";
+			}
+
+			if (counterOptions.appendText)
+				counterText += " " + counterOptions.appendText;
+
+			if (counterOptions.progressbar) {
+				this._cache.progressbar.progressbar("option", "value", percentage);
+				this._cache.progresstext.text(counterText);
+			} else {
+				$counter.text(counterText);
+			}
+
+			if ( (counterOptions.startHide && this._stepIndex == 0)
+				|| (counterOptions.finishHide && this._stepIndex == (this._cache.steps.length - 1)) )
+				$counter.hide();
+			else {
+				$counter.show();
+			}
+		},
+
+		/**
+		 * @private
+		 * @description This generates the <button> elements for the main navigation and binds `click` handlers to each of them
+		 */
+		_buildButtons: function() {
+			$wizard = this._cache.wizard,
+			$currentStep = this._cache.currentStep,
+			buttonOptions = this.options.buttons;
+
+			var cancelButton = this._cache.cancelButton = $('<button id="jw-btnCancel" class="ui-state-default ui-priority-secondary ui-corner-all" type="' + buttonOptions.cancelType + '">' + buttonOptions.cancelText + '</button>')
+				.click($.proxy(this.options.onCancel, this));
+
+			var previousButton = this._cache.previousButton = $('<button id="jw-btnPrevious" class="ui-state-default ui-corner-all" type="button">' + buttonOptions.previousText + '</button>')
+				.click($.proxy(this, 'previousStep'));
+
+			var nextButton = this._cache.nextButton = $('<button id="jw-btnNext" class="ui-state-default ui-corner-all" type="button">' + buttonOptions.nextText + '</button>')
+				.click($.proxy(this, 'nextStep'));
+
+			var finishButton = this._cache.finishButton = $('<button id="jw-btnFinish" class="ui-state-default ui-state-highlight ui-corner-all" type="' + buttonOptions.finishType + '">' + buttonOptions.finishText + '</button>')
+				.click($.proxy(this.options.onFinish, this));
+
+			$footer = this._cache.footer = $('<div id="jw-footer" class="ui-widget-header ui-corner-bottom" />');
+			$wizard.append(
+				$footer.append(this._cache.buttons = $('<div id="jw-buttons" />')
+					.append(cancelButton)
+					.append(previousButton)
+					.append(nextButton)
+					.append(finishButton)
+			));
+		},
+
+		/**
+		 * @private
+		 * @description Updates the visibility status of each of the buttons depending on the end-user's progress
+		 */
+		_updateButtons: function() {
+			var $steps = this._cache.steps,
+				$currentStep = this._cache.currentStep,
+				$previousButton = this._cache.previousButton,
+				$nextButton = this._cache.nextButton,
+				$finishButton = this._cache.finishButton;
+
+			switch ($currentStep.attr("id")) {
+				case $steps.first().attr("id"):
+					$previousButton.hide();
+					$nextButton.show();
+					$finishButton.hide();
+					break;
+
+				case $steps.last().attr("id"):
+					$previousButton.show();
+					$nextButton.hide();
+					$finishButton.show();
+					break;
+
+				default:
+					$previousButton.show();
+					$nextButton.show();
+					$finishButton.hide();
+					break;
+			}
+		},
+
+		/**
+		 * @property object options This is the set of configuration options available to the user.
+		 */
+		options: {
+			validate: false,
 			debug: false,
+
+			titleHide: false,
+			menuEnable: true,
+
+			buttons: {
+				cancelHide: false,
+				cancelType: "button",
+				finishType: "button",
+				cancelText: "Cancel",
+				previousText: "Previous",
+				nextText: "Next",
+				finishText: "Finish"
+			},
 
 			counter: {
 				enable: false,
-				type: 'count',
-				excludeStart: false,
-				hideStart: false,
-				excludeFinish: false,
-				hideFinish: false
+				type: "count",
+				progressbar: false,
+				startCount: true,
+				startHide: false,
+				finishCount: true,
+				finishHide: false,
+				appendText: "Complete",
+				orientText: "left"
 			},
 
-			/* Button Rules */
-			hideCancelButton: false,
-			finishButtonType: 'button',
-			buttonText: {
-				cancel: 'Cancel',
-				previous: 'Previous',
-				next: 'Next',
-				finish: 'Finish'
-			},
-
-			/* Menu Rules */
-			enableMenu: false,
-			menuWidth: '10em',
-
-			/* CSS Classes */
-			cssClasses: {
-				title: 'title',
-				menu: {
-					div: 'menu',
-					active: 'active',
-					current: 'current',
-					inactive: 'inactive'
-				},
-				steps: {
-					wrapper: 'stepwrapper',
-					all: 'step'
-				},
-				counter: 'counter',
-				buttons: {
-					div: 'buttons',
-					cancel: 'wizardButton',
-					previous: 'wizardButton',
-					next: 'wizardButton',
-					finish: 'wizardButton'
-				}
-			},
-
-			/* Events */
-			events: {
-				onCancel: function(e) { return true; },
-				onFinish: function(e) { return true; }
-			}
-		};
-
-		/* Assign our Default Parameters (override with anything the end-user supplies) */
-		var options = $.extend(true, {}, defaults, options);
-
-		var w = $(element);	// Create a reference to the wizard itself
-
-		_log("Start init for:", element);
-
-		var	selStepsAll = 'div.' + options.cssClasses.steps.all;
-
-		w.changeStep = function(nextStep, isInit) {
-			if (typeof nextStep === 'number')
-			{
-				_log("changeStep() called with a numeric index passed:", nextStep);
-
-				if (nextStep < 0 || nextStep > (w.itemCount - 1))
-				{
-					alert('Index ' + nextStep + ' Out of Range');
-					return false;
-				}
-
-				nextStep = w.find(selStepsAll + ':eq(' + nextStep + ')');
-			}
-			else if (typeof nextStep === 'object')
-			{
-				_log("changeStep() called with an object passed:", nextStep);
-
-				if ( !nextStep.is(selStepsAll) )
-				{
-					alert('Supplied Element is NOT one of the Wizard Steps');
-					return false;
-				}
-			}
-
-			if (!isInit)
-			{
-				if (w.currentStep.triggerHandler('onDeactivate') === false)
-				{
-					_log("onDeactivate() returned false, cancelling changeStep()", w.currentStep, nextStep);
-					return false;
-				}
-			}
-
-			w.currentStep.hide();
-			if (!options.hideTitle)	w.titleBox.text(nextStep.attr('title'));
-
-			nextStep.show().triggerHandler('onActivate');
-
-			w.currentStep = w.find(selStepsAll + ':visible');
-			w.currentStepIndex = getCurrentStepIndex();
-
-			buttons.update();
-			if (options.enableMenu)	menu.update();
-			if (options.counter.enable)	counter.update();
-
-			_log("changeStep() complete", nextStep);
-		};
-
-		function _log() {
-			if (options.debug)
-			{
-				window.console && console._log[console.firebug ? 'apply' : 'call'](console, "jWizard _log:", Array.prototype.slice.call(arguments));
-			}
-		}
-
-		function getCurrentStepIndex() {
-			var	returnIndex = 0,
-				currentTitle = w.currentStep.attr('title');
-
-			var x = 0;
-			w.find(selStepsAll).each(function() {
-				var thisTitle = $(this).attr('title');
-
-				if (thisTitle === currentTitle)	returnIndex = x;
-
-				x++;
-			});
-
-
-			if (returnIndex > w.actualCount)
-				w.actualIndex = w.actualCount;
-			else if (options.counter.excludeStart && returnIndex > 0)
-				w.actualIndex = returnIndex - 1;
-			else
-				w.actualIndex = returnIndex;
-
-			return returnIndex;
-		};
-
-		var menu = {
-			build: function() {
-				var	x = 0,
-					tmpHtml = '<div id="jw-menuwrapper"><div id="jw-menu"><ol>';
-
-				w.find(selStepsAll).each(function() {
-					tmpHtml += '<li><a step="' + x + '">' + $(this).attr('title') + '</a></li>';
-					x++;
-				});
-				tmpHtml += '</ol></div></div>';
-
-				w.menuDiv = $(tmpHtml);
-				w.find('#jw-stepwrapper').prepend(w.menuDiv).append('<div style="clear: both;"></div>');
-				w.menuDiv.css({
-					'width': options.menuWidth,
-					'margin-right': '-' + options.menuWidth,
-					'float': 'left'
-				});
-				w.find(selStepsAll).css('margin-left', options.menuWidth);
-
-				w.find('li.' + options.cssClasses.menu.active).live('click', function() {
-					w.changeStep(parseInt($(this).children('a').attr('step')));
-				});
-			},
-
-			update: function() {
-				var	menuItemIndex = 0,
-					menuItemStatus = 'active';
-
-				$('#jw-menu').find('a').each(function() {
-					var	menuItem = $(this).parent(),
-						menuItemAnchor = $(this);
-
-					if ( menuItemAnchor.text() === w.currentStep.attr('title') )
-						menuItemStatus = 'current';
-					else if (menuItemStatus === 'current')
-						menuItemStatus = 'inactive';
-
-					menuItem.removeClass().addClass(menuItemStatus);
-
-					if (menuItem.hasClass('active'))
-						menuItemAnchor.attr('href', 'javascript:void(0);');
-					else
-						menuItemAnchor.removeAttr('href');
-
-					if (options.enableThemeRoller)
-					{
-						if (menuItem.hasClass('active'))
-							menuItem.addClass('ui-state-default');
-						else if (menuItem.hasClass('current'))
-							menuItem.addClass('ui-state-highlight');
-						else
-							menuItem.addClass('ui-state-disabled');
+			effects: {
+				enable: false,
+				step: {
+					enable: true,
+					show: {
+						type: "slide",
+						options: {
+							direction: "left"
+						},
+						duration: "normal",
+						callback: $.noop
+					},
+					hide: {
+						type: "slide",
+						options: {
+							direction: "left"
+						},
+						duration: "normal",
+						callback: $.noop
 					}
-
-					menuItemIndex++;
-				});
-			}
-		};
-
-		var counter = {
-			build: function() {
-				w.counterSpan = $('<span id="jw-counter" class="' + options.cssClasses.counter + '" />');
-				w.buttonsDiv.prepend(w.counterSpan);
-
-				w.actualIndex = w.currentStepIndex;
-				w.actualCount = w.itemCount;
-
-				if (options.counter.excludeStart)
-					w.actualCount--;
-				if (options.counter.excludeFinish)
-					w.actualCount--;
-
-				if (options.counter.excludeStart && w.actualIndex > 0)
-					w.actualIndex++;
+				},
+				title: {
+					enable: true,
+					show: {
+						type: "slide",
+						options: {},
+						duration: "normal",
+						callback: $.noop
+					},
+					hide: {
+						type: "slide",
+						options: {},
+						duration: "normal",
+						callback: $.noop
+					}
+				},
+				menu: {
+					enable: true,
+					change: {
+						type: "highlight",
+						options: {},
+						duration: "normal",
+						callback: $.noop
+					}
+				},
+				counter: {
+					enable: true,
+					change: {
+						type: "highlight",
+						options: {},
+						duration: "normal",
+						callback: $.noop
+					}
+				},
 			},
 
-			update: function() {
-				if (options.counter.type === 'percentage')
-					var text = Math.round((w.actualIndex / w.actualCount) * 100) + '% Complete';
-				else
-					var text = w.actualIndex + ' of ' + w.actualCount + ' Complete';
-
-				w.counterSpan.text(text);
-
-				if ( (options.counter.hideStart && w.currentStepIndex == 0)
-					|| (options.counter.hideFinish && w.currentStepIndex == (w.itemCount -1)) )
-					w.counterSpan.hide();
-				else
-					w.counterSpan.show();
+			events: {
+				onCancel: $.noop,
+				onFinish: $.noop
 			}
-		};
-
-		var buttons = {
-			build: function() {
-				w.buttonsDiv = $('<div id="jw-buttons" class="' + options.cssClasses.buttons.div + '"></div>');
-				w.cancelButton = $('<button id="jw-btnCancel" type="button" class="' + options.cssClasses.buttons.cancel + '">' + options.buttonText.cancel + '</button>');
-				w.previousButton = $('<button id="jw-btnPrevious" type="button" class="' + options.cssClasses.buttons.previous + '">' + options.buttonText.previous + '</button>');
-				w.nextButton = $('<button id="jw-btnNext" type="button" class="' + options.cssClasses.buttons.next + '">' + options.buttonText.next + '</button>');
-				w.finishButton = $('<button id="jw-btnFinish" type="' + options.finishButtonType + '" class="' + options.cssClasses.buttons.finish + '">' + options.buttonText.finish + '</button>');
-
-				w.nextButton.click(function() {
-					_log("Next Button Clicked");
-					w.changeStep(w.currentStep.next(selStepsAll));
-				});
-				w.previousButton.click(function() {
-					_log("Previous Button Clicked");
-					w.changeStep(w.currentStep.prev(selStepsAll));
-				});
-				w.cancelButton.click(function() {
-					_log("Cancel Button Clicked!");
-					w.trigger('onCancel');
-				});
-				w.finishButton.click(function() {
-					_log("Finish Button Clicked!");
-					w.trigger('onFinish');
-				});
-
-				w.buttonsDiv.append(w.cancelButton).append(w.previousButton).append(w.nextButton).append(w.finishButton);
-			},
-
-			update: function() {
-				var	currentId = w.currentStep.attr('id'),
-					firstId = w.firstStep.attr('id'),
-					lastId = w.lastStep.attr('id');
-
-				switch (currentId)
-				{
-					case firstId:
-						w.previousButton.hide();
-						w.nextButton.show();
-						w.finishButton.hide();
-						break;
-
-					case lastId:
-						w.previousButton.show();
-						w.nextButton.hide();
-						w.finishButton.show();
-						break;
-
-					default:
-						w.previousButton.show();
-						w.nextButton.show();
-						w.finishButton.hide();
-						break;
-				}
-			}
-		};
-
-		w.bind('onFinish', options.events.onFinish);
-		w.bind('onCancel', options.events.onCancel);
-
-		buttons.build();
-
-		var steps = w.children("div");
-		_log("Steps found for wizard", steps);
-
-		steps.addClass(options.cssClasses.steps.all).each(function(x) {
-			$this = $(this);
-			if ($this.attr('id') == '')
-				$this.attr('id', 'step' + x);
-		});
-
-		if (options.validateSteps)
-		{
-			steps.bind('onDeactivate', function(e) {
-				var isValid = true;
-				$(this).find('input').each(function() {
-					if ($(this).valid() == false)
-						isValid = false;
-				});
-				return isValid;
-			});
 		}
-
-		w.itemCount = steps.length;
-
-		steps.hide();
-		w.stepWrapperDiv = $('<div id="jw-stepwrapper"></div>');
-		steps.wrapAll(w.stepWrapperDiv);
-
-		w.firstStep = $(steps[0]);
-		w.lastStep = $(steps[steps.length - 1]);
-		w.currentStep = $(steps[options.startStep]);
-		w.currentStepIndex = 0;
-
-		if (options.hideCancelButton)	w.cancelButton.hide();
-
-		if (!options.hideTitle)
-		{
-			w.titleBox = $('<h2 id="jw-title" class="' + options.cssClasses.title + '"></h2>');
-			w.prepend(w.titleBox);
-		}
-		w.append(w.buttonsDiv);
-
-		if (options.enableMenu)		menu.build();
-		if (options.counter.enable)	counter.build();
-
-		if (options.enableThemeRoller)
-		{
-			w.addClass('ui-widget');
-			w.find('#jw-stepwrapper').addClass('ui-widget-content');
-			w.buttonsDiv.addClass('ui-widget-content');
-			w.buttonsDiv.find('button').addClass('ui-state-default');
-
-			if (!options.hideTitle)
-				w.titleBox.addClass('ui-widget-header');
-
-			if (options.enableMenu)
-				w.menuDiv.find('li.' + options.cssClasses.menu.active).addClass('ui-state-default');
-
-			if (options.counter.enable)
-				w.counterSpan.addClass('ui-widget-content');
-
-			w.find('.ui-state-default')
-				.live('mouseover',	function() { $(this).addClass('ui-state-hover'); } )
-				.live('mouseout',	function() { $(this).removeClass('ui-state-hover'); } )
-				.live('mousedown',	function() { $(this).addClass('ui-state-active'); } )
-				.live('mouseup',	function() { $(this).removeClass('ui-state-active'); } );
-		}
-
-		w.changeStep(parseInt(options.startStep), true);
-
-		return w;
-	};
-
-	$.fn.jWizard = function(options) {
-		if (this.length <= 0)
-			return this;
-		else
-		{
-			return this.each(function() {
-				var element = $(this);
-
-				// Return early if this element already has a plugin instance
-				if (element.data('jWizard'))	return;
-
-				// pass options to plugin constructor
-				var w = new jWizard(this, options);
-
-				// Store plugin object in this element's data
-				element.data('jWizard', w);
-			});
-		}
-	};
+	});
 })(jQuery);

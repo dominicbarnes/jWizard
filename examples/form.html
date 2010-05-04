@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<link rel="stylesheet" type="text/css" href="css/redmond/jquery-ui-1.8.custom.css" />
+<link rel="stylesheet" type="text/css" href="../jWizard.base.css" />
+
+</head>
+
+<body>
+
+<button id="btnTest">TEST</button>
+
+<form id="jWizard" method="POST">
+	<div title="Welcome">
+		<p>Welcome to an official jWizard test page!</p>
+		<p>Feel free to play around with the many configuration options to see how the affect the behavior of the wizard. I'm sure you'll find that there are plenty of ways to use this tool and that it can fit anywhere you need it.</p>
+	</div>
+	<fieldset>
+		<legend>Questions Three</legend>
+
+		<p>Answer me these questions 3! (And the next step ye see)</p>
+
+		<div class="field">
+			<label for="txtName">What is your name?</label>
+			<input type="text" id="txtName" name="name" />
+		</div>
+		<div class="field">
+			<label for="txtQuest">What is your quest?</label>
+			<input type="text" id="txtQuest" name="quest" />
+		</div>
+		<div class="field">
+			<label for="selColor">What is your favorite color?</label>
+			<select id="selColor">
+				<option></option>
+				<option>Red</option>
+				<option>Orange</option>
+				<option>Yellow</option>
+				<option>Green</option>
+				<option>Blue</option>
+				<option>Indigo</option>
+				<option>Violet</option>
+			</select>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>Contact Information</legend>
+
+		<div class="field">
+			<label for="txtEmail">What is your email?</label>
+			<input type="text" id="txtEmail" name="email" />
+		</div>
+		<div class="field">
+			<label for="txtPhone">What is your phone number?</label>
+			<input type="text" id="txtPhone" name="phone" />
+		</div>
+		<div class="field">
+			<label for="txtEmail">What is your address?</label>
+			<textarea name="address" id="txtAddress" rows="5" width="100%"></textarea>
+		</div>
+	</fieldset>
+	<fieldset>
+		<legend>Personal Information</legend>
+
+		<div class="field radio clearfix">
+			<p>What is your gender?</p>
+			<label for="rdoGender-Male"><input type="radio" id="rdoGender-Male" name="gender" value="male" /> Male</label>
+			<label for="rdoGender-Female"><input type="radio" id="rdoGender-Female" name="gender" value="female" /> Female</label>
+		</div>
+		<div class="field">
+			<label for="txtAbout">Tell us about yourself</label>
+			<textarea name="about" id="txtAbout" rows="5" width="100%"></textarea>
+		</div>
+	</fieldset>
+	<div title="Finish">
+		<p>You have completed all the steps of the wizard!</p>
+		<em>Click Finish below to Submit your Information</em>
+	</div>
+</form>
+
+<script type="text/javascript" src="js/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../jquery.jWizard.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#jWizard").jWizard({ debug: true });
+
+	$("#btnTest").click(function() {
+		$("#jWizard").jWizard("option", "buttons.nextText", "Something Else!");
+	});
+});
+</script>
+
+</body>
+
+</html>

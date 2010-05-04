@@ -1,0 +1,139 @@
+fieldset {
+	border: none;
+}
+legend {
+	display: none;
+}
+
+.required {
+	font-weight: bold;
+}
+div.field {
+	padding: .5em;
+	border-bottom: 1px dashed #ccc;
+	margin-bottom: .5em;
+}
+	div.field label {
+		display: block;
+		width: 15em;
+		float: left;
+	}
+	div.radio label {
+		width: auto;
+		margin-right: 2em;
+	}
+	div.field input {
+		display: inline;
+	}
+
+
+
+/* Wizard-specific configuration */
+#jWizard {
+	width: 800px;
+}
+	#jw-header {
+	}
+		#jw-title {
+			padding: 0 1em;
+		}
+
+	#jw-content {
+		padding: .5em 0;
+	}
+		#jw-menu-wrap {
+			width: 10em;
+			margin-right: -10em;
+			float: left;
+		}
+			#jw-menu {
+				margin: 0 .5em;
+			}
+				#jw-menu ol {
+					list-style: none;
+					margin: 0;
+					padding: 0;
+				}
+				#jw-menu li {
+					padding: .25em .5em;
+					margin-bottom: .25em;
+				}
+		#jw-steps-wrap {
+			height: 15em;
+			overflow: auto;
+			margin-left: 10em;
+			padding: .5em;
+		}
+			#jw-content p {
+				margin-top: 0;
+			}
+			#jw-content div.jw-step {
+			}
+
+	#jw-footer {
+		padding: 1em;
+	}
+		#jw-counter {
+			float: left;
+			padding: .2em;
+			width: 10em;
+		}
+			/* Text: Left -- Bar: Right */
+			#jw-counter.left #jw-counter-text {
+				float: left;
+				padding: .4em;
+			}
+			#jw-counter.left #jw-counter-progressbar {
+				display: block;
+				width: 6em;
+				float: right;
+			}
+			/* Text Center-aligned over Progress Bar */
+			#jw-counter.center #jw-counter-text {
+				float: left;
+				width: 10em;
+				text-align: center;
+				padding: .4em;
+			}
+			#jw-counter.center #jw-counter-progressbar {
+				display: block;
+			}
+			/* Bar: Left -- Text: Right */
+			#jw-counter.right #jw-counter-text {
+				float: right;
+				padding: .4em;
+			}
+			#jw-counter.right #jw-counter-progressbar {
+				display: block;
+				width: 6em;
+				float: left;
+			}
+		#jw-buttons {
+			text-align: right;
+		}
+			#jw-buttons button {
+				padding: .5em 1em;
+				margin-left: 1em;
+			}
+
+/* Clearfix */
+.clearfix:after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+
+.clearfix {
+	display: inline-block;
+}
+
+html[xmlns] .clearfix {
+	display: block;
+}
+
+* html .clearfix {
+	height: 1%;
+}
