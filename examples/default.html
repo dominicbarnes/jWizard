@@ -41,13 +41,11 @@ $(document).ready(function() {
 
 	$("#jWizard").jWizard({
 		// Although not technically required, I don't see why you would leave this out.
-		events: {
-			onCancel: function() {
-				alert("Cancel");
-			},
-			onFinish: function() {
-				alert("Finish");
-			}
+		cancel: function() {
+			alert("Cancel");
+		},
+		finish: function() {
+			alert("Finish");
 		}
 	});
 });

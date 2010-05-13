@@ -141,10 +141,9 @@ $(document).ready(function() {
 			},
 		},
 
-		events: {
-			onCancel: $.noop,	// This is the function to be called when the cancel <button> is clicked
-			onFinish: $.noop	// This is the function to be called when the finish <button> is clicked
-		}
+		// Events
+		cancel: $.noop,	// This is the function to be called when the cancel <button> is clicked
+		finish: $.noop	// This is the function to be called when the finish <button> is clicked
 	});
 });
 </script>

@@ -132,10 +132,8 @@ $(document).ready(function() {
 			cancelType: "reset",	// Resets the form when the Cancel Button is clicked (use in conjunction with onCancel to jump to the first step)
 			finishType: "submit"	// Will POST the form when the Finish Button is clicked
 		},
-		events: {
-			onCancel: function() {
-				$("#jWizard").jWizard("firstStep");	// Jumps to the first step in the Wizard after being cancelled
-			}
+		cancel: function() {
+			$("#jWizard").jWizard("firstStep");	// Jumps to the first step in the Wizard after being cancelled
 		}
 	}).validate({
 		rules: {
