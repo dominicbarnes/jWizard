@@ -3,7 +3,9 @@
 
 <head>
 
-<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.1/themes/base/jquery-ui.css" />
+<title>Default Configuration</title>
+
+<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/base/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="../jWizard.base.css" />
 
 </head>
@@ -13,8 +15,8 @@
 <div id="switcher"></div>
 <br />
 
-<div id="jWizard">
-	<div title="Welcome">
+<div id="jWizard" class="jWizard">
+	<div id="test1-step1" title="Welcome">
 		<p>Welcome to an official jWizard test page!</p>
 		<p>Feel free to play around with the many configuration options to see how the affect the behavior of the wizard. I'm sure you'll find that there are plenty of ways to use this tool and that it can fit anywhere you need it.</p>
 	</div>
@@ -39,15 +41,7 @@
 $(document).ready(function() {
 	$('#switcher').themeswitcher();
 
-	$("#jWizard").jWizard({
-		// Although not technically required, I don't see why you would leave this out.
-		cancel: function() {
-			alert("Cancel");
-		},
-		finish: function() {
-			alert("Finish");
-		}
-	});
+	$("#jWizard").jWizard();
 });
 </script>
 
