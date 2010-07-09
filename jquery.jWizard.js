@@ -8,6 +8,7 @@
  * @requires jQuery UI (Widget Factory; ProgressBar optional; Button optional)
  * @version  0.12
  */
+/*jslint browser: true, devel: true, onevar: true, undef: true, eqeqeq: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
 "use strict";
 (function ($) {
 	/**
@@ -290,8 +291,7 @@
 		 * @return void
 		 */
 		_buildSteps: function() {
-			var $wizard = this.element,
-				$steps = this.element.children("div, fieldset");
+			var $steps = this.element.children("div, fieldset");
 
 			this._stepCount = $steps.length;
 
@@ -394,9 +394,10 @@
 		 * @return void
 		 */
 		_buildMenu: function() {
-			this.element.addClass("jw-hasmenu");
+			var tmpHtml = ['<div class="jw-menu-wrap"><div class="jw-menu"><ol>'],
+				$menu;
 
-			var tmpHtml = ['<div class="jw-menu-wrap"><div class="jw-menu"><ol>'];
+			this.element.addClass("jw-hasmenu");
 
 			this.element.find(".jw-step").each(function(x) {
 				tmpHtml.push('<li class="' + ((x === 0) ? "jw-current ui-state-highlight" : "jw-inactive ui-state-disabled") + ' ui-corner-all"><a step="' + x + '">' + $(this).attr('title') + '</a></li>');
@@ -433,9 +434,10 @@
 		 * @return void
 		 */
 		_updateMenu: function() {
-			var iCurrentStepIndex = this._stepIndex;
+			var iCurrentStepIndex = this._stepIndex,
+				$menu = this.element.find(".jw-menu");
 
-			this._effect(this.element.find(".jw-menu").find("li:eq(" + iCurrentStepIndex + ")"), "menu", "change");
+			this._effect($menu.find("li:eq(" + iCurrentStepIndex + ")"), "menu", "change");
 
 			$menu.find("a").each(function(x) {
 				var $li = $(this).parent(),
