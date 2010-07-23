@@ -1,7 +1,7 @@
 jWizard
 =======
 
-jQuery Wizard Form Plugin
+jQuery UI Wizard Widget
 -------------------------
 
 jWizard can take your boring HTML forms and turn them into a Windows Wizard-like interface.
