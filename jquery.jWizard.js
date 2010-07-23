@@ -44,7 +44,6 @@
 		 * @return void
 		 */
 		_create: function() {
-			this._log("init");
 			this._id = this.element.attr("id");
 
 			this._buildSteps();
@@ -273,7 +272,7 @@
 				this._effect($title, "title", "hide", "hide");
 			}
 
-			$title.text(this.element.find(".jw-step:visible").attr("title"));
+			$title.text(this.element.find(".jw-step:not(.ui-helper-hidden)").attr("title"));
 
 			if (!bIsFirstStep) {
 				this._effect($title, "title", "show", "show");
@@ -315,7 +314,7 @@
 				});
 			}
 
-			$steps.hide().wrapAll('<div class="jw-content ui-widget-content clearfix"><div class="jw-steps-wrap" /></div>');
+			$steps.hide().wrapAll('<div class="jw-content ui-widget-content ui-helper-clearfix"><div class="jw-steps-wrap" /></div>');
 		},
 
 		/**
@@ -333,10 +332,6 @@
 
 			if (typeof $currentStep !== "undefined" && $currentStep.triggerHandler("deactivate") === false) {
 				return false;
-			}
-
-			if (bIsFirstStep && this.options.effects.step.enable) {
-				this.options.effects.step.enable = false;
 			}
 
 			if (typeof nextStep === "number") {
@@ -369,10 +364,6 @@
 			} else {
 				nextStep.trigger("activate");
 				this._effect(nextStep, "step", "show", "show");
-			}
-
-			if (bIsFirstStep && !this.options.effects.step.enable) {
-				this.options.effects.step.enable = true;
 			}
 
 			this._updateButtons();
@@ -599,12 +590,11 @@
 		 */
 		_updateButtons: function() {
 			var $steps = this.element.find(".jw-step"),
-				$currentStep = $steps.filter(":visible"),
 				$previousButton = this.element.find(".jw-button-previous"),
 				$nextButton = this.element.find(".jw-button-next"),
 				$finishButton = this.element.find(".jw-button-finish");
 
-			switch ($currentStep.index()) {
+			switch ($steps.index($steps.filter(":visible"))) {
 				case 0:
 					$previousButton.hide();
 					$nextButton.show();
