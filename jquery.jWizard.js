@@ -6,7 +6,7 @@
  *
  * @requires jQuery
  * @requires jQuery UI (Widget Factory; ProgressBar optional; Button optional)
- * @version  0.12
+ * @version  1.0
  */
 /*jslint browser: true, devel: true, onevar: true, undef: true, eqeqeq: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
 "use strict";
@@ -79,6 +79,37 @@
 		 * @return void
 		 */
 		destroy: function() {
+			this._destroySteps();
+			this._destroyTitle();
+
+			if (this.options.menuEnable) {
+				this._destroyMenu();
+			}
+
+			this._destroyButtons();
+
+			if (this.options.counter.enable) {
+				this._destroyCounter();
+			}
+
+			this.element.removeClass("ui-widget");
+			this.element.find(".ui-state-default").unbind("mouseover").unbind("mouseout");
+		},
+
+		/**
+		 * @public
+		 * @description Disables the wizard (mainly the buttons)
+		 */
+		disable: function() {
+			this.element.addClass("ui-state-disabled").find("button").attr("disabled", "disabled");
+		},
+
+		/**
+		 * @public
+		 * @description Disables the wizard (mainly the buttons)
+		 */
+		enable: function() {
+			this.element.removeClass("ui-state-disabled").find("button").removeAttr("disabled");
 		},
 
 		/**
@@ -282,6 +313,15 @@
 
 		/**
 		 * @private
+		 * @description Destroys the title element (used in `destroy()`)
+		 * @return void
+		 */
+		_destroyTitle: function() {
+			$(".jw-header").remove();
+		},
+
+		/**
+		 * @private
 		 * @description Initializes the step collection.
 		 *    Any direct children <div> (with a title attr) or <fieldset> (with a <legend>) are considered steps, and there should be no other sibling elements.
 		 *    All steps without a specified `id` attribute are assigned one based on their index in the collection.
@@ -315,6 +355,16 @@
 			}
 
 			$steps.hide().wrapAll('<div class="jw-content ui-widget-content ui-helper-clearfix"><div class="jw-steps-wrap" /></div>');
+		},
+
+		/**
+		 * @private
+		 * @description Destroys the step wrappers and restores the steps to their original state (used in `destroy()`)
+		 * @return void
+		 */
+		_destroySteps: function() {
+			$(".jw-step").show().unwrap().unwrap();	// Unwrap 2x: .jw-steps-wrap + .jw-content
+			$(".jw-step").unbind("activate").unbind("deactivate").removeClass("jw-step");
 		},
 
 		/**
@@ -474,15 +524,6 @@
 
 		/**
 		 * @private
-		 * @description Removes the counter DOM elements, resets _stepCount
-		 * @return void
-		 */
-		_destroyCounter: function() {
-			this.element.find(".jw-counter").remove();
-		},
-
-		/**
-		 * @private
 		 * @description This is run at the end of every call to this._changeStep()
 		 * @return void
 		 * @see this._changeStep()
@@ -536,6 +577,15 @@
 			} else {
 				$counter.show();
 			}
+		},
+
+		/**
+		 * @private
+		 * @description Removes the counter DOM elements, resets _stepCount
+		 * @return void
+		 */
+		_destroyCounter: function() {
+			this.element.find(".jw-counter").remove();
 		},
 
 		/**
@@ -616,12 +666,21 @@
 		},
 
 		/**
+		 * @private
+		 * @description Updates the visibility status of each of the buttons depending on the end-user's progress
+		 * @see this._changeStep()
+		 */
+		_destroyButtons: function() {
+			this.element.find(".jw-footer").remove();
+		},
+
+		/**
 		 * @property object options This is the set of configuration options available to the user.
 		 */
 		options: {
 			validate: false,
 			debug: false,
-
+			disabled: false,
 			titleHide: false,
 			menuEnable: false,
 
