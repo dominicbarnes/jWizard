@@ -4,6 +4,8 @@ jWizard
 jQuery UI Wizard Widget
 -------------------------
 
+** Attention ** I have finally decided to release this sucker as 1.0 :)
+
 jWizard can take your boring HTML forms and turn them into a Windows Wizard-like interface.
 
 The require markup and setup is simple and straightforward.
