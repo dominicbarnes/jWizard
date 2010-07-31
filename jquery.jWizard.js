@@ -303,7 +303,7 @@
 				this._effect($title, "title", "hide", "hide");
 			}
 
-			$title.text(this.element.find(".jw-step:not(:visible)").attr("title"));
+			$title.text(this.element.find(".jw-step:visible").attr("title"));
 
 			if (!bIsFirstStep) {
 				this._effect($title, "title", "show", "show");
