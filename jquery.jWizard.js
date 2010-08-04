@@ -303,7 +303,7 @@
 				this._effect($title, "title", "hide", "hide");
 			}
 
-			$title.text(this.element.find(".jw-step:not(:visible)").attr("title"));
+			$title.text(this.element.find(".jw-step:not(.ui-helper-hidden)").attr("title"));
 
 			if (!bIsFirstStep) {
 				this._effect($title, "title", "show", "show");
@@ -376,7 +376,7 @@
 		 */
 		_changeStep: function(nextStep, bIsFirstStep) {
 			var $steps = this.element.find(".jw-step"),
-				$currentStep = $steps.filter(":visible");
+				$currentStep = $steps.filter(":not(.ui-helper-hidden)");
 
 			bIsFirstStep = bIsFirstStep || false;
 
@@ -644,7 +644,7 @@
 				$nextButton = this.element.find(".jw-button-next"),
 				$finishButton = this.element.find(".jw-button-finish");
 
-			switch ($steps.index($steps.filter(":visible"))) {
+			switch ($steps.index($steps.filter(":not(.ui-helper-hidden)"))) {
 				case 0:
 					$previousButton.hide();
 					$nextButton.show();
