@@ -6,9 +6,10 @@
  *
  * @requires jQuery
  * @requires jQuery UI (Widget Factory; ProgressBar optional; Button optional)
- * @version  1.0
+ * @version  1.2
  */
-/*jslint browser: true, devel: true, onevar: true, undef: true, eqeqeq: true, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
+/*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: false, eqeqeq: false, plusplus: false, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
+/*global window: true, $: true, jQuery: true */
 "use strict";
 (function ($) {
 	/**
@@ -43,7 +44,7 @@
 		 * @description Initializes jWizard
 		 * @return void
 		 */
-		_create: function() {
+		_create: function () {
 			this._id = this.element.attr("id");
 
 			this._buildSteps();
@@ -61,7 +62,7 @@
 
 			this.element.addClass("ui-widget");
 
-			this.element.find(".ui-state-default").live("mouseover mouseout", function(event) {
+			this.element.find(".ui-state-default").live("mouseover mouseout", function (event) {
 				if (event.type === "mouseover") {
 					$(this).addClass("ui-state-hover");
 				} else {
@@ -78,7 +79,7 @@
 		 *    Will eventually be used to restore everything to it's pre-widget state.
 		 * @return void
 		 */
-		destroy: function() {
+		destroy: function () {
 			this._destroySteps();
 			this._destroyTitle();
 
@@ -100,7 +101,7 @@
 		 * @public
 		 * @description Disables the wizard (mainly the buttons)
 		 */
-		disable: function() {
+		disable: function () {
 			this.element.addClass("ui-state-disabled").find("button").attr("disabled", "disabled");
 		},
 
@@ -108,7 +109,7 @@
 		 * @public
 		 * @description Disables the wizard (mainly the buttons)
 		 */
-		enable: function() {
+		enable: function () {
 			this.element.removeClass("ui-state-disabled").find("button").removeAttr("disabled");
 		},
 
@@ -117,99 +118,104 @@
 		 * @description Can set options within the widget programmatically
 		 * @return void
 		 */
-		_setOption: function(key, value) {
+		_setOption: function (key, value) {
 			var keys = key.split('.');
 
 			if (keys.length > 1) {
 				switch (keys[0]) {
-					case "buttons":
-						this.options[keys[0]][keys[1]] = value;
+				case "buttons":
+					this.options[keys[0]][keys[1]] = value;
 
-						switch (keys[1]) {
-							case "cancelHide":
-								this.element.find(".jw-button-cancel")[value ? "addClass" : "removeClass"]("ui-helper-hidden");
-								break;
-							case "cancelType":
-								this.element.find(".jw-button-cancel").attr("type", value);
-								break;
-							case "finishType":
-								this.element.find(".jw-button-finish").attr("type", value);
-								break;
-							case "cancelText":
-								this.element.find(".jw-button-cancel").text(value);
-								break;
-							case "previousText":
-								this.element.find(".jw-button-previous").text(value);
-								break;
-							case "nextText":
-								this.element.find(".jw-button-next").text(value);
-								break;
-							case "finishText":
-								this.element.find(".jw-button-finish").text(value);
-								break;
-						}
+					switch (keys[1]) {
+					case "cancelHide":
+						this.element.find(".jw-button-cancel")[value ? "addClass" : "removeClass"]("ui-helper-hidden");
 						break;
-
-					case "counter":
-						this.options[keys[0]][keys[1]] = value;
-
-						switch (keys[1]) {
-							case "enable":
-								if (value) {
-									this._buildCounter();
-									this._updateCounter();
-								} else {
-									this._destroyCounter();
-								}
-								break;
-							case "type":
-							case "progressbar":
-							case "startCount":
-							case "startHide":
-							case "finishCount":
-							case "finishHide":
-							case "appendText":
-							case "orientText":
-								if (this.options.counter.enable) {
-									this._updateCounter();
-								}
-								break;
-						}
+					case "cancelType":
+						this.element.find(".jw-button-cancel").attr("type", value);
 						break;
+					case "finishType":
+						this.element.find(".jw-button-finish").attr("type", value);
+						break;
+					case "cancelText":
+						this.element.find(".jw-button-cancel").text(value);
+						break;
+					case "previousText":
+						this.element.find(".jw-button-previous").text(value);
+						break;
+					case "nextText":
+						this.element.find(".jw-button-next").text(value);
+						break;
+					case "finishText":
+						this.element.find(".jw-button-finish").text(value);
+						break;
+					}
+					break;
 
-					case "effects":
-						if (keys.length === 2) {
-							this.options[keys[0]][keys[1]] = value;
+				case "counter":
+					this.options[keys[0]][keys[1]] = value;
+
+					switch (keys[1]) {
+					case "enable":
+						if (value) {
+							this._buildCounter();
+							this._updateCounter();
 						} else {
-							this.options[keys[0]][keys[1]][keys[2]] = value;
+							this._destroyCounter();
 						}
 						break;
+					case "type":
+					case "progressbar":
+					case "location":
+						this._destroyCounter();
+						this._buildCounter();
+						this._updateCounter();
+						break;
+					case "startCount":
+					case "startHide":
+					case "finishCount":
+					case "finishHide":
+					case "appendText":
+					case "orientText":
+						if (this.options.counter.enable) {
+							this._updateCounter();
+						}
+						break;
+					}
+					break;
+
+				case "effects":
+					if (keys.length === 2) {
+						this.options[keys[0]][keys[1]] = value;
+					} else {
+						this.options[keys[0]][keys[1]][keys[2]] = value;
+					}
+					break;
 				}
 			} else {
 				this.options[keys[0]] = value;
 
 				switch (keys[0]) {
-					case "hideTitle":
-						this.element.find(".jw-header")[value ? "addClass" : "removeClass"]("ui-helper-hidden");
-						break;
+				case "hideTitle":
+					this.element.find(".jw-header")[value ? "addClass" : "removeClass"]("ui-helper-hidden");
+					break;
 
-					case "menuEnable":
-						if (value) {
-							this._buildMenu();
-							this._updateMenu();
-						} else {
-							this._destroyMenu();
-						}
-						break;
+				case "menuEnable":
+					if (value) {
+						this._buildMenu();
+						this._updateMenu();
+					} else {
+						this._destroyMenu();
+					}
+					break;
 
-					case "counter":
-						this._destroyCounter();
-						this._buildCounter();
-						this._updateCounter();
-						break;
+				case "counter":
+					this._destroyCounter();
+					this._buildCounter();
+					this._updateCounter();
+					break;
 
-					default:
-						break;
+				default:
+					break;
 				}
 			}
 		},
@@ -218,7 +224,7 @@
 		 * @description Jumps to the first step in the wizard's step collection
 		 * @return void
 		 */
-		firstStep: function() {
+		firstStep: function () {
 			this._changeStep(0);
 		},
 
@@ -226,7 +232,7 @@
 		 * @description Jumps to the last step in the wizard's step collection
 		 * @return void
 		 */
-		lastStep: function() {
+		lastStep: function () {
 			this._changeStep(this._stepCount - 1);
 		},
 
@@ -234,7 +240,7 @@
 		 * @description Jumps to the next step in the wizard's step collection
 		 * @return void
 		 */
-		nextStep: function() {
+		nextStep: function () {
 			this._changeStep(this._stepIndex + 1);
 		},
 
@@ -242,7 +248,7 @@
 		 * @description Jumps to the previous step in the wizard's step collection
 		 * @return void
 		 */
-		previousStep: function() {
+		previousStep: function () {
 			this._changeStep(this._stepIndex - 1);
 		},
 
@@ -250,7 +256,7 @@
 		 * @description Goes to an arbitrary `step` in the collection based on input
 		 * @return void
 		 */
-		changeStep: function(nextStep) {
+		changeStep: function (nextStep) {
 			this._changeStep(nextStep);
 		},
 
@@ -259,7 +265,7 @@
 		 * @description Internal wrapper for performing animations
 		 * @return void
 		 */
-		_effect: function($element, action, subset, type) {
+		_effect: function ($element, action, subset, type) {
 			type = type || "effect";
 			var opt = this.options.effects[action][subset];
 
@@ -270,13 +276,12 @@
 			$element[type](opt.type, opt.options, opt.duration, opt.callback);
 		},
 
-
 		/**
 		 * @private
 		 * @description Internal wrapper for logging (and potentially debugging)
 		 * @return void
 		 */
-		_log: function() {
+		_log: function () {
 			if (this.options.debug && window.console) {
 				console.log[console.firebug ? "apply" : "call"](console, Array.prototype.slice.call(arguments));
 			}
@@ -284,11 +289,52 @@
 
 		/**
 		 * @private
+		 * @description Internal wrapper for HTML Generation
+		 * @param string sTagName The name of the HTML Element
+		 * @param object oAttributes Key = Attribute name, Value = Attribute value
+		 * @param sInnerHtml The inner HTML if there is any
+		 * @return string Generated HTML
+		 */
+		_html: function (sTagName, oAttributes, sInnerHtml) {
+			var aElement = [], aAttributes = [""], x;
+
+			sTagName = sTagName.toLowerCase();
+
+			aElement.push("<" + sTagName);
+			if (typeof oAttributes === "object") {
+				for (x in oAttributes) {
+					if (oAttributes.hasOwnProperty(x)) {
+						aAttributes.push(x.toLowerCase() + '="' + oAttributes[x] + '"');
+					}
+				}
+			}
+			aElement.push(aAttributes.join(" "));
+
+			if (["br", "hr", "meta", "link"].indexOf(sTagName) > 0) {
+				aElement.push(" />");
+			} else {
+				aElement.push(">");
+				if (sInnerHtml) {
+					aElement.push(sInnerHtml);
+				}
+				aElement.push("</" + sTagName + ">");
+			}
+
+			return aElement.join("");
+		},
+
+		/**
+		 * @private
 		 * @description Generates the header/title
 		 * @return void
 		 */
-		_buildTitle: function() {
-			this.element.prepend($('<div class="jw-header ui-widget-header ui-corner-top ' + (this.options.hideTitle ? "ui-helper-hidden" : "") + '"><h2 class="jw-title" /></div>'));
+		_buildTitle: function () {
+			var oDivAttributes = { "class": ["jw-header", "ui-widget-header", "ui-corner-top"] };
+			if (this.options.hideTitle) {
+				oDivAttributes["class"].push("ui-helper-hidden");
+			}
+			oDivAttributes["class"] = oDivAttributes["class"].join(" ");
+			this.element.prepend(this._html("div", oDivAttributes, '<h2 class="jw-title" />'));
 		},
 
 		/**
@@ -296,7 +342,7 @@
 		 * @description Updates the title
 		 * @return void
 		 */
-		_updateTitle: function(bIsFirstStep) {
+		_updateTitle: function (bIsFirstStep) {
 			var $title = this.element.find(".jw-title"),
 				$visibleStep = this.element.find(".jw-step:visible");
 
@@ -304,7 +350,7 @@
 				this._effect($title, "title", "hide", "hide");
 			}
 
-			$title.text( $visibleStep.length == 1 ? $visibleStep.attr("title") : this.element.find(".jw-step:first").attr("title") );
+			$title.text($visibleStep.length == 1 ? $visibleStep.attr("title") : this.element.find(".jw-step:first").attr("title"));
 
 			if (!bIsFirstStep) {
 				this._effect($title, "title", "show", "show");
@@ -317,7 +363,7 @@
 		 * @description Destroys the title element (used in `destroy()`)
 		 * @return void
 		 */
-		_destroyTitle: function() {
+		_destroyTitle: function () {
 			$(".jw-header").remove();
 		},
 
@@ -326,16 +372,16 @@
 		 * @description Initializes the step collection.
 		 *    Any direct children <div> (with a title attr) or <fieldset> (with a <legend>) are considered steps, and there should be no other sibling elements.
 		 *    All steps without a specified `id` attribute are assigned one based on their index in the collection.
-		 *    If the validation plugin is going to be used, a callback is bound to the "deactivate" of each step that tests that step's collection of input's against the validation plugin rules.
+		 *    If the validation plugin is going to be used, a callback is bound to the "hide" of each step that tests that step's collection of input's against the validation plugin rules.
 		 *    Lastly, a <div> is wrapped around all the steps to isolate them from the rest of the widget.
 		 * @return void
 		 */
-		_buildSteps: function() {
+		_buildSteps: function () {
 			var $steps = this.element.children("div, fieldset");
 
 			this._stepCount = $steps.length;
 
-			$steps.addClass("jw-step").each(function(x) {
+			$steps.addClass("jw-step").each(function (x) {
 				var $step = $(this);
 
 				if (this.tagName.toLowerCase() === "fieldset") {
@@ -344,7 +390,7 @@
 			});
 
 			if (this.options.validate) {
-				$steps.bind("deactivate", function(event) {
+				$steps.bind("hide", function (event) {
 					var $inputs = $(this).find(":input");
 
 					if ($inputs.length > 0) {
@@ -355,7 +401,7 @@
 				});
 			}
 
-			$steps.hide().wrapAll('<div class="jw-content ui-widget-content ui-helper-clearfix"><div class="jw-steps-wrap" /></div>');
+			$steps.hide().wrapAll(this._html("div", { "class": "jw-content ui-widget-content ui-helper-clearfix" }, this._html("div", { "class": "jw-steps-wrap" })));
 		},
 
 		/**
@@ -363,9 +409,9 @@
 		 * @description Destroys the step wrappers and restores the steps to their original state (used in `destroy()`)
 		 * @return void
 		 */
-		_destroySteps: function() {
+		_destroySteps: function () {
 			$(".jw-step").show().unwrap().unwrap();	// Unwrap 2x: .jw-steps-wrap + .jw-content
-			$(".jw-step").unbind("activate").unbind("deactivate").removeClass("jw-step");
+			$(".jw-step").unbind("show").unbind("hide").removeClass("jw-step");
 		},
 
 		/**
@@ -375,13 +421,13 @@
 		 * @param bool isInit Behavior needs to change if this is called during _init (as opposed to manually through the global setter)
 		 * @return void
 		 */
-		_changeStep: function(nextStep, bIsFirstStep) {
+		_changeStep: function (nextStep, bIsFirstStep) {
 			var $steps = this.element.find(".jw-step"),
 				$currentStep = $steps.filter(":visible");
 
 			bIsFirstStep = bIsFirstStep || false;
 
-			if (typeof $currentStep !== "undefined" && $currentStep.triggerHandler("deactivate") === false) {
+			if (typeof $currentStep !== "undefined" && $currentStep.triggerHandler("hide") === false) {
 				return false;
 			}
 
@@ -394,7 +440,7 @@
 				this._stepIndex = nextStep;
 				nextStep = $steps.eq(nextStep);
 			} else if (typeof nextStep === "object") {
-				if ( !nextStep.is($steps.selector) ) {
+				if (!nextStep.is($steps.selector)) {
 					alert("Supplied Element is NOT one of the Wizard Steps");
 					return false;
 				}
@@ -405,16 +451,16 @@
 			$currentStep = nextStep;
 
 			if (typeof $currentStep !== "undefined") {
-				this.options.effects.step.hide.callback = $.proxy(function() {
-					nextStep.trigger("activate");
+				this.options.effects.step.hide.callback = $.proxy(function () {
 					this._effect(nextStep, "step", "show", "show");
+					nextStep.trigger("show");
 				}, this);
 
 				this.element.find(".jw-step").hide();
 				this._effect($currentStep, "step", "hide", "hide");
 			} else {
-				nextStep.trigger("activate");
 				this._effect(nextStep, "step", "show", "show");
+				nextStep.trigger("show");
 			}
 
 			this._updateButtons();
@@ -435,20 +481,27 @@
 		 *    Binds a click event to each of the <a> that will change the step accordingly when clicked
 		 * @return void
 		 */
-		_buildMenu: function() {
-			var tmpHtml = ['<div class="jw-menu-wrap"><div class="jw-menu"><ol>'],
-				$menu;
+		_buildMenu: function () {
+			var aListItems = [], $menu, sMenuHtml;
 
 			this.element.addClass("jw-hasmenu");
-
-			this.element.find(".jw-step").each(function(x) {
-				tmpHtml.push('<li class="' + ((x === 0) ? "jw-current ui-state-highlight" : "jw-inactive ui-state-disabled") + ' ui-corner-all"><a step="' + x + '">' + $(this).attr('title') + '</a></li>');
+			this.element.find(".jw-step").each(function (x) {
+				var aListItemClasses = ["ui-corner-all"];
+				if (x === 0) {
+					aListItemClasses.push("jw-current");
+					aListItemClasses.push("ui-state-highlight");
+				} else {
+					aListItemClasses.push("jw-inactive");
+					aListItemClasses.push("ui-state-disabled");
+				}
+				aListItems.push(this._html("li", { "class": aListItemClasses.join(" ") }, this._html("a", { step: x }, $(this).attr("title"))));
 			});
-			tmpHtml.push("</ol></div></div>");
 
-			this.element.find(".jw-content").prepend($menu = $(tmpHtml.join("")));
+			sMenuHtml = this._html("div", { "class": "jw-menu-wrap" }, this._html("div", { "class": "jw-menu" }, this._html("ol", aListItems.join(""))));
 
-			$menu.find("a").click($.proxy(function(event) {
+			this.element.find(".jw-content").prepend($menu = $(sMenuHtml.join("")));
+
+			$menu.find("a").click($.proxy(function (event) {
 				var $target = $(event.target),
 					iNextStep = parseInt($target.attr("step"), 10);
 
@@ -463,7 +516,7 @@
 		 * @description Removes the 'jw-hasmenu' class and pulls the menu out of the DOM entirely
 		 * @return void
 		 */
-		_destroyMenu: function() {
+		_destroyMenu: function () {
 			this.element.removeClass("jw-hasmenu").find(".jw-menu-wrap").remove();
 		},
 
@@ -475,23 +528,23 @@
 		 * @see this._changeStep()
 		 * @return void
 		 */
-		_updateMenu: function() {
+		_updateMenu: function () {
 			var iCurrentStepIndex = this._stepIndex,
 				$menu = this.element.find(".jw-menu");
 
 			this._effect($menu.find("li:eq(" + iCurrentStepIndex + ")"), "menu", "change");
 
-			$menu.find("a").each(function(x) {
+			$menu.find("a").each(function (x) {
 				var $li = $(this).parent(),
 					$a = $(this),
 					iStep = parseInt($a.attr("step"), 10),
 					sClass = "";
 
-				if ( iStep < iCurrentStepIndex ) {
+				if (iStep < iCurrentStepIndex) {
 					sClass += "jw-active ui-state-default ui-corner-all";
-				} else if ( iStep === iCurrentStepIndex ) {
+				} else if (iStep === iCurrentStepIndex) {
 					sClass += "jw-current ui-state-highlight ui-corner-all";
-				} else if ( iStep > iCurrentStepIndex ) {
+				} else if (iStep > iCurrentStepIndex) {
 					sClass += "jw-inactive ui-state-disabled ui-corner-all";
 					$a.removeAttr("href");
 				}
@@ -506,10 +559,14 @@
 		 *    A new <span> is created and used as the main element
 		 * @return void
 		 */
-		_buildCounter: function() {
-			var $counter = $('<span class="jw-counter ui-widget-content ui-corner-all jw-' + this.options.counter.orientText + '" />');
+		_buildCounter: function () {
+			var $counter = $(this._html("span", { "class": "jw-counter ui-widget-content ui-corner-all jw-" + this.options.counter.orientText }));
 
-			this.element.find(".jw-footer").prepend($counter);
+			if (this.options.counter.location === "header") {
+				this.element.find(".jw-header").prepend($counter);
+			} else if (this.options.counter.location === "footer") {
+				this.element.find(".jw-footer").prepend($counter);
+			}
 
 			if (!this.options.counter.startCount) {
 				this._stepCount--;
@@ -519,7 +576,10 @@
 			}
 
 			if (this.options.counter.progressbar) {
-				$counter.append('<span class="jw-counter-text" />').append('<span class="jw-counter-progressbar" />').find(".jw-counter-progressbar").progressbar();
+				$counter
+					.append('<span class="jw-counter-text" />')
+					.append('<span class="jw-counter-progressbar" />')
+					.find(".jw-counter-progressbar").progressbar();
 			}
 		},
 
@@ -529,7 +589,7 @@
 		 * @return void
 		 * @see this._changeStep()
 		 */
-		_updateCounter: function() {
+		_updateCounter: function () {
 			var $counter = this.element.find(".jw-counter"),
 				counterOptions = this.options.counter,
 				counterText = "",
@@ -573,7 +633,7 @@
 				$counter.text(counterText);
 			}
 
-			if ( (counterOptions.startHide && this._stepIndex === 0) || (counterOptions.finishHide && this._stepIndex === (this._actualCount - 1)) ) {
+			if ((counterOptions.startHide && this._stepIndex === 0) || (counterOptions.finishHide && this._stepIndex === (this._actualCount - 1))) {
 				$counter.hide();
 			} else {
 				$counter.show();
@@ -585,7 +645,7 @@
 		 * @description Removes the counter DOM elements, resets _stepCount
 		 * @return void
 		 */
-		_destroyCounter: function() {
+		_destroyCounter: function () {
 			this.element.find(".jw-counter").remove();
 		},
 
@@ -594,44 +654,65 @@
 		 * @description This generates the <button> elements for the main navigation and binds `click` handlers to each of them
 		 * @see this._changeStep()
 		 */
-		_buildButtons: function() {
-			var buttonOptions = this.options.buttons,
-				$footer = $('<div class="jw-footer ui-widget-header ui-corner-bottom" />'),
-				cancelButton = null,
-				previousButton = null,
-				nextButton = null,
-				finishButton = null;
+		_buildButtons: function () {
+			var oButtonOptions = this.options.buttons,
+				$Footer = $(this._html("div", { "class": "jw-footer ui-widget-header ui-corner-bottom" })),
+				$CancelButton = null,
+				$PreviousButton = null,
+				$NextButton = null,
+				$FinishButton = null,
+				oAttributes = { "class": "", type: "" },
+				sBaseClasses = "ui-state-default ui-corner-all ",
+				aClasses = [];
 
-			cancelButton = $('<button class="jw-button-cancel ui-state-default ui-priority-secondary ui-corner-all ' + (buttonOptions.cancelHide ? "ui-helper-hidden" : "") + '" type="' + buttonOptions.cancelType + '">' + buttonOptions.cancelText + '</button>')
-				.click($.proxy(function(event) {
+			/* Cancel Button */
+			aClasses = ["jw-button-cancel", "jw-priority-secondary"];
+			if (oButtonOptions.cancelHide) {
+				aClasses.push("ui-helper-hidden");
+			}
+			oAttributes["class"] = sBaseClasses + aClasses.join(" ");
+			oAttributes.type = oButtonOptions.cancelType;
+			$CancelButton = $(this._html("button", oAttributes, oButtonOptions.cancelText))
+				.click($.proxy(function (event) {
 					this._trigger("cancel", event);
 				}, this));
 
-			previousButton = $('<button class="jw-button-previous ui-state-default ui-corner-all" type="button">' + buttonOptions.previousText + '</button>')
+			/* Previous Button */
+			oAttributes["class"] = sBaseClasses + "jw-button-previous";
+			oAttributes.type = "button";
+			$PreviousButton = $(this._html("button", oAttributes, oButtonOptions.previousText))
 				.click($.proxy(this, 'previousStep'));
 
-			nextButton = $('<button class="jw-button-next ui-state-default ui-corner-all" type="button">' + buttonOptions.nextText + '</button>')
+			/* Next Button */
+			oAttributes["class"] = sBaseClasses + "jw-button-next";
+			$NextButton = $(this._html("button", oAttributes, oButtonOptions.nextText))
 				.click($.proxy(this, 'nextStep'));
 
-			finishButton = $('<button class="jw-button-finish ui-state-default ui-state-highlight ui-corner-all" type="' + buttonOptions.finishType + '">' + buttonOptions.finishText + '</button>')
-				.click($.proxy(function(event) {
+			/* Finish Button */
+			aClasses = ["jw-button-finish", "ui-state-highlight"];
+			oAttributes["class"] = sBaseClasses +  aClasses.join(" ");
+			oAttributes.type = oButtonOptions.finishType;
+			$FinishButton = $(this._html("button", oAttributes, oButtonOptions.finishText))
+				.click($.proxy(function (event) {
 					this._trigger("finish", event);
 				}, this));
 
-			if (buttonOptions.jqueryui.enable) {
-				cancelButton.button({ icons: { primary: buttonOptions.jqueryui.cancelIcon } });
-				previousButton.button({ icons: { primary: buttonOptions.jqueryui.previousIcon } });
-				nextButton.button({ icons: { secondary: buttonOptions.jqueryui.nextIcon } });
-				finishButton.button({ icons: { secondary: buttonOptions.jqueryui.finishIcon } });
+			if (oButtonOptions.jqueryui.enable) {
+				$CancelButton.button({ icons: { primary: oButtonOptions.jqueryui.cancelIcon } });
+				$PreviousButton.button({ icons: { primary: oButtonOptions.jqueryui.previousIcon } });
+				$NextButton.button({ icons: { secondary: oButtonOptions.jqueryui.nextIcon } });
+				$FinishButton.button({ icons: { secondary: oButtonOptions.jqueryui.finishIcon } });
 			}
 
 			this.element.append(
-				$footer.append($('<div class="jw-buttons" />')
-					.append(cancelButton)
-					.append(previousButton)
-					.append(nextButton)
-					.append(finishButton)
-			));
+				$Footer.append(
+					$('<div class="jw-buttons" />')
+						.append($CancelButton)
+						.append($PreviousButton)
+						.append($NextButton)
+						.append($FinishButton)
+				)
+			);
 		},
 
 		/**
@@ -639,30 +720,30 @@
 		 * @description Updates the visibility status of each of the buttons depending on the end-user's progress
 		 * @see this._changeStep()
 		 */
-		_updateButtons: function() {
+		_updateButtons: function () {
 			var $steps = this.element.find(".jw-step"),
 				$previousButton = this.element.find(".jw-button-previous"),
 				$nextButton = this.element.find(".jw-button-next"),
 				$finishButton = this.element.find(".jw-button-finish");
 
 			switch ($steps.index($steps.filter(":visible"))) {
-				case 0:
-					$previousButton.hide();
-					$nextButton.show();
-					$finishButton.hide();
-					break;
+			case 0:
+				$previousButton.hide();
+				$nextButton.show();
+				$finishButton.hide();
+				break;
 
-				case $steps.length - 1:
-					$previousButton.show();
-					$nextButton.hide();
-					$finishButton.show();
-					break;
+			case $steps.length - 1:
+				$previousButton.show();
+				$nextButton.hide();
+				$finishButton.show();
+				break;
 
-				default:
-					$previousButton.show();
-					$nextButton.show();
-					$finishButton.hide();
-					break;
+			default:
+				$previousButton.show();
+				$nextButton.show();
+				$finishButton.hide();
+				break;
 			}
 		},
 
@@ -671,7 +752,7 @@
 		 * @description Updates the visibility status of each of the buttons depending on the end-user's progress
 		 * @see this._changeStep()
 		 */
-		_destroyButtons: function() {
+		_destroyButtons: function () {
 			this.element.find(".jw-footer").remove();
 		},
 
@@ -706,6 +787,7 @@
 				enable: false,
 				type: "count",
 				progressbar: false,
+				location: "footer",
 				startCount: true,
 				startHide: false,
 				finishCount: true,
