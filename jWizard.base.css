@@ -1,6 +1,9 @@
 /* jWizard-specific configuration */
 .jw-header {
 }
+	.jw-header .jw-counter {
+		float: right;
+	}
 	.jw-title {
 		padding: 0 1em;
 	}
