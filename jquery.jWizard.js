@@ -310,7 +310,7 @@
 			}
 			aElement.push(aAttributes.join(" "));
 
-			if (["br", "hr", "meta", "link"].indexOf(sTagName) > 0) {
+			if (sTagName === "br" || sTagName === "hr" || sTagName === "meta" || sTagName === "link") {
 				aElement.push(" />");
 			} else {
 				aElement.push(">");
