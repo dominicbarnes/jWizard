@@ -1,6 +1,11 @@
 /* jWizard-specific configuration */
 .jw-header {
+	padding: 1em;
 }
+	.jw-header h2 {
+		margin: 0;
+		padding: .3em 0;
+	}
 	.jw-header .jw-counter {
 		float: right;
 	}
