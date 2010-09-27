@@ -197,7 +197,7 @@
 				this.options[keys[0]] = value;
 
 				switch (keys[0]) {
-				case "hideTitle":
+				case "titleHide":
 					this.element.find(".jw-header")[value ? "addClass" : "removeClass"]("ui-helper-hidden");
 					break;
 
