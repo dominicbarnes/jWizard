@@ -665,7 +665,7 @@
 			oAttributes["class"] = sBaseClasses + "jw-button-previous";
 			oAttributes.type = "button";
 			$PreviousButton = $(this._html("button", oAttributes, oButtonOptions.previousText))
-				.click(function () {
+				.click(function (event) {
 					if (self._trigger("previous", event, { currentStepIndex: self._stepIndex, nextStepIndex: self._stepIndex - 1 })) {
 						self.previousStep();
 					}
