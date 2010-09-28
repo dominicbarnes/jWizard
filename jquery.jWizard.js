@@ -332,7 +332,7 @@
 		 */
 		_buildTitle: function () {
 			var oDivAttributes = { "class": ["jw-header", "ui-widget-header", "ui-corner-top"] };
-			if (this.options.hideTitle) {
+			if (this.options.titleHide) {
 				oDivAttributes["class"].push("ui-helper-hidden");
 			}
 			oDivAttributes["class"] = oDivAttributes["class"].join(" ");
@@ -477,7 +477,7 @@
 					aListItemClasses.push("jw-inactive");
 					aListItemClasses.push("ui-state-disabled");
 				}
-				aListItems.push(self._html("li", { "class": aListItemClasses.join(" ") }, self._html("a", { step: x }, $(this).attr("title"))));
+				aListItems.push(self._html("li", { "class": aListItemClasses.join(" ") }, self._html("a", { step: x }, '<span>'+ (x+1) +'</span>'+ $(this).attr("title"))));
 			});
 
 			sMenuHtml = this._html("div", { "class": "jw-menu-wrap" }, this._html("div", { "class": "jw-menu" }, this._html("ol", null, aListItems.join(""))));
@@ -704,6 +704,7 @@
 						.append($NextButton)
 						.append($FinishButton)
 				)
+				.append('<div class="jw-spacer">&nbsp;</div>')
 			);
 		},
 
