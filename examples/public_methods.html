@@ -55,32 +55,32 @@
 $(document).ready(function() {
 	$('#switcher').themeswitcher();
 
-	$("#jWizard").jWizard({
-		events: {
-			onCancel: function() {
-				$("#jWizard").jWizard("firstStep");
-			}
+	$w = $("#jWizard"); // cache this jQuery object
+
+	$w.jWizard({
+		cancel: function() {
+			$w.jWizard("firstStep");
 		}
 	});
 
 	$("#btnFirstStep").click(function() {
-		$("#jWizard").jWizard("firstStep");	// Jumps to the step index 0 (ie. the first step)
+		$w.jWizard("firstStep");	// Jumps to the step index 0 (ie. the first step)
 	});
 
 	$("#btnPreviousStep").click(function() {
-		$("#jWizard").jWizard("previousStep");	// Jumps to the previous step (same behaviour as previous <button>)
+		$w.jWizard("previousStep");	// Jumps to the previous step (same behaviour as previous <button>)
 	});
 
 	$("#btnNextStep").click(function() {
-		$("#jWizard").jWizard("nextStep");	// Jumps to the next step (same behaviour as next <button>)
+		$w.jWizard("nextStep");	// Jumps to the next step (same behaviour as next <button>)
 	});
 
 	$("#btnArbitraryStep").click(function() {
-		$("#jWizard").jWizard("changeStep", 2);	// Jumps to the step with the given index
+		$w.jWizard("changeStep", 2);	// Jumps to the step with the given index
 	});
 
 	$("#btnLastStep").click(function() {
-		$("#jWizard").jWizard("lastStep");	// Jumps to the last step
+		$w.jWizard("lastStep");	// Jumps to the last step
 	});
 });
 </script>

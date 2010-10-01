@@ -6,7 +6,7 @@
  *
  * @requires jQuery
  * @requires jQuery UI (Widget Factory; ProgressBar optional; Button optional)
- * @version  1.3
+ * @version  1.4
  */
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: false, eqeqeq: false, plusplus: false, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
 /*global window: true, $: true, jQuery: true */
@@ -16,12 +16,6 @@
 	 * @class The jWizard object will be fed into $.widget()
 	 */
 	$.widget("db.jWizard", {
-		/**
-		 * @private
-		 * @property string _id The id of the current DOM element
-		 */
-		_id: "",
-
 		/**
 		 * @private
 		 * @property int _stepIndex Represents the index of the current active/visible step
@@ -45,8 +39,6 @@
 		 * @return void
 		 */
 		_create: function () {
-			this._id = this.element.attr("id");
-
 			this._buildSteps();
 			this._buildTitle();
 
@@ -70,7 +62,7 @@
 				}
 			});
 
-			this._changeStep(parseInt(this._stepIndex, 10), true);
+			this._changeStep(this._stepIndex, true);
 		},
 
 		/**
@@ -129,6 +121,18 @@
 					this.options[keys[0]][keys[1]] = value;
 
 					switch (keys[1]) {
+					case "jqueryui":
+						this.options[keys[0]][keys[1]][keys[2]] = value;
+						if (keys[2] === "enable") {
+							if (value) {
+								this.find(".jw-buttons > button").button("destroy");
+							} else {
+								this._destroyButtons();
+								this._buildButtons();
+							}
+							break;
+						}
+						break;
 					case "cancelHide":
 						this.element.find(".jw-button-cancel")[value ? "addClass" : "removeClass"]("ui-helper-hidden");
 						break;
@@ -168,9 +172,11 @@
 					case "type":
 					case "progressbar":
 					case "location":
-						this._destroyCounter();
-						this._buildCounter();
-						this._updateCounter();
+						if (this.options.counter.enable) {
+							this._destroyCounter();
+							this._buildCounter();
+							this._updateCounter();
+						}
 						break;
 					case "startCount":
 					case "startHide":
@@ -215,9 +221,6 @@
 					this._buildCounter();
 					this._updateCounter();
 					break;
-
-				default:
-					break;
 				}
 			}
 		},
@@ -227,7 +230,7 @@
 		 * @return void
 		 */
 		firstStep: function () {
-			this._changeStep(0);
+			this.changeStep(0, "first");
 		},
 
 		/**
@@ -235,7 +238,7 @@
 		 * @return void
 		 */
 		lastStep: function () {
-			this._changeStep(this._stepCount - 1);
+			this.changeStep(this._stepCount - 1, "last");
 		},
 
 		/**
@@ -243,7 +246,16 @@
 		 * @return void
 		 */
 		nextStep: function () {
-			this._changeStep(this._stepIndex + 1);
+			var options = {
+				wizard: this.element,
+				currentStepIndex: this._stepIndex,
+				nextStepIndex: this._stepIndex + 1,
+				delta: 1
+			};
+
+			if (this._trigger("next", null, options) !== false) {
+				this.changeStep(this._stepIndex + 1, "next");
+			}
 		},
 
 		/**
@@ -251,15 +263,36 @@
 		 * @return void
 		 */
 		previousStep: function () {
-			this._changeStep(this._stepIndex - 1);
+			var options = {
+				wizard: this.element,
+				currentStepIndex: this._stepIndex,
+				nextStepIndex: this._stepIndex - 1,
+				delta: -1
+			};
+
+			if (this._trigger("previous", null, options) !== false) {
+				this.changeStep(this._stepIndex - 1, "previous");
+			}
 		},
 
 		/**
 		 * @description Goes to an arbitrary `step` in the collection based on input
 		 * @return void
 		 */
-		changeStep: function (nextStep) {
-			this._changeStep(nextStep, true);
+		changeStep: function (nextStep, type) {
+			type = type || "manual";
+			var iNextStep = typeof nextStep === "number" ? nextStep : $(nextStep).index(),
+				options = {
+					wizard: this.element,
+					currentStepIndex: this._stepIndex,
+					nextStepIndex: iNextStep,
+					delta: iNextStep - this._stepIndex,
+					type: type
+				};
+
+			if (this._trigger("changestep", null, options) !== false) {
+				this._changeStep(iNextStep, true);
+			}
 		},
 
 		/**
@@ -666,18 +699,14 @@
 			oAttributes.type = "button";
 			$PreviousButton = $(this._html("button", oAttributes, oButtonOptions.previousText))
 				.click(function (event) {
-					if (self._trigger("previous", event, { currentStepIndex: self._stepIndex, nextStepIndex: self._stepIndex - 1 })) {
-						self.previousStep();
-					}
+					self.previousStep();
 				});
 
 			/* Next Button */
 			oAttributes["class"] = sBaseClasses + "jw-button-next";
 			$NextButton = $(this._html("button", oAttributes, oButtonOptions.nextText))
-				.click(function (event) {
-					if (self._trigger("next", event, { currentStepIndex: self._stepIndex, nextStepIndex: self._stepIndex + 1 })) {
-						self.nextStep();
-					}
+				.click(function () {
+					self.nextStep();
 				});
 
 			/* Finish Button */
@@ -846,7 +875,16 @@
 			cancel: $.noop,
 			previous: $.noop,
 			next: $.noop,
-			finish: $.noop
+			finish: $.noop,
+
+			changestep: function (event, ui) {
+				if (event.isDefaultPrevented()) {
+					if (typeof event.nextStepIndex !== "undefined") {
+						ui.wizard.jWizard("changeStep", event.nextStepIndex);
+						return false;
+					}
+				}
+			}
 		}
 	});
 }(jQuery));
