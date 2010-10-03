@@ -4,30 +4,30 @@ layout: default
 
 <h2>{{ page.title }}</h2>
 
+<!--
 <div id="switcher"></div>
 <br />
+-->
 
 {{ page.html }}
 
 <h3>HTML</h3>
-{% highlight html %}
-	{{ page.html | escape }}
-{% endhighlight %}
+{% highlight html %}{{ page.html }}{% endhighlight %}
 
 <h3>JavaScript</h3>
-{% highlight javascript %}
-	{{ page.js }}
-{% endhighlight %}
+{% highlight javascript %}{{ page.js }}{% endhighlight %}
 
 {% for script in page.scripts %}
 <script type="text/javascript" src="/jWizard/{{ script }}"></script>
 {% endfor %}
 
+<!--
 <script type="text/javascript">
 $(document).ready(function() {
 	$('#switcher').themeswitcher();
 });
 </script>
+-->
 
 <script type="text/javascript">
 {{ page.js }}
