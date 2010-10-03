@@ -95,7 +95,7 @@ nav {
 				background: #fff;
 				color: #000;
 			}
-	nav ul.secondary {
+	nav ul.secondary a {
 		background-color: white;
 	}
 
@@ -199,9 +199,3 @@ footer {
 		display: inline;
 		margin-left: .5em;
 	}
-
-ul.nav {
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
