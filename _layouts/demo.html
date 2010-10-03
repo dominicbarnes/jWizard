@@ -18,11 +18,9 @@ layout: default
 <h3>Dependencies</h3>
 {% highlight html %}
 {% for css in page.stylesheets %}
-<link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />
-{% endfor %}
+<link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />{% endfor %}
 {% for js in page.scripts %}
-<script type="text/javascript" src="/jWizard/{{ js }}"></script>
-{% endfor %}
+<script type="text/javascript" src="/jWizard/{{ js }}"></script>{% endfor %}
 {% endhighlight %}
 
 <h3>HTML</h3>
@@ -41,12 +39,10 @@ $(document).ready(function() {
 
 <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/base/jquery-ui.css" />
 {% for css in page.stylesheets %}
-<link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />
-{% endfor %}
+<link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />{% endfor %}
 
 {% for js in page.scripts %}
-<script type="text/javascript" src="/jWizard/{{ js }}"></script>
-{% endfor %}
+<script type="text/javascript" src="/jWizard/{{ js }}"></script>{% endfor %}
 
 <script type="text/javascript">
 {{ page.js }}
