@@ -9,7 +9,7 @@ header, footer, hgroup, section, article, aside, nav {
 }
 
 body {
-	font: verdana, helvetica, arial;
+	font-family: verdana, helvetica, arial;
 	text-align: left;
 	background: #fff;
 	padding-bottom: 3em;
