@@ -11,15 +11,21 @@ layout: default
 
 {{ page.html }}
 
+<h3>Dependencies</h3>
+{% highlight html %}
+{% for css in page.stylesheets %}
+<link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />
+{% endfor %}
+{% for js in page.scripts %}
+<script type="text/javascript" src="/jWizard/{{ js }}"></script>
+{% endfor %}
+{% endhighlight %}
+
 <h3>HTML</h3>
 {% highlight html %}{{ page.html }}{% endhighlight %}
 
 <h3>JavaScript</h3>
 {% highlight javascript %}{{ page.js }}{% endhighlight %}
-
-{% for script in page.scripts %}
-<script type="text/javascript" src="/jWizard/{{ script }}"></script>
-{% endfor %}
 
 <!--
 <script type="text/javascript">
@@ -28,6 +34,14 @@ $(document).ready(function() {
 });
 </script>
 -->
+
+{% for css in page.stylesheets %}
+<link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />
+{% endfor %}
+
+{% for js in page.scripts %}
+<script type="text/javascript" src="/jWizard/{{ js }}"></script>
+{% endfor %}
 
 <script type="text/javascript">
 {{ page.js }}
