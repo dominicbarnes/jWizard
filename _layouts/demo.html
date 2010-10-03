@@ -6,7 +6,7 @@ layout: default
 
 {{ content }}
 
-<a href="/jWizard/demos.html">&laquo; Back to Demo List</a>
+<p><a href="/jWizard/demos.html">&laquo; Back to Demo List</a></p>
 
 <!--
 <div id="switcher"></div>
@@ -39,6 +39,7 @@ $(document).ready(function() {
 </script>
 -->
 
+<link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/base/jquery-ui.css" />
 {% for css in page.stylesheets %}
 <link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />
 {% endfor %}
