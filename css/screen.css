@@ -19,6 +19,17 @@ h1, h2, h3, h4, h5, h6 {
 	font-family: Georgia, "Times New Roman";
 }
 
+ul, ol, dl {
+	margin: 0;
+	padding: 0;
+}
+
+form {
+}
+	form ul {
+		list-style: none;
+	}
+
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
@@ -194,6 +205,8 @@ footer {
 }
 	#badges {
 		float: right;
+		margin: 0;
+		padding: 0;
 	}
 	#badges li {
 		display: inline;

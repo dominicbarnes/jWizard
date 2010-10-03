@@ -39,6 +39,15 @@
 </header>
 
 <aside class="right">
+	<div>
+		<h3>Demonstrations</h3>
+		<ol>
+			{% for demo in site.posts %}
+			<li><a href="/jWizard{{ demo.url }}">{{ demo.title }}</a></li>
+			{% endfor %}
+		</ol>
+	</div>
+
 	<div class="center">
 		<h3>About Dominic</h3>
 		<p>Dominic Barnes is currently a software developer with <a href="http://www.mediafire.com/">MediaFire.com</a>. While working mostly with PHP, MySQL and Javascript, his skills include ASP.NET, (C#) SQL Server and CouchDB.</p>
