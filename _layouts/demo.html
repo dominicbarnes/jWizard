@@ -10,7 +10,7 @@ stylesheets:
   - css/jWizard.base.css
 ---
 
-<h2>{{ page.title }}</h2>
+<h2>{{ post.title }}</h2>
 
 {{ content }}
 
@@ -21,21 +21,21 @@ stylesheets:
 <br />
 -->
 
-{{ page.html }}
+{{ post.html }}
 
 <h3>Dependencies</h3>
 {% highlight html %}
-{% for css in page.stylesheets %}
+{% for css in post.stylesheets %}
 <link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />{% endfor %}
-{% for js in page.scripts %}
+{% for js in post.scripts %}
 <script type="text/javascript" src="/jWizard/{{ js }}"></script>{% endfor %}
 {% endhighlight %}
 
 <h3>HTML</h3>
-{% highlight html %}{{ page.html }}{% endhighlight %}
+{% highlight html %}{{ post.html }}{% endhighlight %}
 
 <h3>JavaScript</h3>
-{% highlight javascript %}{{ page.js }}{% endhighlight %}
+{% highlight javascript %}{{ post.js }}{% endhighlight %}
 
 <!--
 <script type="text/javascript">
@@ -46,12 +46,12 @@ $(document).ready(function() {
 -->
 
 <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/base/jquery-ui.css" />
-{% for css in page.stylesheets %}
+{% for css in post.stylesheets %}
 <link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />{% endfor %}
 
-{% for js in page.scripts %}
+{% for js in post.scripts %}
 <script type="text/javascript" src="/jWizard/{{ js }}"></script>{% endfor %}
 
 <script type="text/javascript">
-{{ page.js }}
+{{ post.js }}
 </script>
