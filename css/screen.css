@@ -72,13 +72,10 @@ nav {
 	padding: 0;
 	font-size: 90%;
 }
-	nav a.active, nav a.active:hover {
-		background: #FFF;
-		color: #003;
-	}
 	nav ul {
+		display: inline;
 		list-style: none;
-		margin: 0;
+		margin: 0 1em 0 0;
 		padding: 0;
 	}
 		nav ul li {
@@ -98,6 +95,9 @@ nav {
 				background: #fff;
 				color: #000;
 			}
+	nav ul.secondary {
+		background-color: white;
+	}
 
 nav.left {
 	margin: 0 1em;
