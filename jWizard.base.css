@@ -1,4 +1,7 @@
 /* jWizard-specific configuration */
+.jw-widget {
+	overflow: hidden;
+}
 .jw-header {
 	padding: 1em;
 }
