@@ -26,6 +26,13 @@
 
 	<nav>
 		<ul class="primary">
+			<li><a href="/index.html">Home</a></li>
+			<li><a href="/about.html">About</a></li>
+			<li><a href="/contact.html">Contact</a></li>
+			<li><a href="/projects.html">Projects</a></li>
+		</ul>
+
+		<ul class="secondary">
 			<li><a href="/jWizard/">Home</a></li>
 			<li><a href="/jWizard/demos.html">Demonstrations</a></li>
 		</ul>
@@ -34,18 +41,23 @@
 
 <aside class="right">
 	<div>
-		<h3>Demonstrations</h3>
-		<ol>
-			{% for demo in site.posts %}
-			<li><a href="/jWizard{{ demo.url }}">{{ demo.title }}</a></li>
-			{% endfor %}
-		</ol>
+		<nav>
+			<h3>Demonstrations</h3>
+			<ol>
+				{% for demo in site.posts %}
+				<li><a href="/jWizard{{ demo.url }}">{{ demo.title }}</a></li>
+				{% endfor %}
+			</ol>
+		</nav>
 	</div>
 
 	<div class="center">
-		<h3>About Dominic</h3>
-		<p>Dominic Barnes is currently a software developer with <a href="http://www.mediafire.com/">MediaFire.com</a>. While working mostly with PHP, MySQL and Javascript, his skills include ASP.NET, (C#) SQL Server and CouchDB.</p>
-		<a href="http://stackoverflow.com/users/188702/dominic-barnes"><img src="http://stackoverflow.com/users/flair/188702.png" height="58" width="208" alt="Stack Overflow Flair" title="Check out my profile on Stack Overflow!" /></a>
+		<h3>About jWizard</h3>
+		<p>
+			jWizard is a user-friendly, flexible and slim wizard plugin for the <a href="http://jquery.com/">jQuery</a> Javascript Framework.
+			Based off of the Windows <a href="http://en.wikipedia.org/wiki/Wizard_(software)">wizards</a>, as well as the <a href="http://quickstarts.asp.net/QuickStartv20/aspnet/doc/ctrlref/standard/wizard.aspx">.NET Wizard Control</a>,
+			it is meant to enrich your user interface with a wizard that helps guide your users through a series of steps, reducing a large and complicated process into small chunks to keep your users from being overwhelmed.
+		</p>
 	</div>
 </aside>
 
