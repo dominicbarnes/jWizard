@@ -52,7 +52,7 @@
 				this._buildCounter();
 			}
 
-			this.element.addClass("ui-widget");
+			this.element.addClass("ui-widget jw-widget");
 
 			this.element.find(".ui-state-default").live("mouseover mouseout", function (event) {
 				if (event.type === "mouseover") {
