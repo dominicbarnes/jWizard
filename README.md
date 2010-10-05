@@ -25,4 +25,4 @@ and this:
 
 The rest of the HTML as well as the JS that you need for a slick wizard interface is automatically generated and handled behind the scenes.
 
-By digging into the configuration, even more functionality is available. All of it is well-documented [here](http://wiki.github.com/desdev/jWizard/) and there is a complete set of demos [here](http://dominic.selfip.info/jWizard).
+By digging into the configuration, even more functionality is available. All of it is well-documented [here](http://wiki.github.com/dominicbarnes/jWizard/) and there is a complete set of demos [here](http://dominic.selfip.info/jWizard).
