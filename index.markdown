@@ -1,6 +1,8 @@
 ---
 layout: default
 title: Home
+description: jWizard is a jQuery UI Widget for generating a Wizard interface for your web pages and applications.
+keywords: [home]
 ---
 
 ## jWizard jQuery UI Widget

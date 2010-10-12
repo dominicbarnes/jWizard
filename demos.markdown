@@ -1,6 +1,8 @@
 ---
 layout: default
 title: Demonstrations
+description: Here are the various demonstrations I've set up to show you the power and flexibility of jWizard.
+keywords: [demonstrations]
 ---
 
 ## {{ page.title }}
