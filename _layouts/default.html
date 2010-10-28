@@ -49,7 +49,7 @@
 		<nav>
 			<h3>Demonstrations</h3>
 			<ol>
-				{% for demo in site.posts %}
+				{% for demo in site.posts reversed %}
 				<li><a href="/jWizard{{ demo.url }}">{{ demo.title }}</a></li>
 				{% endfor %}
 			</ol>
