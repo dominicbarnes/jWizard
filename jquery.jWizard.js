@@ -40,8 +40,11 @@
 		 */
 		_create: function () {
 			this._buildSteps();
-			this._buildTitle();
-
+			
+			if (!this.options.titleHide) {
+			    this._buildTitle();
+            }
+		    
 			if (this.options.menuEnable) {
 				this._buildMenu();
 			}
