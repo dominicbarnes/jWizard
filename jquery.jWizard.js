@@ -332,13 +332,13 @@
 			}
 		},
 
-		_updateNavigation: function () {
+		_updateNavigation: function (firstStep) {
 			this._updateButtons();
 			if (this.options.menuEnable) {
-				this._updateMenu();
+				this._updateMenu(firstStep);
 			}
 			if (this.options.counter.enable) {
-				this._updateCounter();
+				this._updateCounter(firstStep);
 			}
 		},
 
@@ -458,13 +458,13 @@
 				this._effect($currentStep, "step", "hide", "hide", function () {
 					wizard._effect(nextStep, "step", "show", "show", function () {
 						wizard._enableButtons();
-						wizard._updateNavigation();
+						wizard._updateNavigation(firstStep);
 					});
 				});
 			} else {
 				this._stepIndex = $steps.index(nextStep);
 				this._updateTitle(firstStep);
-				this._updateNavigation();
+				this._updateNavigation(firstStep);
 			}
 		},
 
@@ -477,7 +477,7 @@
 		 * @return void
 		 */
 		_buildMenu: function () {
-			var list = [], $menu;
+			var list = [], $menu, $anchors;
 
 			this.element.addClass("jw-hasmenu");
 			this.element.find(".jw-step").each(function (x) {
@@ -499,6 +499,10 @@
 			});
 
 			this.element.find(".jw-content").prepend($menu);
+
+			if (this.options.effects.enable || this.options.effects.menu.enable) {
+				$menu.find("li").addClass("jw-animated");
+			}
 
 			$menu.find("a").click($.proxy(function (event) {
 				var $target = $(event.target),
@@ -527,28 +531,31 @@
 		 * @see this._changeStep()
 		 * @return void
 		 */
-		_updateMenu: function () {
-			var currentStep = this._stepIndex,
+		_updateMenu: function (firstStep) {
+			var wizard = this,
+				currentStep = this._stepIndex,
 				$menu = this.element.find(".jw-menu");
 
-			this._effect($menu.find("li:eq(" + currentStep + ")"), "menu", "change");
+			if (!firstStep) {
+				this._effect($menu.find("li:eq(" + currentStep + ")"), "menu", "change");
+			}
 
 			$menu.find("a").each(function (x) {
-				var $li = $(this).parent(),
-					$a = $(this),
+				var $a = $(this),
+					$li = $a.parent(),
 					iStep = parseInt($a.attr("step"), 10),
 					sClass = "";
 
 				if (iStep < currentStep) {
-					sClass += "jw-active ui-state-default ui-corner-all";
+					sClass += "jw-active ui-state-default";
 				} else if (iStep === currentStep) {
-					sClass += "jw-current ui-state-highlight ui-corner-all";
+					sClass += "jw-current ui-state-highlight";
 				} else if (iStep > currentStep) {
-					sClass += "jw-inactive ui-state-disabled ui-corner-all";
+					sClass += "jw-inactive ui-state-disabled";
 					$a.removeAttr("href");
 				}
 
-				$li.removeClass().addClass(sClass);
+				$li.removeClass("jw-active jw-current jw-inactive ui-state-default ui-state-highlight ui-state-disabled").addClass(sClass);
 			});
 		},
 
@@ -574,6 +581,10 @@
 				this._stepCount--;
 			}
 
+			if (this.options.effects.enable || this.options.effects.counter.enable) {
+				$counter.addClass("jw-animated");
+			}
+
 			if (this.options.counter.progressbar) {
 				$counter
 					.html('<span class="jw-counter-text" /> <span class="jw-counter-progressbar" />')
@@ -587,7 +598,7 @@
 		 * @return void
 		 * @see this._changeStep()
 		 */
-		_updateCounter: function () {
+		_updateCounter: function (firstStep) {
 			var $counter = this.element.find(".jw-counter"),
 				counterOptions = this.options.counter,
 				counterText = "",
@@ -600,7 +611,9 @@
 				actualCount--;
 			}
 
-			this._effect($counter, "counter", "change");
+			if (!firstStep) {
+				this._effect($counter, "counter", "change");
+			}
 
 			percentage = Math.round((actualIndex / actualCount) * 100);
 
@@ -795,37 +808,37 @@
 					hide: {
 						type: "slide",
 						options: { direction: "left" },
-						duration: "fast",
+						duration: "fast"
 					},
 					show: {
 						type: "slide",
 						options: { direction: "left" },
-						duration: "fast",
+						duration: "fast"
 					}
 				},
 				title: {
 					enable: false,
 					hide: {
 						type: "slide",
-						duration: "fast",
+						duration: "fast"
 					},
 					show: {
 						type: "slide",
-						duration: "fast",
+						duration: "fast"
 					}
 				},
 				menu: {
 					enable: false,
 					change: {
 						type: "highlight",
-						duration: "fast",
+						duration: "fast"
 					}
 				},
 				counter: {
 					enable: false,
 					change: {
 						type: "highlight",
-						duration: "fast",
+						duration: "fast"
 					}
 				}
 			},
