@@ -3,27 +3,21 @@ layout: default
 ---
 
 <h2>{{ page.title }}</h2>
-
-{{ content }}
-
-<p><a href="/jWizard/demos.html">&laquo; Back to Demo List</a></p>
-
-<!--
-<div id="switcher"></div>
 <br />
--->
 
 {{ page.html }}
 
 <h3>Dependencies</h3>
 {% highlight html %}
 <link rel="stylesheet" type="text/css" href="/jWizard/css/jWizard.base.css" />
-{% for css in page.stylesheets %}<link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />
+{% for css in page.stylesheets %}
+<link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />
 {% endfor %}
 <script type="text/javascript" src="/jWizard/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jWizard/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/jWizard/js/jquery.jWizard.js"></script>
-{% for js in page.scripts %}<script type="text/javascript" src="/jWizard/{{ js }}"></script>
+{% for js in page.scripts %}
+<script type="text/javascript" src="/jWizard/{{ js }}"></script>
 {% endfor %}
 {% endhighlight %}
 
@@ -33,23 +27,17 @@ layout: default
 <h3>JavaScript</h3>
 {% highlight javascript %}{{ page.js }}{% endhighlight %}
 
-<!--
-<script type="text/javascript">
-$(document).ready(function() {
-	$('#switcher').themeswitcher();
-});
-</script>
--->
-
 <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.5/themes/base/jquery-ui.css" />
 <link rel="stylesheet" type="text/css" href="/jWizard/css/jWizard.base.css" />
-{% for css in page.stylesheets %}<link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />
+{% for css in page.stylesheets %}
+<link rel="stylesheet" type="text/css" href="/jWizard/{{ css }}" />
 {% endfor %}
 
 <script type="text/javascript" src="/jWizard/js/jquery.min.js"></script>
 <script type="text/javascript" src="/jWizard/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="/jWizard/js/jquery.jWizard.js"></script>
-{% for js in page.scripts %}<script type="text/javascript" src="/jWizard/{{ js }}"></script>
+{% for js in page.scripts %}
+<script type="text/javascript" src="/jWizard/{{ js }}"></script>
 {% endfor %}
 
 <script type="text/javascript">

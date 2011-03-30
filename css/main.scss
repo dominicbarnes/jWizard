@@ -1,0 +1,197 @@
+---
+---
+
+@mixin rounded($radius: 5px) {
+	-webkit-border-radius: $radius;
+	-moz-border-radius: $radius;
+	border-radius: $radius;
+}
+
+@mixin rounded_side($side, $radius: 10px) {
+	-webkit-border-#{$side}-radius: $radius;
+	-moz-border-radius-#{$side}: $radius;
+	border-#{$side}-radius: $radius;
+}
+
+
+html, body {
+	margin: 0;
+	padding: 0;
+}
+
+/* HTML5 Elements */
+header, footer, hgroup, section, article, aside, nav {
+	display: block;
+}
+
+body {
+	font-family: verdana, helvetica, arial;
+	text-align: left;
+	padding-bottom: 3em;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	font-family: Georgia, "Times New Roman";
+}
+
+form {
+	ul {
+		list-style: none;
+	}
+}
+
+table, th, td {
+	border: 1px solid #ccc;
+	margin: 0;
+	padding: 0;
+}
+table {
+	border-collapse: collapse;
+	border-spacing: 0;
+	width: 100%;
+}
+th, td {
+	padding: .5em;
+}
+
+pre {
+	padding: .5em;
+	max-height: 30em;
+	overflow: auto;
+	border: 1px solid #ccc;
+}
+
+a {
+	color: #0066B3;
+	text-decoration: none;
+
+	&:hover { text-decoration: underline; }
+	&[target=_blank]:after {
+		content: " \21D2";
+	}
+	img {
+		border: none;
+	}
+}
+
+header {
+	overflow: hidden;
+	background-color: #BBD9EE;
+
+	#html5-badge {
+		float: right;
+		margin: .5em;
+	}
+	hgroup {
+		padding: 1em;
+
+		h1, h2 {
+			margin: 0;
+			padding: 0;
+		}
+	}
+}
+
+nav {
+	margin: 0;
+	padding: 0;
+	font-size: 90%;
+
+	ul {
+		display: inline;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+
+		li {
+			display: inline-block;
+			margin-left: .5em;
+			text-align: center;
+		}
+		li > a.current {
+			background-color: #fff;
+		}
+		a {
+			color: #666;
+			display: block;
+			padding: .2em 1em;
+			background-color: #E7F1F8;
+			text-decoration: none;
+			border: 1px solid #fff;
+			border-bottom: none;
+		}
+	}
+}
+
+nav.left {
+	margin: 0 1em;
+
+	a {
+		border-bottom: none;
+		@include rounded_side(top, 3px);
+	}
+}
+
+#content {
+	padding: 1em;
+	margin: 1em 18em 1em 1em;
+	padding: 1em;
+	border: 2px solid #ccc;
+	border-bottom: none;
+	@include rounded(5px);
+
+	> h2 {
+		margin: 0;
+		padding: 0;
+	}
+	div.source {
+		margin-top: 2em;
+
+		pre {
+			white-space: pre-wrap;
+		}
+	}
+}
+
+#contact-information {
+	margin: 0;
+	padding: .5em;
+
+	dt {
+		float: left;
+		clear: left;
+		font-weight: bold;
+		width: 4em;
+
+		&:after { content: ":"; }
+	}
+	dd {
+		margin: 0 0 0 5em;
+		padding: 0 0 .5em 0;
+	}
+}
+
+aside.right {
+	float: right;
+	width: 18em;
+
+	> div {
+		margin: 1em;
+		padding: .5em .5em 2em .5em;
+		background-color: #FFF6BF;
+		@include rounded(5px);
+		border: 1px solid #ccc;
+
+		h3 {
+			margin: 0 0 .5em 0;
+			padding: 0 0 .5em 0;
+			border-bottom: 1px solid #888;
+		}
+	}
+}
+
+footer {
+	clear: both;
+	margin: 1em;
+	padding: .5em;
+}

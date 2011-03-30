@@ -2,14 +2,15 @@
 layout: default
 title: Home
 description: jWizard is a jQuery UI Widget for generating a Wizard interface for your web pages and applications.
-keywords: [home]
+keywords: [home, demonstrations]
 ---
 
 ## jWizard jQuery UI Widget
 
- * [GitHub Repository](http://github.com/dominicbarnes/jWizard)
- * [Demonstrations](/jWizard/demos.html)
+Source code, examples and more available on [GitHub](http://github.com/dominicbarnes/jWizard).
 
-jWizard is a user-friendly, flexible and slim wizard plugin for the <a href="http://jquery.com/">jQuery</a> Javascript Framework.
-Based off of the Windows wizards as well as the .NET Wizard Control, it is meant to enrich your user interface with a wizard that helps guide your users through a series of steps,
-reducing a large and complicated process into small chunks to keep your users from being overwhelmed.
+### Demonstrations
+
+{% for demo in site.posts reversed %}
+ * [{{ demo.title }}](/jWizard{{ demo.url }}) - {{ demo.description }}
+{% endfor %}

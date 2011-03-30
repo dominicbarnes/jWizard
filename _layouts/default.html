@@ -2,16 +2,16 @@
 <html lang="en">
 
 <head>
-	<title>Dominic Barnes - Web Development</title>
+	<title>Dominic Barnes - {% if page.title %}{{ page.title }}{% else %}Web Development{% endif %}</title>
 
 	<meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-	<meta name="author" content="jWizard" />
+	<meta name="author" content="Dominic Barnes" />
 	<meta name="description=" content="{{ page.description }}" />
 	<meta name="keywords" content="javascript, jquery, jquery ui, widget, {{ page.keywords | join: ', ' }}" />
 	<meta name="revised" content="{{ site.time }}" />
 
-	<link rel="stylesheet" type="text/css" href="/jWizard/css/screen.css" />
+	<link rel="stylesheet" type="text/css" href="/jWizard/css/main.css" />
 	<link rel="stylesheet" type="text/css" href="/jWizard/css/syntax.css" />
 
 	<!--[if IE]>
@@ -22,7 +22,7 @@
 <body>
 
 <header>
-	<a href="http://github.com/dominicbarnes/jWizard"><img style="position: absolute; top: 0; right: 0; border: 0;" src="http://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub" /></a>
+	<a id="html5-badge" href="http://www.w3.org/html/logo/"><img src="http://www.w3.org/html/logo/badge/html5-badge-h-css3-semantics.png" width="165" height="64" alt="HTML5 Powered with CSS3 / Styling, and Semantics" title="HTML5 Powered with CSS3 / Styling, and Semantics"></a>
 
 	<hgroup>
 		<h1><a href="/jWizard">jWizard</a></h1>
@@ -34,26 +34,30 @@
 			<li><a href="/index.html">Home</a></li>
 			<li><a href="/about.html">About</a></li>
 			<li><a href="/contact.html">Contact</a></li>
-			<li><a href="/projects.html">Projects</a></li>
-		</ul>
-
-		<ul class="secondary">
-			<li><a href="/jWizard/">Home</a></li>
-			<li><a href="/jWizard/demos.html">Demonstrations</a></li>
+			<li><a href="/jWizard/" class="current">jWizard</a></li>
+			<!--<li><a href="/node-couch-api/">node-couch-api</a></li>-->
 		</ul>
 	</nav>
 </header>
 
 <aside class="right">
 	<div>
-		<nav>
-			<h3>Demonstrations</h3>
-			<ol>
-				{% for demo in site.posts reversed %}
-				<li><a href="/jWizard{{ demo.url }}">{{ demo.title }}</a></li>
-				{% endfor %}
-			</ol>
-		</nav>
+		{% if page.url == '/index.html' %}
+			<h3>About jWizard</h3>
+			<p>jWizard is a user-friendly, flexible and slim wizard plugin for the <a href="http://jquery.com/">jQuery</a> Javascript Framework, built atop the <a href="http://jqueryui.com/">jQuery UI</a> Widget Factory.</p>
+			<p>Based off of the Windows wizards as well as the .NET Wizard Control, it is meant to enrich your user interface with a wizard that helps guide your users through a series of steps, reducing a large and complicated process into small chunks to keep your users from being overwhelmed.</p>
+			<p>I've included a number of demonstrations of the functionality and customizability of jWizard here. Feel free to <a href="/contact.html">contact</a> me with further questions.</p>
+		{% else %}
+			<nav>
+				<h3>Demonstrations</h3>
+				<ol>
+					{% for demo in site.posts reversed %}
+					<li><a href="/jWizard{{ demo.url }}" title="{{ demo.description }}">{{ demo.title }}</a></li>
+					{% endfor %}
+				</ol>
+			</nav>
+		{% endif %}
+
 	</div>
 </aside>
 
@@ -61,13 +65,7 @@
 {{ content }}
 </section>
 
-<footer>
-	<ul id="badges">
-		<li><a href="http://validator.w3.org/check?uri=referer"><img src="/img/w3c-html5.png" alt="Valid HTML5" title="W3C Validation passed for HTML5 (Experimental)" height="15" width="80" /></a></li>
-	</ul>
-
-	&copy; Dominic Barnes
-</footer>
+<footer></footer>
 
 <script type="text/javascript">
 var _gaq = _gaq || [];
