@@ -6,7 +6,7 @@
  *
  * @requires jQuery
  * @requires jQuery UI (Widget Factory; ProgressBar optional; Button optional)
- * @version  1.4
+ * @version  1.6
  */
 /*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: false, eqeqeq: false, plusplus: false, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
 /*global window: true, $: true, jQuery: true */
@@ -281,17 +281,17 @@
 		 */
 		changeStep: function (nextStep, type) {
 			type = type || "manual";
-			var iNextStep = typeof nextStep === "number" ? nextStep : $(nextStep).index(),
-				options = {
-					wizard: this.element,
-					currentStepIndex: this._stepIndex,
-					nextStepIndex: iNextStep,
-					delta: iNextStep - this._stepIndex,
-					type: type
-				};
+			nextStep = typeof nextStep === "number" ? nextStep : $(nextStep).index();
+			var options = {
+				wizard: this.element,
+				currentStepIndex: this._stepIndex,
+				nextStepIndex: nextStep,
+				delta: nextStep - this._stepIndex,
+				type: type
+			};
 
 			if (this._trigger("changestep", null, options) !== false) {
-				this._changeStep(iNextStep, true);
+				this._changeStep(nextStep);
 			}
 		},
 
@@ -300,13 +300,23 @@
 		 * @description Internal wrapper for performing animations
 		 * @return void
 		 */
-		_effect: function ($element, action, subset, type) {
-			type = type || "effect";
-			var opt = this.options.effects[action][subset];
+		_effect: function ($element, action, subset, type, callback) {
+			var wizard = this,
+				opt = this.options.effects[action][subset];
 
-			if (!this.options.effects.enable || !this.options.effects[action].enable) {
-				opt.duration = -1;
+			type = type || "effect";
+
+			if (!$element.length || !$element.hasClass("jw-animated")) {
+				$element[type]();
+
+				if (callback) {
+					callback.call(this);
+				}
+
+				return false;
 			}
+
+			opt.callback = callback || $.noop;
 
 			$element[type](opt.type, opt.options, opt.duration, opt.callback);
 		},
@@ -322,40 +332,14 @@
 			}
 		},
 
-		/**
-		 * @private
-		 * @description Internal wrapper for HTML Generation
-		 * @param string sTagName The name of the HTML Element
-		 * @param object oAttributes Key = Attribute name, Value = Attribute value
-		 * @param sInnerHtml The inner HTML if there is any
-		 * @return string Generated HTML
-		 */
-		_html: function (sTagName, oAttributes, sInnerHtml) {
-			var aElement = [], aAttributes = [""], x;
-
-			sTagName = sTagName.toLowerCase();
-
-			aElement.push("<" + sTagName);
-			if (typeof oAttributes === "object") {
-				for (x in oAttributes) {
-					if (oAttributes.hasOwnProperty(x)) {
-						aAttributes.push(x.toLowerCase() + '="' + oAttributes[x] + '"');
-					}
-				}
+		_updateNavigation: function () {
+			this._updateButtons();
+			if (this.options.menuEnable) {
+				this._updateMenu();
 			}
-			aElement.push(aAttributes.join(" "));
-
-			if (sTagName === "br" || sTagName === "hr" || sTagName === "meta" || sTagName === "link") {
-				aElement.push(" />");
-			} else {
-				aElement.push(">");
-				if (sInnerHtml) {
-					aElement.push(sInnerHtml);
-				}
-				aElement.push("</" + sTagName + ">");
+			if (this.options.counter.enable) {
+				this._updateCounter();
 			}
-
-			return aElement.join("");
 		},
 
 		/**
@@ -364,12 +348,10 @@
 		 * @return void
 		 */
 		_buildTitle: function () {
-			var oDivAttributes = { "class": ["jw-header", "ui-widget-header", "ui-corner-top"] };
-			if (this.options.hideTitle) {
-				oDivAttributes["class"].push("ui-helper-hidden");
-			}
-			oDivAttributes["class"] = oDivAttributes["class"].join(" ");
-			this.element.prepend(this._html("div", oDivAttributes, '<h2 class="jw-title" />'));
+			this.element.prepend($("<div />", {
+				className: "jw-header ui-widget-header ui-corner-top" + (this.options.hideTitle ? " ui-helper-hidden" : ""),
+				html: '<h2 class="jw-title' + ((this.options.effects.enable || this.options.effects.title.enable) ? " jw-animated" : "") + '" />'
+			}));
 		},
 
 		/**
@@ -377,20 +359,19 @@
 		 * @description Updates the title
 		 * @return void
 		 */
-		_updateTitle: function (bIsFirstStep) {
-			var $title = this.element.find(".jw-title"),
-				$visibleStep = this.element.find(".jw-step:visible");
+		_updateTitle: function (firstStep) {
+			var wizard = this,
+				$title = this.element.find(".jw-title"),
+				$currentStep = this.element.find(".jw-step:eq(" + this._stepIndex + ")");
 
-			if (!bIsFirstStep) {
-				this._effect($title, "title", "hide", "hide");
+			if (!firstStep) {
+				this._effect($title, "title", "hide", "hide", function () {
+					$title.text($currentStep.attr("title"));
+					wizard._effect($title, "title", "show", "show");
+				});
+			} else {
+				$title.text($currentStep.attr("title"));
 			}
-
-			$title.text($visibleStep.length == 1 ? $visibleStep.attr("title") : this.element.find(".jw-step:first").attr("title"));
-
-			if (!bIsFirstStep) {
-				this._effect($title, "title", "show", "show");
-			}
-
 		},
 
 		/**
@@ -423,7 +404,14 @@
 				}
 			});
 
-			$steps.hide().wrapAll(this._html("div", { "class": "jw-content ui-widget-content ui-helper-clearfix" }, this._html("div", { "class": "jw-steps-wrap" })));
+			if (this.options.effects.enable || this.options.effects.step.enable) {
+				$steps.addClass("jw-animated");
+			}
+
+			$steps.hide().wrapAll($("<div />", {
+				className: "jw-content ui-widget-content ui-helper-clearfix",
+				html: '<div class="jw-steps-wrap" />'
+			})).eq(this._stepIndex).show();
 		},
 
 		/**
@@ -443,13 +431,10 @@
 		 * @param bool isInit Behavior needs to change if this is called during _init (as opposed to manually through the global setter)
 		 * @return void
 		 */
-		_changeStep: function (nextStep, bIsFirstStep) {
-			var self = this,
+		_changeStep: function (nextStep, firstStep) {
+			var wizard = this,
 				$steps = this.element.find(".jw-step"),
-				$currentStep = $steps.filter(":visible"),
-				oBeforeChangeStepOptions = {};
-
-			bIsFirstStep = bIsFirstStep || false;
+				$currentStep = $steps.eq(this._stepIndex);
 
 			if (typeof nextStep === "number") {
 				if (nextStep < 0 || nextStep > ($steps.length - 1)) {
@@ -465,27 +450,21 @@
 				}
 			}
 
-			$currentStep = nextStep;
-			this._stepIndex = $steps.index(nextStep);
+			if (!firstStep) {
+				this._disableButtons();
+				this._stepIndex = $steps.index(nextStep);
+				this._updateTitle(firstStep);
 
-			if ($currentStep.length > 0) {
-				this.options.effects.step.hide.callback = function () {
-					self._effect(nextStep, "step", "show", "show");
-				};
-
-				this.element.find(".jw-step").hide();
-				this._effect($currentStep, "step", "hide", "hide");
+				this._effect($currentStep, "step", "hide", "hide", function () {
+					wizard._effect(nextStep, "step", "show", "show", function () {
+						wizard._enableButtons();
+						wizard._updateNavigation();
+					});
+				});
 			} else {
-				this._effect(nextStep, "step", "show", "show");
-			}
-
-			this._updateButtons();
-			this._updateTitle(bIsFirstStep);
-			if (this.options.menuEnable) {
-				this._updateMenu();
-			}
-			if (this.options.counter.enable) {
-				this._updateCounter();
+				this._stepIndex = $steps.index(nextStep);
+				this._updateTitle(firstStep);
+				this._updateNavigation();
 			}
 		},
 
@@ -498,31 +477,35 @@
 		 * @return void
 		 */
 		_buildMenu: function () {
-			var self = this, aListItems = [], $menu, sMenuHtml;
+			var list = [], $menu;
 
 			this.element.addClass("jw-hasmenu");
 			this.element.find(".jw-step").each(function (x) {
-				var aListItemClasses = ["ui-corner-all"];
-				if (x === 0) {
-					aListItemClasses.push("jw-current");
-					aListItemClasses.push("ui-state-highlight");
-				} else {
-					aListItemClasses.push("jw-inactive");
-					aListItemClasses.push("ui-state-disabled");
-				}
-				aListItems.push(self._html("li", { "class": aListItemClasses.join(" ") }, self._html("a", { step: x }, $(this).attr("title"))));
+				list.push($("<li />", {
+					className: "ui-corner-all " + (x === 0 ? "jw-current ui-state-highlight" : "jw-inactive ui-state-disabled"),
+					html: $("<a />", {
+						step: x,
+						text: $(this).attr("title")
+					})
+				})[0]);
 			});
 
-			sMenuHtml = this._html("div", { "class": "jw-menu-wrap" }, this._html("div", { "class": "jw-menu" }, this._html("ol", null, aListItems.join(""))));
+			$menu = $("<div />", {
+				className: "jw-menu-wrap",
+				html: $("<div />", {
+					className: "jw-menu",
+					html: $("<ol />", { html: $(list) })
+				})
+			});
 
-			this.element.find(".jw-content").prepend($menu = $(sMenuHtml));
+			this.element.find(".jw-content").prepend($menu);
 
 			$menu.find("a").click($.proxy(function (event) {
 				var $target = $(event.target),
-					iNextStep = parseInt($target.attr("step"), 10);
+					nextStep = parseInt($target.attr("step"), 10);
 
 				if ($target.parent().hasClass("jw-active")) {
-					this._changeStep(iNextStep, iNextStep <= this._stepIndex);
+					this.changeStep(nextStep, nextStep <= this._stepIndex ? "previous" : "next");
 				}
 			}, this));
 		},
@@ -545,10 +528,10 @@
 		 * @return void
 		 */
 		_updateMenu: function () {
-			var iCurrentStepIndex = this._stepIndex,
+			var currentStep = this._stepIndex,
 				$menu = this.element.find(".jw-menu");
 
-			this._effect($menu.find("li:eq(" + iCurrentStepIndex + ")"), "menu", "change");
+			this._effect($menu.find("li:eq(" + currentStep + ")"), "menu", "change");
 
 			$menu.find("a").each(function (x) {
 				var $li = $(this).parent(),
@@ -556,11 +539,11 @@
 					iStep = parseInt($a.attr("step"), 10),
 					sClass = "";
 
-				if (iStep < iCurrentStepIndex) {
+				if (iStep < currentStep) {
 					sClass += "jw-active ui-state-default ui-corner-all";
-				} else if (iStep === iCurrentStepIndex) {
+				} else if (iStep === currentStep) {
 					sClass += "jw-current ui-state-highlight ui-corner-all";
-				} else if (iStep > iCurrentStepIndex) {
+				} else if (iStep > currentStep) {
 					sClass += "jw-inactive ui-state-disabled ui-corner-all";
 					$a.removeAttr("href");
 				}
@@ -576,7 +559,7 @@
 		 * @return void
 		 */
 		_buildCounter: function () {
-			var $counter = $(this._html("span", { "class": "jw-counter ui-widget-content ui-corner-all jw-" + this.options.counter.orientText }));
+			var $counter = $("<span />", { className: "jw-counter ui-widget-content ui-corner-all jw-" + this.options.counter.orientText });
 
 			if (this.options.counter.location === "header") {
 				this.element.find(".jw-header").prepend($counter);
@@ -593,8 +576,7 @@
 
 			if (this.options.counter.progressbar) {
 				$counter
-					.append('<span class="jw-counter-text" />')
-					.append('<span class="jw-counter-progressbar" />')
+					.html('<span class="jw-counter-text" /> <span class="jw-counter-progressbar" />')
 					.find(".jw-counter-progressbar").progressbar();
 			}
 		},
@@ -672,68 +654,49 @@
 		 */
 		_buildButtons: function () {
 			var self = this,
-				oButtonOptions = this.options.buttons,
-				$Footer = $(this._html("div", { "class": "jw-footer ui-widget-header ui-corner-bottom" })),
-				$CancelButton = null,
-				$PreviousButton = null,
-				$NextButton = null,
-				$FinishButton = null,
-				oAttributes = { "class": "", type: "" },
-				sBaseClasses = "ui-state-default ui-corner-all ",
-				aClasses = [];
-
-			/* Cancel Button */
-			aClasses = ["jw-button-cancel", "jw-priority-secondary"];
-			if (oButtonOptions.cancelHide) {
-				aClasses.push("ui-helper-hidden");
-			}
-			oAttributes["class"] = sBaseClasses + aClasses.join(" ");
-			oAttributes.type = oButtonOptions.cancelType;
-			$CancelButton = $(this._html("button", oAttributes, oButtonOptions.cancelText))
-				.click(function (event) {
-					self._trigger("cancel", event);
+				options = this.options.buttons,
+				$footer = $("<div />", { className: "jw-footer ui-widget-header ui-corner-bottom" }),
+				$cancel = $("<button />", {
+					className: "ui-state-default ui-corner-all jw-button-cancel jw-priority-secondary" + (options.cancelHide ? " ui-helper-hidden" : ""),
+					type: options.cancelType,
+					text: options.cancelText,
+					click: function (event) {
+						self._trigger("cancel", event);
+					}
+				}),
+				$previous = $("<button />", {
+					className: "ui-state-default ui-corner-all jw-button-previous",
+					type: "button",
+					text: options.previousText,
+					click: function (event) {
+						self.previousStep();
+					}
+				}),
+				$next = $("<button />", {
+					className: "ui-state-default ui-corner-all jw-button-next",
+					type: "button",
+					text: options.nextText,
+					click: function (event) {
+						self.nextStep();
+					}
+				}),
+				$finish = $("<button />", {
+					className: "ui-state-default ui-corner-all jw-button-finish ui-state-highlight",
+					type: options.finishType,
+					text: options.finishText,
+					click: function (event) {
+						self._trigger("finish", event);
+					}
 				});
 
-			/* Previous Button */
-			oAttributes["class"] = sBaseClasses + "jw-button-previous";
-			oAttributes.type = "button";
-			$PreviousButton = $(this._html("button", oAttributes, oButtonOptions.previousText))
-				.click(function (event) {
-					self.previousStep();
-				});
-
-			/* Next Button */
-			oAttributes["class"] = sBaseClasses + "jw-button-next";
-			$NextButton = $(this._html("button", oAttributes, oButtonOptions.nextText))
-				.click(function () {
-					self.nextStep();
-				});
-
-			/* Finish Button */
-			aClasses = ["jw-button-finish", "ui-state-highlight"];
-			oAttributes["class"] = sBaseClasses +  aClasses.join(" ");
-			oAttributes.type = oButtonOptions.finishType;
-			$FinishButton = $(this._html("button", oAttributes, oButtonOptions.finishText))
-				.click(function (event) {
-					self._trigger("finish", event);
-				});
-
-			if (oButtonOptions.jqueryui.enable) {
-				$CancelButton.button({ icons: { primary: oButtonOptions.jqueryui.cancelIcon } });
-				$PreviousButton.button({ icons: { primary: oButtonOptions.jqueryui.previousIcon } });
-				$NextButton.button({ icons: { secondary: oButtonOptions.jqueryui.nextIcon } });
-				$FinishButton.button({ icons: { secondary: oButtonOptions.jqueryui.finishIcon } });
+			if (options.jqueryui.enable) {
+				$cancel.button({ icons: { primary: options.jqueryui.cancelIcon } });
+				$previous.button({ icons: { primary: options.jqueryui.previousIcon } });
+				$next.button({ icons: { secondary: options.jqueryui.nextIcon } });
+				$finish.button({ icons: { secondary: options.jqueryui.finishIcon } });
 			}
 
-			this.element.append(
-				$Footer.append(
-					$('<div class="jw-buttons" />')
-						.append($CancelButton)
-						.append($PreviousButton)
-						.append($NextButton)
-						.append($FinishButton)
-				)
-			);
+			this.element.append($footer.append($('<div class="jw-buttons" />').append($cancel).append($previous).append($next).append($finish)));
 		},
 
 		/**
@@ -743,29 +706,37 @@
 		 */
 		_updateButtons: function () {
 			var $steps = this.element.find(".jw-step"),
-				$previousButton = this.element.find(".jw-button-previous"),
-				$nextButton = this.element.find(".jw-button-next"),
-				$finishButton = this.element.find(".jw-button-finish");
+				$previous = this.element.find(".jw-button-previous"),
+				$next = this.element.find(".jw-button-next"),
+				$finish = this.element.find(".jw-button-finish");
 
 			switch ($steps.index($steps.filter(":visible"))) {
 			case 0:
-				$previousButton.hide();
-				$nextButton.show();
-				$finishButton.hide();
+				$previous.hide();
+				$next.show();
+				$finish.hide();
 				break;
 
 			case $steps.length - 1:
-				$previousButton.show();
-				$nextButton.hide();
-				$finishButton.show();
+				$previous.show();
+				$next.hide();
+				$finish.show();
 				break;
 
 			default:
-				$previousButton.show();
-				$nextButton.show();
-				$finishButton.hide();
+				$previous.show();
+				$next.show();
+				$finish.hide();
 				break;
 			}
+		},
+
+		_disableButtons: function () {
+			this.element.find(".jw-buttons button").addClass("ui-state-disabled").attr("disabled", true);
+		},
+
+		_enableButtons: function () {
+			this.element.find(".jw-buttons button").removeClass("ui-state-disabled").attr("disabled", false);
 		},
 
 		/**
@@ -785,6 +756,7 @@
 			disabled: false,
 			titleHide: false,
 			menuEnable: false,
+			//hotkeys: false,
 
 			buttons: {
 				jqueryui: {
@@ -819,55 +791,41 @@
 			effects: {
 				enable: false,
 				step: {
-					enable: true,
+					enable: false,
 					hide: {
 						type: "slide",
-						options: {
-							direction: "left"
-						},
-						duration: "normal",
-						callback: $.noop
+						options: { direction: "left" },
+						duration: "fast",
 					},
 					show: {
 						type: "slide",
-						options: {
-							direction: "left"
-						},
-						duration: "normal",
-						callback: $.noop
+						options: { direction: "left" },
+						duration: "fast",
 					}
 				},
 				title: {
-					enable: true,
+					enable: false,
 					hide: {
 						type: "slide",
-						options: {},
-						duration: "normal",
-						callback: $.noop
+						duration: "fast",
 					},
 					show: {
 						type: "slide",
-						options: {},
-						duration: "normal",
-						callback: $.noop
+						duration: "fast",
 					}
 				},
 				menu: {
-					enable: true,
+					enable: false,
 					change: {
 						type: "highlight",
-						options: {},
-						duration: "normal",
-						callback: $.noop
+						duration: "fast",
 					}
 				},
 				counter: {
-					enable: true,
+					enable: false,
 					change: {
 						type: "highlight",
-						options: {},
-						duration: "normal",
-						callback: $.noop
+						duration: "fast",
 					}
 				}
 			},
