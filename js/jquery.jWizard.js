@@ -6,7 +6,7 @@
  *
  * @requires jQuery
  * @requires jQuery UI (Widget Factory; ProgressBar optional; Button optional)
- * @version  1.6.1
+ * @version  1.6.2
  */
 (function ($) {
 	/**
