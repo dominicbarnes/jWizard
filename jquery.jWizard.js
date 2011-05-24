@@ -6,11 +6,8 @@
  *
  * @requires jQuery
  * @requires jQuery UI (Widget Factory; ProgressBar optional; Button optional)
- * @version  1.6
+ * @version  1.6.1
  */
-/*jslint white: true, browser: true, devel: true, onevar: true, undef: true, nomen: false, eqeqeq: false, plusplus: false, bitwise: true, regexp: true, newcap: true, immed: true, strict: true */
-/*global window: true, $: true, jQuery: true */
-"use strict";
 (function ($) {
 	/**
 	 * @class The jWizard object will be fed into $.widget()
@@ -669,38 +666,23 @@
 			var self = this,
 				options = this.options.buttons,
 				$footer = $("<div />", { className: "jw-footer ui-widget-header ui-corner-bottom" }),
-				$cancel = $("<button />", {
-					className: "ui-state-default ui-corner-all jw-button-cancel jw-priority-secondary" + (options.cancelHide ? " ui-helper-hidden" : ""),
-					type: options.cancelType,
-					text: options.cancelText,
-					click: function (event) {
-						self._trigger("cancel", event);
-					}
-				}),
-				$previous = $("<button />", {
-					className: "ui-state-default ui-corner-all jw-button-previous",
-					type: "button",
-					text: options.previousText,
-					click: function (event) {
-						self.previousStep();
-					}
-				}),
-				$next = $("<button />", {
-					className: "ui-state-default ui-corner-all jw-button-next",
-					type: "button",
-					text: options.nextText,
-					click: function (event) {
-						self.nextStep();
-					}
-				}),
-				$finish = $("<button />", {
-					className: "ui-state-default ui-corner-all jw-button-finish ui-state-highlight",
-					type: options.finishType,
-					text: options.finishText,
-					click: function (event) {
-						self._trigger("finish", event);
-					}
-				});
+				$cancel = $('<button type="' + options.cancelType + '" class="ui-state-default ui-corner-all jw-button-cancel jw-priority-secondary"' + (options.cancelHide ? " ui-helper-hidden" : "") + '">' + options.cancelText + '</button>'),
+				$previous = $('<button type="button" class="ui-state-default ui-corner-all jw-button-previous">' + options.previousText + '</button>'),
+				$next = $('<button type="button" class="ui-state-default ui-corner-all jw-button-next">' + options.nextText + '</button>'),
+				$finish = $('<button type="' + options.finishType + '" class="ui-state-default ui-corner-all jw-button-finish ui-state-highlight">' + options.finishText + '</button>');
+
+			$cancel.click(function (event) {
+				self._trigger("cancel", event);
+			});
+			$previous.click(function (event) {
+				self.previousStep();
+			});
+			$next.click(function (event) {
+				self.nextStep();
+			});
+			$finish.click(function (event) {
+				self._trigger("finish", event);
+			});
 
 			if (options.jqueryui.enable) {
 				$cancel.button({ icons: { primary: options.jqueryui.cancelIcon } });
