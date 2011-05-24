@@ -35,6 +35,7 @@
 			.jw-menu li {
 				padding: .25em .5em;
 				margin-bottom: .25em;
+				cursor: pointer;
 			}
 	.jw-hasmenu .jw-steps-wrap {
 		margin-left: 10em;
