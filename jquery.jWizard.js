@@ -706,6 +706,7 @@
 				$finish = this.element.find(".jw-button-finish");
 
 			switch ($steps.index($steps.filter(":visible"))) {
+			case -1:
 			case 0:
 				$previous.hide();
 				$next.show();
