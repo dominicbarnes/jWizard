@@ -346,7 +346,7 @@
 		 */
 		_buildTitle: function () {
 			this.element.prepend($("<div />", {
-				className: "jw-header ui-widget-header ui-corner-top" + (this.options.hideTitle ? " ui-helper-hidden" : ""),
+				"class": "jw-header ui-widget-header ui-corner-top" + (this.options.hideTitle ? " ui-helper-hidden" : ""),
 				html: '<h2 class="jw-title' + ((this.options.effects.enable || this.options.effects.title.enable) ? " jw-animated" : "") + '" />'
 			}));
 		},
@@ -406,7 +406,7 @@
 			}
 
 			$steps.hide().wrapAll($("<div />", {
-				className: "jw-content ui-widget-content ui-helper-clearfix",
+				"class": "jw-content ui-widget-content ui-helper-clearfix",
 				html: '<div class="jw-steps-wrap" />'
 			})).eq(this._stepIndex).show();
 		},
@@ -479,7 +479,7 @@
 			this.element.addClass("jw-hasmenu");
 			this.element.find(".jw-step").each(function (x) {
 				list.push($("<li />", {
-					className: "ui-corner-all " + (x === 0 ? "jw-current ui-state-highlight" : "jw-inactive ui-state-disabled"),
+					"class": "ui-corner-all " + (x === 0 ? "jw-current ui-state-highlight" : "jw-inactive ui-state-disabled"),
 					html: $("<a />", {
 						step: x,
 						text: $(this).attr("title")
@@ -488,9 +488,9 @@
 			});
 
 			$menu = $("<div />", {
-				className: "jw-menu-wrap",
+				"class": "jw-menu-wrap",
 				html: $("<div />", {
-					className: "jw-menu",
+					"class": "jw-menu",
 					html: $("<ol />", { html: $(list) })
 				})
 			});
@@ -563,7 +563,7 @@
 		 * @return void
 		 */
 		_buildCounter: function () {
-			var $counter = $("<span />", { className: "jw-counter ui-widget-content ui-corner-all jw-" + this.options.counter.orientText });
+			var $counter = $("<span />", { "class": "jw-counter ui-widget-content ui-corner-all jw-" + this.options.counter.orientText });
 
 			if (this.options.counter.location === "header") {
 				this.element.find(".jw-header").prepend($counter);
@@ -665,7 +665,7 @@
 		_buildButtons: function () {
 			var self = this,
 				options = this.options.buttons,
-				$footer = $("<div />", { className: "jw-footer ui-widget-header ui-corner-bottom" }),
+				$footer = $("<div />", { "class": "jw-footer ui-widget-header ui-corner-bottom" }),
 				$cancel = $('<button type="' + options.cancelType + '" class="ui-state-default ui-corner-all jw-button-cancel jw-priority-secondary"' + (options.cancelHide ? " ui-helper-hidden" : "") + '">' + options.cancelText + '</button>'),
 				$previous = $('<button type="button" class="ui-state-default ui-corner-all jw-button-previous">' + options.previousText + '</button>'),
 				$next = $('<button type="button" class="ui-state-default ui-corner-all jw-button-next">' + options.nextText + '</button>'),
