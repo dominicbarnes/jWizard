@@ -9,6 +9,7 @@ jWizard can take your boring HTML forms and turn them into a Windows Wizard-like
 The require markup and setup is simple and straightforward.
 
 With nothing more than this:
+
 ```html
 <div id="wizard">
 	<div title="Step 1"></div>
@@ -19,6 +20,7 @@ With nothing more than this:
 ```
 
 and this:
+
 ```javascript
 $(document).ready(function() {
 	$("#wizard").jWizard();
