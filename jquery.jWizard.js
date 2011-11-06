@@ -3,7 +3,7 @@
  *
  * @name	jWizard jQuery UI Widget
  * @author	Dominic Barnes
- * aad
+ * 
  * @requires jQuery
  * @requires jQuery UI (Widget Factory; ProgressBar optional; Button optional)
  * @version  1.6.2
