@@ -3,7 +3,7 @@
  *
  * @name	jWizard jQuery UI Widget
  * @author	Dominic Barnes
- * 
+ *
  * @requires jQuery
  * @requires jQuery UI (Widget Factory; ProgressBar optional; Button optional)
  * @version  1.6.2
@@ -30,6 +30,12 @@
 		 * @property int _actualCount Represents the `actual` number of steps
 		 */
 		_actualCount: 0,
+
+		/**
+		 * @private
+		 * @property Array _visited Represents the `visited` steps
+		 */
+		_visited: [],
 
 		/**
 		 * @description Initializes jWizard
@@ -60,6 +66,11 @@
 			});
 
 			this._changeStep(this._stepIndex, true);
+
+			this._visited[0] = true;
+			for (var i=1; i<this._stepCount; i++) {
+				this._visited[i] = false;
+			}
 		},
 
 		/**
@@ -251,6 +262,7 @@
 			};
 
 			if (this._trigger("next", null, options) !== false) {
+				this._visited[this._stepIndex+1] = true;
 				this.changeStep(this._stepIndex + 1, "next");
 			}
 		},
@@ -543,11 +555,11 @@
 					iStep = parseInt($a.attr("step"), 10),
 					sClass = "";
 
-				if (iStep < currentStep) {
-					sClass += "jw-active ui-state-default";
-				} else if (iStep === currentStep) {
+				if (iStep === currentStep) {
 					sClass += "jw-current ui-state-highlight";
-				} else if (iStep > currentStep) {
+				} else if (wizard._visited[iStep]) {
+					sClass += "jw-active ui-state-default";
+				} else if (!wizard._visited[iStep]) {
 					sClass += "jw-inactive ui-state-disabled";
 					$a.removeAttr("href");
 				}
