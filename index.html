@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Dominic Barnes</title>
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/css/bootstrap-combined.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css" rel="stylesheet">
+    <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/themes/base/jquery-ui.css" rel="stylesheet">
+    <link href="/css/jWizard.base.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="navbar navbar-static-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+
+                <a href="/" class="brand">Dominic Barnes</a>
+
+                <div class="nav-collapse">
+                    <ul class="nav">
+                        <li><a href="/">About Me</a></li>
+                        <li class="active"><a href="/jWizard">jWizard</a></li>
+                        <li><a href="/node-couchdb-api">node-couchdb-api</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="span8">
+                <h3>1. Install</h3>
+
+                <pre>&lt;!-- jquery ui theme --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/path/to/jquery-ui.css&quot; /&gt;
+&lt;!-- required CSS basics --&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;/path/to/jWizard.base.css&quot; /&gt;
+
+&lt;!-- duh --&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/path/to/jquery.js&quot;&gt;&lt;/script&gt;
+&lt;!-- at least the widget factory --&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/path/to/jquery-ui.js&quot;&gt;&lt;/script&gt;
+&lt;!-- and the plugin itself --&gt;
+&lt;script type=&quot;text/javascript&quot; src=&quot;/path/to/jWizard.min.js&quot;&gt;&lt;/script&gt;</pre>
+
+                <h3>2. Create Form</h3>
+                <pre>&lt;!-- Can be a form with nested fieldset/legend (legend = titles) --&gt;
+&lt;form id=&quot;wizard&quot; class=&quot;jWizard&quot;&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;Beginning&lt;/legend&gt;
+        &lt;p&gt;Are you sure you want to begin? Press &quot;Next&quot; to proceed?&lt;/p&gt;
+    &lt;/fieldset&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;Middle&lt;/legend&gt;
+        &lt;p&gt;Are you sure you want to?&lt;/p&gt;
+        &lt;p&gt;You can still go back. Or press &quot;Next&quot; again to confirm.&lt;/p&gt;
+    &lt;/fieldset&gt;
+    &lt;fieldset&gt;
+        &lt;legend&gt;End&lt;/legend&gt;
+        &lt;p&gt;Done, click &quot;Finish&quot; to end&lt;/p&gt;
+    &lt;/fieldset&gt;
+&lt;/form&gt;
+
+&lt;!-- Can also just be divs with title attributes --&gt;
+&lt;div id=&quot;wizard-div&quot; class=&quot;jWizard&quot;&gt;
+    &lt;div title=&quot;Beginning&quot;&gt;
+        &lt;p&gt;Are you sure you want to begin? Press &quot;Next&quot; to proceed?&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div title=&quot;Middle&quot;&gt;
+        &lt;p&gt;Are you sure you want to?&lt;/p&gt;
+        &lt;p&gt;You can still go back. Or press &quot;Next&quot; again to confirm.&lt;/p&gt;
+    &lt;/div&gt;
+    &lt;div title=&quot;End&quot;&gt;
+        &lt;p&gt;Done, click &quot;Finish&quot; to end&lt;/p&gt;
+    &lt;/div&gt;
+&lt;/div&gt;</pre>
+
+                <h3>3. Initialize</h3>
+                <pre>$(".jWizard").jWizard();</pre>
+
+                <h3>4. Profit</h3>
+                <form id="wizard" class="jWizard">
+                    <fieldset>
+                        <legend>Beginning</legend>
+                        <p>Are you sure you want to begin? Press "Next" to proceed?</p>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Middle</legend>
+                        <p>Are you sure you want to?</p>
+                        <p>You can still go back. Or press "Next" again to confirm.</p>
+                    </fieldset>
+                    <fieldset>
+                        <legend>End</legend>
+                        <p>Done, click "Finish" to end</p>
+                    </fieldset>
+                </form>
+            </div>
+
+            <div class="span4">
+                <h3>Demos</h3>
+
+                <ol>
+                    <li><a href="http://htmlpreview.github.com/?https://raw.github.com/dominicbarnes/jWizard/master/examples/all_config.html" target="_blank">
+                        All Configuration Options</a></li>
+                    <li><a href="http://htmlpreview.github.com/?https://raw.github.com/dominicbarnes/jWizard/master/examples/default.html" target="_blank">
+                        Default Configuration</a></li>
+                    <li><a href="http://htmlpreview.github.com/?https://raw.github.com/dominicbarnes/jWizard/master/examples/menu.html" target="_blank">
+                        Navigation Menu Enabled</a></li>
+                    <li><a href="http://htmlpreview.github.com/?https://raw.github.com/dominicbarnes/jWizard/master/examples/counter.html" target="_blank">
+                        Step Counter Enabled</a></li>
+                    <li><a href="http://htmlpreview.github.com/?https://raw.github.com/dominicbarnes/jWizard/master/examples/effects.html" target="_blank">
+                        jQuery UI Effects Enabled</a></li>
+                    <li><a href="http://htmlpreview.github.com/?https://raw.github.com/dominicbarnes/jWizard/master/examples/events.html" target="_blank">
+                        Custom Events</a></li>
+                    <li><a href="http://htmlpreview.github.com/?https://raw.github.com/dominicbarnes/jWizard/master/examples/public_methods.html" target="_blank">
+                        Public Methods</a></li>
+                    <li><a href="http://htmlpreview.github.com/?https://raw.github.com/dominicbarnes/jWizard/master/examples/multiple.html" target="_blank">
+                        Multiple Instances</a></li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.1.1/js/bootstrap.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"></script>
+    <script src="/js/jquery.jWizard.min.js"></script>
+    <script>
+    $(function () {
+        $("#wizard").jWizard();
+    });
+    </script>
+</body>
+
+</html>
