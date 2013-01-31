@@ -622,7 +622,7 @@
 				} else if (actualIndex > actualCount) {
 					counterText = actualCount;
 				} else {
-					counterText = actualIndex;
+					counterText = actualIndex + 1;
 				}
 
 				counterText += " of " + actualCount;
