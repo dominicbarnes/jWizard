@@ -51,13 +51,7 @@
 
 			this.element.addClass("ui-widget jw-widget");
 
-			this.element.find(".ui-state-default").live("mouseover mouseout", function (event) {
-				if (event.type === "mouseover") {
-					$(this).addClass("ui-state-hover");
-				} else {
-					$(this).removeClass("ui-state-hover");
-				}
-			});
+			this._hoverable(this.element.find(".ui-state-default"));
 
 			this._changeStep(this._stepIndex, true);
 		},
@@ -82,10 +76,9 @@
 				this._destroyCounter();
 			}
 
-			this.element.removeClass("ui-widget");
-			this.element.find(".ui-state-default").unbind("mouseover").unbind("mouseout");
+			this.element.removeClass("ui-widget jw-widget");
 
-			$.Widget.prototype.destroy.call(this);
+			this._super();
 		},
 
 		/**
@@ -417,8 +410,9 @@
 		 * @return void
 		 */
 		_destroySteps: function () {
-			$(".jw-step").show().unwrap().unwrap();	// Unwrap 2x: .jw-steps-wrap + .jw-content
-			$(".jw-step").unbind("show").unbind("hide").removeClass("jw-step");
+			// Unwrap 2x: .jw-steps-wrap + .jw-content
+			this.element.find(".jw-step").show().unwrap().unwrap()
+				.unbind("show hide").removeClass("jw-step");
 		},
 
 		/**
@@ -666,7 +660,7 @@
 			var self = this,
 				options = this.options.buttons,
 				$footer = $("<div />", { "class": "jw-footer ui-widget-header ui-corner-bottom" }),
-				$cancel = $('<button type="' + options.cancelType + '" class="ui-state-default ui-corner-all jw-button-cancel jw-priority-secondary' + (options.cancelHide ? " ui-helper-hidden" : "") + '">' + options.cancelText + '</button>'),
+				$cancel = $('<button type="' + options.cancelType + '" class="ui-state-default ui-corner-all jw-button-cancel ui-priority-secondary' + (options.cancelHide ? " ui-helper-hidden" : "") + '">' + options.cancelText + '</button>'),
 				$previous = $('<button type="button" class="ui-state-default ui-corner-all jw-button-previous">' + options.previousText + '</button>'),
 				$next = $('<button type="button" class="ui-state-default ui-corner-all jw-button-next">' + options.nextText + '</button>'),
 				$finish = $('<button type="' + options.finishType + '" class="ui-state-default ui-corner-all jw-button-finish ui-state-highlight">' + options.finishText + '</button>');
