@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+
+    <link rel="stylesheet" href="mocha.css" />
+    <link type="text/css" rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/themes/base/jquery-ui.css" />
+    <link rel="stylesheet" type="text/css" href="../jWizard.base.css" />
+</head>
+
+<body>
+    <div id="mocha"></div>
+
+    <div class="hidden">
+        <div id="wizard-basic">
+            <div id="basic-step1" title="Step 1">Step 1 Content</div>
+            <div id="basic-step2" title="Step 2">Step 2 Content</div>
+            <div id="basic-step3" title="Step 3">Step 3 Content</div>
+            <div id="basic-step4" title="Step 4">Step 4 Content</div>
+        </div>
+    </div>
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.0/jquery-ui.min.js"></script>
+    <script src="mocha.js"></script>
+    <script src="expect.js"></script>
+    <script src="jquery.expect.js"></script>
+    <script>
+        mocha.ui("bdd");
+        mocha.reporter("html");
+    </script>
+    <script type="text/javascript" src="../jquery.jWizard.js"></script>
+    <script src="test.js"></script>
+    <script>
+        mocha.run();
+    </script>
+</body>
+
+</html>
