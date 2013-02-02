@@ -97,24 +97,18 @@
 			this.element.removeClass("ui-state-disabled").find("button").removeAttr("disabled");
 		},
 
-		/**
-		 * @private
-		 * @description Can set options within the widget programmatically
-		 * @return void
-		 */
-		_setOption: function (key, value) {
-			var keys = key.split('.');
+		option: function (key, val) {
+			this._superApply(arguments);
 
-			if (keys.length > 1) {
+			if (typeof key === "string" && typeof val !== "undefined") {
+				var keys = key.split(".");
+
 				switch (keys[0]) {
 				case "buttons":
-					this.options[keys[0]][keys[1]] = value;
-
 					switch (keys[1]) {
 					case "jqueryui":
-						this.options[keys[0]][keys[1]][keys[2]] = value;
 						if (keys[2] === "enable") {
-							if (value) {
+							if (val) {
 								this.find(".jw-buttons > button").button("destroy");
 							} else {
 								this._destroyButtons();
@@ -123,33 +117,38 @@
 							break;
 						}
 						break;
+
 					case "cancelHide":
-						this.element.find(".jw-button-cancel")[value ? "addClass" : "removeClass"]("ui-helper-hidden");
+						this.element.find(".jw-button-cancel").toggleClass("ui-helper-hidden", !!val);
 						break;
+
 					case "cancelType":
-						this.element.find(".jw-button-cancel").attr("type", value);
+						this.element.find(".jw-button-cancel").attr("type", val);
 						break;
+
 					case "finishType":
-						this.element.find(".jw-button-finish").attr("type", value);
+						this.element.find(".jw-button-finish").attr("type", val);
 						break;
+
 					case "cancelText":
-						this.element.find(".jw-button-cancel").text(value);
+						this.element.find(".jw-button-cancel").text(val);
 						break;
+
 					case "previousText":
-						this.element.find(".jw-button-previous").text(value);
+						this.element.find(".jw-button-previous").text(val);
 						break;
+
 					case "nextText":
-						this.element.find(".jw-button-next").text(value);
+						this.element.find(".jw-button-next").text(val);
 						break;
+
 					case "finishText":
-						this.element.find(".jw-button-finish").text(value);
+						this.element.find(".jw-button-finish").text(val);
 						break;
 					}
 					break;
 
 				case "counter":
-					this.options[keys[0]][keys[1]] = value;
-
 					switch (keys[1]) {
 					case "enable":
 						if (value) {
@@ -180,38 +179,37 @@
 						break;
 					}
 					break;
-
-				case "effects":
-					if (keys.length === 2) {
-						this.options[keys[0]][keys[1]] = value;
-					} else {
-						this.options[keys[0]][keys[1]][keys[2]] = value;
-					}
-					break;
 				}
-			} else {
-				this.options[keys[0]] = value;
+			}
+		},
 
-				switch (keys[0]) {
-				case "titleHide":
-					this.element.find(".jw-header")[value ? "addClass" : "removeClass"]("ui-helper-hidden");
-					break;
+		/**
+		 * @private
+		 * @description Can set options within the widget programmatically
+		 * @return void
+		 */
+		_setOption: function (key, val) {
+			this._superApply(arguments);
 
-				case "menuEnable":
-					if (value) {
-						this._buildMenu();
-						this._updateMenu();
-					} else {
-						this._destroyMenu();
-					}
-					break;
+			switch (key) {
+			case "titleHide":
+				this.element.find(".jw-header").toggleClass("ui-helper-hidden", !val);
+				break;
 
-				case "counter":
-					this._destroyCounter();
-					this._buildCounter();
-					this._updateCounter();
-					break;
+			case "menuEnable":
+				if (val) {
+					this._buildMenu();
+					this._updateMenu();
+				} else {
+					this._destroyMenu();
 				}
+				break;
+
+			case "counter":
+				this._destroyCounter();
+				this._buildCounter();
+				this._updateCounter();
+				break;
 			}
 		},
 
@@ -311,17 +309,6 @@
 			$element[type](opt.type, opt.options, opt.duration, opt.callback);
 		},
 
-		/**
-		 * @private
-		 * @description Internal wrapper for logging (and potentially debugging)
-		 * @return void
-		 */
-		_log: function () {
-			if (this.options.debug && window.console) {
-				console.log[console.firebug ? "apply" : "call"](console, Array.prototype.slice.call(arguments));
-			}
-		},
-
 		_updateNavigation: function (firstStep) {
 			this._updateButtons();
 			if (this.options.menuEnable) {
@@ -339,7 +326,7 @@
 		 */
 		_buildTitle: function () {
 			this.element.prepend($("<div />", {
-				"class": "jw-header ui-widget-header ui-corner-top" + (this.options.hideTitle ? " ui-helper-hidden" : ""),
+				"class": "jw-header ui-widget-header ui-corner-top" + (this.options.titleHide ? " ui-helper-hidden" : ""),
 				html: '<h2 class="jw-title' + ((this.options.effects.enable || this.options.effects.title.enable) ? " jw-animated" : "") + '" />'
 			}));
 		},
@@ -370,7 +357,7 @@
 		 * @return void
 		 */
 		_destroyTitle: function () {
-			$(".jw-header").remove();
+			this.element.children(".jw-header").remove();
 		},
 
 		/**
@@ -741,11 +728,8 @@
 		 * @property object options This is the set of configuration options available to the user.
 		 */
 		options: {
-			debug: false,
-			disabled: false,
 			titleHide: false,
 			menuEnable: false,
-			//hotkeys: false,
 
 			buttons: {
 				jqueryui: {
