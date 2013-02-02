@@ -12,13 +12,11 @@
 <body>
     <div id="mocha"></div>
 
-    <div class="hidden">
-        <div id="wizard-basic">
-            <div id="basic-step1" title="Step 1">Step 1 Content</div>
-            <div id="basic-step2" title="Step 2">Step 2 Content</div>
-            <div id="basic-step3" title="Step 3">Step 3 Content</div>
-            <div id="basic-step4" title="Step 4">Step 4 Content</div>
-        </div>
+    <div id="wizard-basic">
+        <div id="basic-step1" title="Step 1">Step 1 Content</div>
+        <div id="basic-step2" title="Step 2">Step 2 Content</div>
+        <div id="basic-step3" title="Step 3">Step 3 Content</div>
+        <div id="basic-step4" title="Step 4">Step 4 Content</div>
     </div>
 
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
@@ -31,9 +29,10 @@
         mocha.reporter("html");
     </script>
     <script type="text/javascript" src="../jquery.jWizard.js"></script>
-    <script src="test.js"></script>
+    <script src="api.js"></script>
+    <script src="options.js"></script>
     <script>
-        mocha.run();
+        (window.mochaPhantomJs || mocha).run();
     </script>
 </body>
 
