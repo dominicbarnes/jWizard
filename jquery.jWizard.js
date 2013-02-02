@@ -6,7 +6,6 @@
  *
  * @requires jQuery
  * @requires jQuery UI (Widget Factory; ProgressBar optional; Button optional)
- * @version  1.6.2
  */
 (function ($) {
 	/**
@@ -193,7 +192,7 @@
 
 			switch (key) {
 			case "titleHide":
-				this.element.find(".jw-header").toggleClass("ui-helper-hidden", !val);
+				this.element.find(".jw-header").toggleClass("ui-helper-hidden", !!val);
 				break;
 
 			case "menuEnable":
@@ -687,6 +686,7 @@
 				$finish = this.element.find(".jw-button-finish");
 
 			switch ($steps.index($steps.filter(":visible"))) {
+			case -1:
 			case 0:
 				$previous.hide();
 				$next.show();
