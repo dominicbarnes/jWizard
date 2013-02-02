@@ -1,6 +1,6 @@
 {
   "name": "jWizard",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "A wizard widget based on jQuery UI",
   "main": "jquery.jWizard.js",
   "directories": {
