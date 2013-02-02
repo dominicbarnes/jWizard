@@ -57,7 +57,7 @@ describe("options", function () {
         });
     });
 
-    describe.only(".buttons", function () {
+    describe(".buttons", function () {
         var $wizard = $("#wizard-basic");
 
         describe.skip(".jqueryui", function () {
