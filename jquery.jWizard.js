@@ -342,7 +342,7 @@
 
 			if (!firstStep) {
 				this._effect($title, "title", "hide", "hide", function () {
-					$title.text($currentStep.attr("title") || $currentStep.data("title"));
+					$title.text($currentStep.attr("title") || $currentStep.data("jwizard-title"));
 					wizard._effect($title, "title", "show", "show");
 				});
 			} else {
