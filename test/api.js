@@ -218,6 +218,18 @@ describe("#changeStep()", function () {
         $wizard.jWizard("changeStep", 1);
         testVisibility($steps, 0);
     });
+
+    it("should change the title based on the title attribute", function () {
+        $wizard.jWizard("changeStep", 1);
+        $expect($wizard.find(".jw-title"))
+            .to.have.text($wizard.find(".jw-step").eq(1).attr("title"));
+    });
+
+    it("should be able to use the data-title attribute as well", function () {
+        $wizard.jWizard("changeStep", 2);
+        $expect($wizard.find(".jw-title"))
+            .to.have.text($wizard.find(".jw-step").eq(2).attr("data-title"));
+    });
 });
 
 describe("#firstStep()", function () {
