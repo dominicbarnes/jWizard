@@ -1,0 +1,18 @@
+.jw-widget{overflow:hidden;}
+.jw-header{padding:1em;}.jw-header .jw-counter{float:right;}
+.jw-header .jw-title{padding:0 1em;}
+.jw-header h2{margin:0;padding:.3em 0;}
+.jw-content{padding:.5em 0;}.jw-content p{margin-top:0;}
+.jw-hasmenu .jw-steps-wrap{margin-left:10em;}
+.jw-menu-wrap{width:10em;margin-right:-10em;float:left;}
+.jw-menu{margin:0 .5em;}.jw-menu li{padding:.25em .5em;margin-bottom:.25em;cursor:pointer;}
+.jw-menu ol{list-style:none;margin:0;padding:0;}
+.jw-steps-wrap{height:15em;overflow:auto;padding:.5em;}
+.jw-counter{float:left;padding:.2em;}.jw-counter.jw-right{text-align:right;}.jw-counter.jw-right .jw-counter-progressbar{display:block;width:6em;float:left;}
+.jw-counter.jw-right .jw-counter-text{float:right;padding:.4em;}
+.jw-counter.jw-left .jw-counter-progressbar{display:block;width:6em;float:right;}
+.jw-counter.jw-left .jw-counter-text{float:left;padding:.4em;}
+.jw-counter.jw-center .jw-counter-progressbar{display:block;}
+.jw-counter.jw-center .jw-counter-text{float:left;width:10em;padding:.4em;text-align:center;}
+.jw-footer{padding:1em;}
+.jw-buttons{text-align:right;}.jw-buttons button{padding:.5em 1em;margin-left:1em;}
