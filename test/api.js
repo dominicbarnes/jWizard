@@ -228,7 +228,7 @@ describe("#changeStep()", function () {
     it("should be able to use the data-title attribute as well", function () {
         $wizard.jWizard("changeStep", 2);
         $expect($wizard.find(".jw-title"))
-            .to.have.text($wizard.find(".jw-step").eq(2).attr("data-title"));
+            .to.have.text($wizard.find(".jw-step").eq(2).attr("data-jwizard-title"));
     });
 });
 
