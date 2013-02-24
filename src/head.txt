@@ -1,0 +1,7 @@
+/**
+ * jWizard: a jQuery UI Wizard Widget
+ *
+ * @author Dominic Barnes <dominic@dbarnes.info>
+ * @version <%= pkg.version %>
+ */
+(function ($, undefined) {

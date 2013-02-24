@@ -1,10 +1,10 @@
 /*
-  MIT License.  
+  MIT License.
   Copyright (c) 2012 Amjad Masad <amjad@codecademy.com> Ryzac, Inc.
 */
 
 (function (global, undefined) {
-  
+
   var jQuery = global.jQuery
     , $ = jQuery;
 
@@ -205,7 +205,7 @@
    */
 
   var flags = {
-      not: ['to', 'be', 'have', 'include', 'only']
+      not: ['to', 'be', 'have', 'include', 'only', 'trigger']
     , to: ['be', 'have', 'include', 'only', 'not']
     , be: []
     , is: []
@@ -269,7 +269,7 @@
    * Constructor
    * @inherits Error
    */
-   
+
   function AssertionError (msg) {
     Error.call(this);
     /*jshint noarg:false*/
@@ -277,7 +277,7 @@
     this.message = msg;
     this.name = 'AssertionError';
   }
-  
+
   AssertionError.prototype = new Error();
 
   global.$expect = $expect;
@@ -286,7 +286,7 @@
 
   /**
    * Performs an assertion
-   * 
+   *
    * @param {Boolean} truth
    * @param {String|Function} msg
    * @param {String} error
@@ -299,7 +299,7 @@
     if ($.isFunction(msg)) {
       error = msg = msg.call(this, !ok);
     }
-	
+
     msg = this.flags.not ? error : msg;
 
     if (!ok) {
@@ -383,7 +383,7 @@
   Assertion.prototype.eql =
   Assertion.prototype.equal = function ($el, msg) {
     $el = $el instanceof jQuery ? $el : $($el);
-    
+
     // Returns true if every element in a appears exactly once in b.
     var injSurj = function(a,b) {
       if (a.length !== b.length) return false;
@@ -392,8 +392,8 @@
         return $.inArray(el, b) > -1 ? true : null;
       }).length === a.length;
     };
-	
-    // Arrays are equal if every element in this.obj 
+
+    // Arrays are equal if every element in this.obj
     // appears in $el, and vice-versa.
     var eq = injSurj(this.obj, $el) && injSurj($el, this.obj);
 
@@ -422,9 +422,9 @@
       this.assert(
           got === val
         , msg || 'expected ' + i(this.obj) + ' to have an attribute ' + prop + ' equals to ' + val
-        , msg || 'expected ' + i(this.obj) + ' to not have an attribute ' + prop + ' equals to ' + val);  
+        , msg || 'expected ' + i(this.obj) + ' to not have an attribute ' + prop + ' equals to ' + val);
     }
-    
+
     return this;
   };
 
@@ -441,14 +441,14 @@
       ("0" + parseInt(rgb[2],10).toString(16)).slice(-2) +
       ("0" + parseInt(rgb[3],10).toString(16)).slice(-2);
   }
-  
+
   /**
    * Takes color in any format and returns it in a HEX (uppercase) format.
    */
 
   function normalizeColor (color) {
     if (!color) return '';
-    
+
     function r (x) { return x.toUpperCase() + x.toUpperCase(); }
 
     if (color.match(/^#/)) {
@@ -477,7 +477,7 @@
         return prop + '-' + dir;
       }
     }
-    
+
     val = val.split(/\s/);
 
     var passing = true
@@ -513,7 +513,7 @@
           if (style === 'color') {
             if ((got = normalizeColor(got)) !== normalizeColor(val[i])) passing = false;
           } else {
-            if (got !== val[i]) passing = false;  
+            if (got !== val[i]) passing = false;
           }
 
           return got;
@@ -546,7 +546,7 @@
 
     var obj = this.obj
       , template = function (got) {
-          return msg || 'expected ' + i(obj) + ' to have its ' + prop 
+          return msg || 'expected ' + i(obj) + ' to have its ' + prop
                       + ' style equal to ' + val + ( got ? ' but got ' + got : '');
         }
       , that = this
@@ -574,7 +574,7 @@
         case 'border-right':
         case 'border-left':
         case 'border-bottom':
-          got = borderQuad(obj, prop, val);  
+          got = borderQuad(obj, prop, val);
           passing = got.passing;
           got = got.got;
           break;
@@ -607,7 +607,7 @@
           , template(got)
           , template());
     }
-   
+
     this.obj.each(function (_, el) {
       check($(el));
     });
@@ -618,7 +618,7 @@
 
   /**
    * Asserts that an element has certain text. The check is loose by default, meaning punctuation
-   * and spaces are stripped out and case is ignored. Pass in true as the second argument for 
+   * and spaces are stripped out and case is ignored. Pass in true as the second argument for
    * strict equality.
    *
    * @param {String} val
@@ -657,7 +657,7 @@
 
   /**
    * Asserts that an element has certain text. The check is loose by default, meaning punctuation
-   * and spaces are stripped out and case is ignored. Pass in true as the second argument for 
+   * and spaces are stripped out and case is ignored. Pass in true as the second argument for
    * strict equality.
    *
    * @param {String} val
@@ -716,9 +716,9 @@
                 val = parseFloat(val.slice(2));
               } else if (op = ops[val.charAt(0)] ) {
                 opName = val.charAt(0);
-                val = parseFloat(val.slice(1));  
+                val = parseFloat(val.slice(1));
               }
-              
+
               var v = this.obj[fn]();
               this.assert(
                   op(v, val)
@@ -743,7 +743,7 @@
    * @param {String|Function} msg
    * @api public
    */
-  Assertion.prototype.value = 
+  Assertion.prototype.value =
   Assertion.prototype.val = function (val, msg) {
     var got;
     this.assert(
@@ -824,46 +824,45 @@
     return new Assertion(this.obj.end());
   };
 
+  Assertion.prototype.trigger = function (evt, test) {
+    var obj = this.obj
+      , dfd = $.Deferred()
+      , pro = dfd.promise()
+      , actual = 0
+      , limit = 1
+      , handler = function () {
+          if (test) {
+            try {
+              test.apply(this, arguments);
+            } catch (e) {
+              obj.off(evt, handler);
+              return dfd.reject(e);
+            }
+          }
+
+          if (++actual >= limit) {
+            obj.off(evt, handler);
+            dfd.resolve();
+          }
+        };
+
+    pro.times = function (times) {
+      limit = times;
+      return this;
+    };
+
+    obj.on(evt, handler);
+    return dfd.promise();
+  };
+
   /**
    * Async testing signals. Meant to be overridden.
-   * 
+   *
    * @param {String} evt
    * @param {Deferred} dfd
    */
   Assertion.asyncWait = function (/*evt, dfd*/) {};
   Assertion.asyncDone = function (/*evt, dfd*/) {};
-
-  /**
-   * Attaches a *once* callback to an event.
-   * Calls asyncWait with the eventType and a deferred object.
-   * When the event is fired the deferred is resolved and passed to asynDone alont with the eventType.
-   *
-   * @api public
-   * @param {String} evt
-   * @param {Function} cb
-   */
-
-  Assertion.prototype.on = function (evt, cb) {
-    var obj = this.obj
-      , dfd = $.Deferred()
-      , callback = function () {
-          obj.off(evt, callback);
-          var ret = null;
-
-          try {
-            ret = cb.apply(this, arguments);
-            dfd.resolveWith(obj, [null, ret]);
-          } catch (e) {
-            dfd.rejectWith(obj, [e, ret]);
-          }
-
-          Assertion.asyncDone(evt, dfd);
-          return ret;
-        };
-
-    this.obj.on(evt, callback);
-    Assertion.asyncWait(evt, dfd);
-  };
 
   /**
    * Wait before executing a callback
