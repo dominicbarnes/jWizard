@@ -10,18 +10,33 @@
  */
 $.widget("db.progressbar", $.ui.progressbar, {
     _create: function () {
-        this._super();
+        if (this._super) {
+            this._super();
+        } else {
+            $.ui.progressbar.prototype._create.call(this);
+        }
+
         if (this.options.label) this._createLabel();
         this._refreshValue();
     },
 
     _destroy: function () {
         if (this.options.label) this._destroyLabel();
-        this._super();
+
+        if (this._super) {
+            this._super();
+        } else {
+            $.ui.progressbar.prototype._destroy.call(this);
+        }
     },
 
     _refreshValue: function () {
-        this._superApply(arguments);
+        if (this._superApply) {
+            this._superApply(arguments);
+        } else {
+            $.ui.progressbar.prototype._refreshValue.apply(this, arguments);
+        }
+
         if (this.label) this._updateLabel();
     },
 
@@ -30,7 +45,11 @@ $.widget("db.progressbar", $.ui.progressbar, {
             this._updateLabel();
         }
 
-        this._superApply(arguments);
+        if (this._superApply) {
+            this._superApply(arguments);
+        } else {
+            $.ui.progressbar.prototype._setOption.apply(this, arguments);
+        }
     },
 
     _createLabel: function () {
