@@ -46,7 +46,7 @@ module.exports = function (grunt) {
                 src:  "src/*.less",
                 dest: "dist/jquery.jWizard.css"
             }
-        }
+        },
     });
 
     grunt.registerTask("mocha-phantomjs", "Run mocha-phantomjs tests", function () {
@@ -68,6 +68,30 @@ module.exports = function (grunt) {
         proc.stdout.pipe(process.stdout);
     });
 
+    grunt.registerTask("depversions", "Change the jQuery version used for the test suite", function (jquery, jqueryui) {
+        var src = "test/loader.js";
+        var loader = grunt.file.read(src);
+        var deps = {
+            jquery:   jquery,
+            jqueryui: jqueryui
+        };
+        var result = loader.replace(/([a-z]+): "[\d\.]+"/g, function (full, dep) {
+            return dep + ': "' + deps[dep] + '"';
+        });
+
+        grunt.file.write(src, result);
+    });
+
+    grunt.registerTask("testversions", "Run tests against specific versions of jQuery/UI", function (jquery, jqueryui) {
+        var deps = [ "depversions", jquery, jqueryui ].join(":");
+
+        grunt.task.run([ deps, "mocha-phantomjs" ]);
+    });
+
     grunt.registerTask("default", [ "jshint", "concat", "uglify", "less" ]);
-    grunt.registerTask("test", [ "mocha-phantomjs" ]);
+
+    grunt.registerTask("test", [ "test-latest" ])
+    grunt.registerTask("test-all", [ "test-latest", "test-oldest" ])
+    grunt.registerTask("test-latest", [ "testversions:1.9.1:1.10.1" ]);
+    grunt.registerTask("test-oldest", [ "testversions:1.7.2:1.8.24" ]);
 };
