@@ -333,7 +333,7 @@ $.widget("db.jWizard", {
         var wizard = this,
             $footer = $("<div>", {
                 "class": "jw-footer ui-widget-header ui-corner-bottom",
-                html: '<div class="jw-buttons"></div>'
+                html: '<div class="jw-buttons ui-helper-clearfix"></div>'
             });
 
         $.each(this.options.buttons, function (type, data) {
@@ -342,8 +342,8 @@ $.widget("db.jWizard", {
 
             delete options.icons;
 
-            options["class"] = options["class"] || "";
-            options["class"] += " jw-button-" + type;
+            options.class = options["class"] || "";
+            options.class += " jw-button-" + type;
 
             if (data) {
                 wizard["$" + type] = $('<button>', options)
@@ -435,10 +435,34 @@ $.widget("db.jWizard", {
         this.element.find(".jw-footer").find("button").removeClass("ui-state-disabled");
     },
 
-    _setOption: function (key, value) {
+    option: function (key, value) {
         if (this._superApply) {
             this._superApply(arguments);
         } else {
+            if (arguments.length < 1 || key.indexOf(".") === -1) {
+                $.Widget.prototype.option.apply(this, arguments);
+            } else {
+                var current = this.options,
+                    path = key.split("."),
+                    len = path.length - 1;
+
+                $.each(path, function (x, part) {
+                    if (x >= len) {
+                        current[part] = value;
+                    } else {
+                        current = current[part];
+                    }
+                });
+
+                this._setOption(path[0], value);
+            }
+        }
+    },
+
+    _setOption: function (key, value) {
+        if (this._superApply) {
+            this._superApply(arguments);
+        } else if (key === "disabled") {
             $.Widget.prototype._setOption.apply(this, arguments);
         }
 

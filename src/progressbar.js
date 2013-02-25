@@ -20,13 +20,13 @@ $.widget("db.progressbar", $.ui.progressbar, {
         this._refreshValue();
     },
 
-    _destroy: function () {
+    destroy: function () {
         if (this.options.label) this._destroyLabel();
 
         if (this._super) {
             this._super();
         } else {
-            $.ui.progressbar.prototype._destroy.call(this);
+            $.ui.progressbar.prototype.destroy.call(this);
         }
     },
 
@@ -53,6 +53,8 @@ $.widget("db.progressbar", $.ui.progressbar, {
     },
 
     _createLabel: function () {
+        if (this.label) return;
+
         this.label = $('<span class="ui-progressbar-label"></span>').appendTo(this.element);
         this._updateLabel();
     },
@@ -72,6 +74,7 @@ $.widget("db.progressbar", $.ui.progressbar, {
 
     _destroyLabel: function () {
         this.label.remove();
+        this.label = null;
     },
 
     _count: function () {
