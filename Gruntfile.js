@@ -96,7 +96,7 @@ module.exports = function (grunt) {
     grunt.registerTask("default", [ "jshint", "concat", "uglify", "less" ]);
 
     grunt.registerTask("test", [ "test-latest" ])
-    grunt.registerTask("test-all", [ "test-latest", "test-oldest" ])
+    grunt.registerTask("test-all", [ "test-oldest", "test-latest" ])
     grunt.registerTask("test-latest", [ "testversions:1.9.1:1.10.1" ]);
-    grunt.registerTask("test-oldest", [ "testversions:1.7.2:1.8.24" ]);
+    grunt.registerTask("test-oldest", [ "testversions:1.7.0:1.8.7" ]);
 };
