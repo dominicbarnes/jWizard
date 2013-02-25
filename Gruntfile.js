@@ -53,7 +53,7 @@ module.exports = function (grunt) {
         var done = this.async(),
             proc = grunt.util.spawn({
                 cmd:      "./node_modules/.bin/mocha-phantomjs",
-                args:     [ "test/test.html" ],
+                args:     [ "-R", "dot", "test/test.html" ],
                 fallback: "Unit Tests Failed to Run"
             }, function (err, result, code) {
                 if (err) {
@@ -69,7 +69,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask("depversions", "Change the jQuery version used for the test suite", function (jquery, jqueryui) {
-        var src = "test/loader.js";
+        var src = "test/dependencies.js";
         var loader = grunt.file.read(src);
         var deps = {
             jquery:   jquery,
@@ -80,10 +80,15 @@ module.exports = function (grunt) {
         });
 
         grunt.file.write(src, result);
+
+        grunt.log.writeln("jQuery:    " + jquery.green);
+        grunt.log.writeln("jQuery UI: " + jqueryui.green);
     });
 
     grunt.registerTask("testversions", "Run tests against specific versions of jQuery/UI", function (jquery, jqueryui) {
         var deps = [ "depversions", jquery, jqueryui ].join(":");
+
+        grunt.log.write("Running unit tests via mocha-phantomjs...");
 
         grunt.task.run([ deps, "mocha-phantomjs" ]);
     });

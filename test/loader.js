@@ -13,7 +13,4 @@
     js(base + "jquery/" + v.jquery + "/jquery.js");
     js(base + "jqueryui/" + v.jqueryui + "/jquery-ui.js");
     css(base + "jqueryui/" + v.jqueryui + "/themes/base/jquery-ui.css");
-})({
-    jquery: "1.7.2",
-    jqueryui: "1.8.24"
-});
+})(window.versions);
