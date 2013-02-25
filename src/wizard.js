@@ -16,7 +16,11 @@ $.widget("db.jWizard", {
     _create: function () {
         var o = this.options;
 
-        this._super();
+        if (this._super) {
+            this._super();
+        } else {
+            $.Widget.prototype._create.call(this);
+        }
 
         if (o.disabled) this.disable();
 
@@ -38,7 +42,11 @@ $.widget("db.jWizard", {
         if (o.title) this._destroyTitle();
         this._destroySteps();
 
-        this._super();
+        if (this._super) {
+            this._super();
+        } else {
+            $.Widget.prototype.destroy.call(this);
+        }
     },
 
     first: function () {
@@ -98,15 +106,21 @@ $.widget("db.jWizard", {
             dfd    = $.Deferred(),
             effect = this.options.effects.steps.hide;
 
+        function done() {
+            $step.trigger("stephidden");
+            dfd.resolve();
+        }
+
         if ($step) {
             $step.trigger(hide);
             if (hide.isDefaultPrevented()) {
                 dfd.reject();
             } else {
-                this._hide($step, effect, function () {
-                    $step.trigger("stephidden");
-                    dfd.resolve();
-                });
+                if (this._hide) {
+                    this._hide($step, effect, done);
+                } else {
+                    $step.hide(effect, done);
+                }
             }
         } else {
             dfd.resolve();
@@ -121,22 +135,28 @@ $.widget("db.jWizard", {
             dfd    = $.Deferred(),
             effect = this.options.effects.steps.show;
 
+        function done() {
+            wizard.$current = $step;
+
+            wizard._updateTitle();
+            wizard._updateMenu();
+            wizard._updateButtons();
+            wizard._updateProgress();
+
+            $step.trigger("stepshown");
+            dfd.resolve();
+        }
+
         if ($step) {
             $step.trigger(show);
             if (show.isDefaultPrevented()) {
                 dfd.reject();
             } else {
-                this._show($step, effect, function () {
-                    wizard.$current = $step;
-
-                    wizard._updateTitle();
-                    wizard._updateMenu();
-                    wizard._updateButtons();
-                    wizard._updateProgress();
-
-                    $step.trigger("stepshown");
-                    dfd.resolve();
-                });
+                if (this._show) {
+                    this._show($step, effect, done);
+                } else {
+                    $step.show(effect, done);
+                }
             }
         } else {
             dfd.resolve();
@@ -313,7 +333,7 @@ $.widget("db.jWizard", {
         var wizard = this,
             $footer = $("<div>", {
                 "class": "jw-footer ui-widget-header ui-corner-bottom",
-                html: '<div class="jw-buttons"></div>'
+                html: '<div class="jw-buttons ui-helper-clearfix"></div>'
             });
 
         $.each(this.options.buttons, function (type, data) {
@@ -322,8 +342,8 @@ $.widget("db.jWizard", {
 
             delete options.icons;
 
-            options["class"] = options["class"] || "";
-            options["class"] += " jw-button-" + type;
+            options.class = options["class"] || "";
+            options.class += " jw-button-" + type;
 
             if (data) {
                 wizard["$" + type] = $('<button>', options)
@@ -336,20 +356,36 @@ $.widget("db.jWizard", {
 
         this.element.append($footer);
 
-        this._on({
-            "click .jw-button-cancel": function () {
-                wizard.cancel();
-            },
-            "click .jw-button-prev": function () {
-                wizard.prev();
-            },
-            "click .jw-button-next": function () {
-                wizard.next();
-            },
-            "click .jw-button-finish": function () {
-                wizard.finish();
-            }
-        });
+        if (this._on) {
+            this._on({
+                "click .jw-button-cancel": function () {
+                    wizard.cancel();
+                },
+                "click .jw-button-prev": function () {
+                    wizard.prev();
+                },
+                "click .jw-button-next": function () {
+                    wizard.next();
+                },
+                "click .jw-button-finish": function () {
+                    wizard.finish();
+                }
+            });
+        } else {
+            this.element
+                .on("click", ".jw-button-cancel", function () {
+                    wizard.cancel();
+                })
+                .on("click", ".jw-button-prev", function () {
+                    wizard.prev();
+                })
+                .on("click", ".jw-button-next", function () {
+                    wizard.next();
+                })
+                .on("click", ".jw-button-finish", function () {
+                    wizard.finish();
+                })
+        }
 
         this._updateButtons();
     },
@@ -399,8 +435,36 @@ $.widget("db.jWizard", {
         this.element.find(".jw-footer").find("button").removeClass("ui-state-disabled");
     },
 
+    option: function (key, value) {
+        if (this._superApply) {
+            this._superApply(arguments);
+        } else {
+            if (arguments.length < 1 || key.indexOf(".") === -1) {
+                $.Widget.prototype.option.apply(this, arguments);
+            } else {
+                var current = this.options,
+                    path = key.split("."),
+                    len = path.length - 1;
+
+                $.each(path, function (x, part) {
+                    if (x >= len) {
+                        current[part] = value;
+                    } else {
+                        current = current[part];
+                    }
+                });
+
+                this._setOption(path[0], value);
+            }
+        }
+    },
+
     _setOption: function (key, value) {
-        this._superApply(arguments);
+        if (this._superApply) {
+            this._superApply(arguments);
+        } else if (key === "disabled") {
+            $.Widget.prototype._setOption.apply(this, arguments);
+        }
 
         switch (key) {
         case "title":

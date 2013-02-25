@@ -12,9 +12,5 @@
 
     js(base + "jquery/" + v.jquery + "/jquery.js");
     js(base + "jqueryui/" + v.jqueryui + "/jquery-ui.js");
-    css(base + "jqueryui/" + v.jqueryui + "/themes/" + v.theme + "/jquery-ui.css");
-})({
-    jquery:   "1.9.1",
-    jqueryui: "1.10.1",
-    theme:    "blitzer"
-});
+    css(base + "jqueryui/" + v.jqueryui + "/themes/base/jquery-ui.css");
+})(window.versions);
