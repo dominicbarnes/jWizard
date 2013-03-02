@@ -2,6 +2,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-concat");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-less");
+    grunt.loadNpmTasks("grunt-contrib-jade");
     grunt.loadNpmTasks("grunt-contrib-uglify");
 
     grunt.initConfig({
@@ -39,14 +40,29 @@ module.exports = function (grunt) {
         },
 
         less: {
-            options: {
-                compress: true
-            },
             main: {
                 src:  "src/*.less",
                 dest: "dist/jquery.jWizard.css"
+            },
+            min: {
+                options: {
+                    compress: true
+                },
+                src: "dist/jquery.jWizard.css",
+                dest: "dist/jquery.jWizard.min.css"
             }
         },
+
+        jade: {
+            options: {
+                pretty: true
+            },
+            docs: {
+                files: {
+                    "docs/index.html": "docs/index.jade"
+                }
+            }
+        }
     });
 
     grunt.registerTask("mocha-phantomjs", "Run mocha-phantomjs tests", function () {
