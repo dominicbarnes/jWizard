@@ -1,0 +1,58 @@
+options: {
+    title: true,
+
+    menu: true,
+
+    buttons: {
+        cancel: {
+            "class": "ui-priority-secondary",
+            text: "Cancel",
+            type: "reset",
+            icons: {
+                primary: "ui-icon-circle-close"
+            }
+        },
+        prev: {
+            text: "Previous",
+            type: "button",
+            icons: {
+                primary: "ui-icon-circle-triangle-w"
+            }
+        },
+        next: {
+            text: "Next",
+            type: "button",
+            icons: {
+                secondary: "ui-icon-circle-triangle-e"
+            }
+        },
+        finish: {
+            "class": "ui-priority-primary ui-state-highlight",
+            text: "Finish",
+            type: "submit",
+            icons: {
+                secondary: "ui-icon-circle-check"
+            }
+        }
+    },
+
+    progress: {
+        label: "count",
+        append: "Complete"
+    },
+
+    effects: {
+        steps: {
+            hide: {
+                effect:    "blind",
+                direction: "left",
+                duration:  250
+            },
+            show: {
+                effect:    "blind",
+                direction: "left",
+                duration:  250
+            }
+        }
+    }
+}

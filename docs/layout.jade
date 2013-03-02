@@ -1,0 +1,56 @@
+!!! 5
+html(lang="en")
+  head
+    title jWizard &mdash; A jQuery UI Wizard Widget
+    meta(charset="utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name="author", content="Dominic Barnes <dominic@dbarnes.info>")
+    meta(name="description", content="jWizard is a jQuery UI Widget for creating a Wizard interface in web forms")
+    link(href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/css/bootstrap-combined.no-icons.min.css", rel="stylesheet")
+    link(href="//netdna.bootstrapcdn.com/font-awesome/3.0.2/css/font-awesome.css", rel="stylesheet")
+    link(href="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/themes/base/jquery-ui.css", rel="stylesheet")
+    link(href="../dist/jquery.jWizard.min.css", rel="stylesheet")
+    //if lt IE 9
+      script(src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js")
+    style
+      body > .container-fluid { padding-top: 1em; }
+      article { margin-bottom: 5em; }
+      .jw-title { font-size: 1.2em; }
+      dl.dl-horizontal dt { width: 5em; }
+      dl.dl-horizontal dd { margin-left: 6em; }
+      section { border-bottom: 1px solid #ddd; }
+      .hero-unit .alert { margin: 0; }
+      #back-to-top {
+        position: fixed;
+        bottom: 1em;
+        right: 1em;
+        padding: .3em .5em;
+        background-color: white;
+        border: 1px solid #ccc;
+      }
+  body
+    include nav
+    .container-fluid
+      block content
+      span#back-to-top.hide.ui-corner-all: i.icon-chevron-up.icon-large
+    footer
+      .container-fluid
+        .well
+          .row-fluid
+            .span6
+              b jWizard
+              | &nbsp;&ndash;&nbsp;
+              a(href="http://plugins.jquery.com/jWizard") jQuery Plugins Page
+              | &nbsp;&ndash;&nbsp;
+              a(href="http://github.com/dominicbarnes/jWizard") GitHub Repository
+              | &nbsp;&ndash;&nbsp;
+              a(href="http://github.com/dominicbarnes/jWizard/issues") Feature Requests
+              | &nbsp;&ndash;&nbsp;
+              a(href="http://github.com/dominicbarnes/jWizard/issues") Bug Reports
+            .span6.text-right &copy; Dominic Barnes 2013
+
+    block scripts
+      script(src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js")
+      script(src="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js")
+      script(src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.1/jquery-ui.min.js")
+      script(src="../dist/jquery.jWizard.min.js")
