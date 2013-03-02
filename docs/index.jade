@@ -1,0 +1,36 @@
+extends layout
+
+block content
+  include hero
+  include demo
+  include options
+  include events
+  include progress
+  include changelog
+
+block append scripts
+  script
+    jQuery(function ($) {
+      $("#demo-run").click(function () {
+        $("#wizard").jWizard({
+          buttons: {
+            finish: {
+              type: "button"
+            }
+          }
+        });
+        $(this).parent().remove();
+      });
+      
+      var $top = $("#back-to-top"),
+        $w = $(window);
+        
+      $top.click(function () {
+        window.location.hash = "";
+        $w.scrollTop(0);
+      });
+      
+      $(window).on("scroll", function (e) {
+        $top.toggle($w.scrollTop() > 0);
+      });
+    });

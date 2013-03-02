@@ -384,7 +384,7 @@ $.widget("db.jWizard", {
                 })
                 .on("click", ".jw-button-finish", function () {
                     wizard.finish();
-                })
+                });
         }
 
         this._updateButtons();
