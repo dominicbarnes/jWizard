@@ -208,6 +208,38 @@ submit this feature to the jQuery UI team for inclusion.</p><h3>Configuration Op
 string to the generated label text.</p>
 
 <p>For example, jWizard appends &quot;Complete&quot; by default so the label would appear
-as <code>&quot;3 of 5 Complete&quot;</code>.</p></div><h2>Change Log</h2><table class="table table-bordered table-striped"><thead><tr><th>Version</th><th>Date</th><th>Comments</th></tr></thead><tbody><tr> <td>v2.0.0</td><td>TBD</td><td><ul><li>Complete API and Internals Rewrite<ul><li>Counter rewritten as an extension of the jQuery UI Progressbar widget</li><li>Menu is now a jQuery UI Menu widget</li><li>Complete rewrite of events system</li></ul></li><li>Test Suite<ul><li>jQuery 1.7+ compatible and automatically tested</li><li>jQuery UI 1.8.7+ compatible and automatically tested</li></ul></li></ul></td></tr><tr class="warning"><td colspan="3">Past versions are not recorded as v2 is a complete rewrite anyways,
-plus I never really kept a detailed change log anyways, sorry :(</td></tr></tbody></table><h2>Road Map / Upcoming Features</h2><ul><li>Finite State Machine internals, allowing for sophisticated navigation</li><li>Allow the user to define the structure of the interface</li><li>Improve the menu widget</li><li>Eventually do not require jQuery UI Button widget (especially helpful to Bootstrap users)</li><li>Improve the progressbar extensions (callback function for label generation)</li><li>Make the steps a separate widget altogether</li></ul><p>Make feature requests of your own on the 
-<a href="http://github.com/dominicbarnes/jWizard/issues">Github Issues Page</a></p></div></div></div><div id="footer"><div class="container-fluid"><div class="well"><b>jWizard</b>&nbsp;&ndash;&nbsp;<a href="http://plugins.jquery.com/jWizard">jQuery Plugins Page</a>&nbsp;&ndash;&nbsp;<a href="http://github.com/dominicbarnes/jWizard">GitHub Repository</a>&nbsp;&ndash;&nbsp;<a href="http://github.com/dominicbarnes/jWizard/issues">Feature Requests</a>&nbsp;&ndash;&nbsp;<a href="http://github.com/dominicbarnes/jWizard/issues">Bug Reports</a><div class="pull-right text-right">&copy; Dominic Barnes 2013</div></div></div></div><script src="app.js"></script></body></html>
+as <code>&quot;3 of 5 Complete&quot;</code>.</p></div><h2>Change Log</h2><table class="table table-bordered table-striped"><thead><tr><th>Version</th><th>Date</th><th>Comments</th></tr></thead><tbody><tr><td>v2.0.0</td><td>March 4, 2013</td><td><ul><li>Complete API and Internals Rewrite<ul><li>Counter rewritten as an extension of the jQuery UI Progressbar widget</li><li>Menu is now a jQuery UI Menu widget</li><li>Complete rewrite of events system</li><li>Available options simplified</li></ul></li><li>Test Suite<ul><li>jQuery 1.7+ compatible and automatically tested</li><li>jQuery UI 1.8.7+ compatible and automatically tested</li></ul></li></ul></td></tr><tr class="warning"><td colspan="3">Past versions are not recorded as v2 is a complete rewrite anyways,
+plus I never really kept a detailed change log anyways, sorry :(</td></tr></tbody></table><h2>Road Map / Upcoming Features</h2><ul><li>Finite State Machine internals, allowing for sophisticated navigation</li><li>Allow the user to define the structure of the interface</li><li>Improve the menu widget</li><li>Eventually do not require jQuery UI Button widget (especially helpful to Bootstrap users)</li><li>Improve the progressbar extensions (callback function for label generation)</li><li>Make the steps a separate widget altogether</li></ul><p>Make feature requests of your own on the
+<a href="http://github.com/dominicbarnes/jWizard/issues">Github Issues Page</a></p><h2>Developers</h2><p>For anyone who wants to hack on jWizard (would be much appreciated) with me,
+you should be able to get started pretty easily.</p>
+
+<h3>Dependencies</h3>
+
+<p>Install <a href="http://nodejs.org/">node.js</a>, then install the NPM dependencies:</p>
+
+<pre><code>npm install</code></pre>
+
+<h3>Running Tests</h3>
+
+<p>You&#39;ll need an internet connection to run the tests, this is because the
+jQuery and jQuery UI scripts are loaded via the Google CDN dynamically. In
+addition, the version of each of those dependencies can be changed on the fly
+as well to run the suite against various version combinations.</p>
+
+<p><strong>Grunt Tasks:</strong></p>
+
+<ul><li><strong>test</strong>: Runs the tests against whatever is defined in <code>test/dependencies.js</code></li><li><strong>test-latest</strong>: Runs the tests against the latest supported versions of
+jQuery/UI (currently 1.9.1 and 1.10.1 respectively)</li><li><strong>test-oldest</strong>: Runs the tests against the oldest supported versions of
+jQuery/UI (currently 1.7.0 and 1.8.7 respectively)</li></ul>
+
+<p>To run tests against a specific version combination of jQuery and jQuery UI,
+use the <code>testversions</code> task. It accepts the jQuery and jQuery UI version (in
+that order) as <code>:</code> separated arguments. For example:</p>
+
+<pre><code>grunt testversions:1.8.3:1.8.24</code></pre>
+
+<p>will run the test suite against <strong>jQuery 1.8.3</strong> and <strong>jQuery UI 1.8.24</strong>.</p>
+
+<p>Submit your patches as Github Pull Requests. Please modify the tests to reflect
+your changes, and make sure they all pass before submitting your PR. Also,
+there is no formal style guide, just follow the conventions that are in place.</p></div></div></div><div id="footer"><div class="container-fluid"><div class="well"><b>jWizard</b>&nbsp;&ndash;&nbsp;<a href="http://plugins.jquery.com/jWizard">jQuery Plugins Page</a>&nbsp;&ndash;&nbsp;<a href="http://github.com/dominicbarnes/jWizard">GitHub Repository</a>&nbsp;&ndash;&nbsp;<a href="http://github.com/dominicbarnes/jWizard/issues">Feature Requests</a>&nbsp;&ndash;&nbsp;<a href="http://github.com/dominicbarnes/jWizard/issues">Bug Reports</a><div class="pull-right text-right">&copy; Dominic Barnes 2013</div></div></div></div><script src="app.js"></script></body></html>
