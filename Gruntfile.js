@@ -1,5 +1,6 @@
 module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-concat");
+    grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-less");
     grunt.loadNpmTasks("grunt-contrib-jade");
@@ -11,12 +12,12 @@ module.exports = function (grunt) {
         jshint: {
             main: {
                 options: { jshintrc: "src/.jshintrc" },
-                src: "src/*.js",
+                src: "src/*.js"
             },
             test: {
                 options: { jshintrc: "test/.jshintrc" },
-                src: "test/*.js",
-            },
+                src: "test/*.js"
+            }
         },
 
         concat: {
@@ -26,6 +27,36 @@ module.exports = function (grunt) {
             main: {
                 src: [ "src/head.txt", "src/*.js", "src/foot.txt" ],
                 dest: "dist/jquery.jWizard.js"
+            },
+            docs: {
+                src: [
+                    "docs/css/bootstrap.css",
+                    "docs/css/fontawesome.css",
+                    "docs/css/jquery-ui.css",
+                    "docs/css/jquery.tocify.css",
+                    "dist/jquery.jWizard.min.css",
+                    "docs/css/style.css"
+                ],
+                dest: "docs/build/app.css"
+            }
+        },
+
+        copy: {
+            docs: {
+                files: [
+                    {
+                        expand: true,
+                        cwd:    "docs/font",
+                        src:    "*",
+                        dest:   "docs/build"
+                    },
+                    {
+                        expand: true,
+                        cwd:    "docs/css/images",
+                        src:    "*",
+                        dest:   "docs/build/images"
+                    }
+                ]
             }
         },
 
@@ -36,6 +67,17 @@ module.exports = function (grunt) {
             main: {
                 src:  "dist/jquery.jWizard.js",
                 dest: "dist/jquery.jWizard.min.js"
+            },
+            docs: {
+                src: [
+                    "docs/js/jquery.js",
+                    "docs/js/jquery-ui.js",
+                    "docs/js/bootstrap.js",
+                    "docs/js/jquery.tocify.min.js",
+                    "dist/jquery.jWizard.min.js",
+                    "docs/js/app.js"
+                ],
+                dest: "docs/build/app.js"
             }
         },
 
@@ -45,11 +87,14 @@ module.exports = function (grunt) {
                 dest: "dist/jquery.jWizard.css"
             },
             min: {
-                options: {
-                    compress: true
-                },
+                options: { compress: true },
                 src: "dist/jquery.jWizard.css",
                 dest: "dist/jquery.jWizard.min.css"
+            },
+            docs: {
+                options: { compress: true },
+                src: "docs/build/app.css",
+                dest: "docs/build/app.css"
             }
         },
 
@@ -59,7 +104,7 @@ module.exports = function (grunt) {
             },
             docs: {
                 files: {
-                    "docs/index.html": "docs/index.jade"
+                    "docs/build/index.html": "docs/index.jade"
                 }
             }
         }
@@ -109,10 +154,24 @@ module.exports = function (grunt) {
         grunt.task.run([ deps, "mocha-phantomjs" ]);
     });
 
-    grunt.registerTask("default", [ "jshint", "concat", "uglify", "less" ]);
+    grunt.registerTask("default", [
+        "jshint",
+        "concat:main",
+        "uglify:main",
+        "less:main",
+        "docs"
+    ]);
 
-    grunt.registerTask("test", [ "test-latest" ])
-    grunt.registerTask("test-all", [ "test-oldest", "test-latest" ])
+    grunt.registerTask("docs", [
+        "concat:docs",
+        "uglify:docs",
+        "less:docs",
+        "copy:docs",
+        "jade"
+    ]);
+
+    grunt.registerTask("test", [ "test-latest" ]);
+    grunt.registerTask("test-all", [ "test-oldest", "test-latest" ]);
     grunt.registerTask("test-latest", [ "testversions:1.9.1:1.10.1" ]);
     grunt.registerTask("test-oldest", [ "testversions:1.7.0:1.8.7" ]);
 };

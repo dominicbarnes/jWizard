@@ -1,0 +1,50 @@
+h2 Usage
+
+:markdown
+  Include the JS and CSS as you would expect:
+
+      <script src="jquery.jWizard.js"></script>
+      <link href="jquery.jWizard.css" rel="stylesheet">
+
+  A wizard can be comprised of a `<form>`, but any other (block-level) element,
+  like `<div>` will also work.
+
+      <form id="wizard">
+        <!-- steps will go here -->
+      </form>
+
+      <!-- or -->
+
+      <div id="wizard">
+          <!-- steps will go here -->
+      </div>
+
+  A step can also be made up of just about any (block-level) element as well.
+
+   * If using a `<fieldset>`, the `<legend>` element will contain the step's title.
+   * If using any other element, add a `title` or `data-jwizard-title` attribute to specify a title
+
+  For example:
+
+      <fieldset>
+          <!-- step title -->
+          <legend>Step 1</legend>
+
+          <!-- step content -->
+      </fieldset>
+
+      <!-- or -->
+
+      <div title="Step 1">
+          <!-- step content -->
+      </div>
+
+      <!-- or -->
+
+      <div data-jwizard-title="Step 1">
+          <!-- step content -->
+      </div>
+
+  Lastly, initialize the wizard via JS:
+
+      $("#wizard").jWizard();
