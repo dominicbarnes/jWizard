@@ -1,6 +1,5 @@
 module.exports = function (grunt) {
     grunt.loadNpmTasks("grunt-contrib-concat");
-    grunt.loadNpmTasks("grunt-contrib-copy");
     grunt.loadNpmTasks("grunt-contrib-jshint");
     grunt.loadNpmTasks("grunt-contrib-less");
     grunt.loadNpmTasks("grunt-contrib-jade");
@@ -38,25 +37,6 @@ module.exports = function (grunt) {
                     "docs/css/style.css"
                 ],
                 dest: "docs/build/app.css"
-            }
-        },
-
-        copy: {
-            docs: {
-                files: [
-                    {
-                        expand: true,
-                        cwd:    "docs/font",
-                        src:    "*",
-                        dest:   "docs/build"
-                    },
-                    {
-                        expand: true,
-                        cwd:    "docs/css/images",
-                        src:    "*",
-                        dest:   "docs/build/images"
-                    }
-                ]
             }
         },
 
@@ -99,9 +79,6 @@ module.exports = function (grunt) {
         },
 
         jade: {
-            options: {
-                pretty: true
-            },
             docs: {
                 files: {
                     "docs/build/index.html": "docs/index.jade"
@@ -166,7 +143,6 @@ module.exports = function (grunt) {
         "concat:docs",
         "uglify:docs",
         "less:docs",
-        "copy:docs",
         "jade"
     ]);
 

@@ -7,8 +7,6 @@ html(lang="en")
     meta(name="author", content="Dominic Barnes <dominic@dbarnes.info>")
     meta(name="description", content="jWizard is a jQuery UI Widget for creating a Wizard interface in web forms")
     link(href="app.css", rel="stylesheet")
-    //if lt IE 9
-      script(src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6.2/html5shiv.js")
   body
     include nav
     .container-fluid
@@ -17,7 +15,7 @@ html(lang="en")
           #toc
         #main.span9
           block content
-    footer
+    #footer
       .container-fluid
         .well
           b jWizard
