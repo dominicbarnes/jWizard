@@ -1,0 +1,245 @@
+<!DOCTYPE html><html lang="en"><head><title>jWizard &mdash; A jQuery UI Wizard Widget</title><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="author" content="Dominic Barnes &lt;dominic@dbarnes.info&gt;"><meta name="description" content="jWizard is a jQuery UI Widget for creating a Wizard interface in web forms"><link href="app.css" rel="stylesheet"></head><body><div class="navbar navbar-static-top"><div class="navbar-inner"><div class="container-fluid"><a data-toggle="collapse" data-target=".nav-collapse" class="btn btn-navbar"><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></a><a href="/" class="brand">Dominic Barnes</a><div class="nav-collapse"><ul class="nav"><li><a href="/">About Me</a></li><li class="active"><a href="/jWizard">jWizard</a></li><li><a href="/node-couchdb-api">node-couchdb-api</a></li></ul></div></div></div></div><div class="container-fluid"><div class="row"><div class="span3"><div id="toc"></div></div><div id="main" class="span9"><div class="hero-unit"><h1>jWizard</h1><p>A jQuery UI Wizard Widget</p><div class="btn-toolbar"><a href="#Demonstration" class="btn btn-large"><i class="icon-magic"></i> Show Me</a><a href="http://github.com/dominicbarnes/jWizard/issues" class="btn btn-large"><i class="icon-tasks"></i> Issue Tracker</a><a href="https://github.com/dominicbarnes/jWizard/archive/master.zip" class="btn btn-primary btn-large"><i class="icon-download"></i> Download</a></div></div><div class="alert">v2 is a complete rewrite, please bear with me through the next few
+releases as I get it back up to feature parity as well as keeping
+the test coverage as complete as possible.</div><h2>Usage</h2><p>Include the JS and CSS as you would expect:</p>
+
+<pre><code>&lt;script src=&quot;jquery.jWizard.js&quot;&gt;&lt;/script&gt;
+&lt;link href=&quot;jquery.jWizard.css&quot; rel=&quot;stylesheet&quot;&gt;</code></pre>
+
+<p>A wizard can be comprised of a <code>&lt;form&gt;</code>, but any other (block-level) element,
+like <code>&lt;div&gt;</code> will also work.</p>
+
+<pre><code>&lt;form id=&quot;wizard&quot;&gt;
+  &lt;!-- steps will go here --&gt;
+&lt;/form&gt;
+
+&lt;!-- or --&gt;
+
+&lt;div id=&quot;wizard&quot;&gt;
+    &lt;!-- steps will go here --&gt;
+&lt;/div&gt;</code></pre>
+
+<p>A step can also be made up of just about any (block-level) element as well.</p>
+
+<ul><li>If using a <code>&lt;fieldset&gt;</code>, the <code>&lt;legend&gt;</code> element will contain the step&#39;s title.</li><li>If using any other element, add a <code>title</code> or <code>data-jwizard-title</code> attribute to specify a title</li></ul>
+
+<p>For example:</p>
+
+<pre><code>&lt;fieldset&gt;
+    &lt;!-- step title --&gt;
+    &lt;legend&gt;Step 1&lt;/legend&gt;
+
+    &lt;!-- step content --&gt;
+&lt;/fieldset&gt;
+
+&lt;!-- or --&gt;
+
+&lt;div title=&quot;Step 1&quot;&gt;
+    &lt;!-- step content --&gt;
+&lt;/div&gt;
+
+&lt;!-- or --&gt;
+
+&lt;div data-jwizard-title=&quot;Step 1&quot;&gt;
+    &lt;!-- step content --&gt;
+&lt;/div&gt;</code></pre>
+
+<p>Lastly, initialize the wizard via JS:</p>
+
+<pre><code>$(&quot;#wizard&quot;).jWizard();</code></pre><h2>Demonstration</h2><div class="row-fluid"><div class="span9"><form id="wizard" method="POST" class="form-horizontal"><fieldset><legend>Identification</legend><div class="control-group"><label class="control-label">First Name</label><div class="controls"><input type="text" name="firstname" placeholder="John"></div></div><div class="control-group"><label class="control-label">Middle Initial</label><div class="controls"><input type="text" name="middle" placeholder="A" class="input-small"></div></div><div class="control-group"><label class="control-label">Last Name</label><div class="controls"><input type="text" name="lastname" placeholder="Smith"></div></div></fieldset><fieldset><legend>Contact Information</legend><div class="control-group"><label class="control-label">Phone Number</label><div class="controls"><input type="text" name="phone" placeholder="123-456-7890"></div></div><div class="control-group"><label class="control-label">Email Address</label><div class="controls"><input type="email" name="email" placeholder="someone@example.com"></div></div></fieldset><fieldset><legend>Login</legend><div class="control-group"><label class="control-label">Username</label><div class="controls"><input type="text" name="username" placeholder="johnsmithy"></div></div><div class="control-group"><label class="control-label">Password</label><div class="controls"><input type="password" name="password"></div></div><div class="control-group"><label class="control-label">Confirm</label><div class="controls"><input type="password" name="confirm"></div></div></fieldset></form></div><div class="span3"><div class="btn-toolbar"><button id="demo-run" class="btn btn-large btn-block btn-primary"><i class="icon-magic"></i> Initialize jWizard</button></div><div class="alert alert-info alert-block">What you will see here is a what you get with no configuration options
+set during the initialization. See the available options below to learn
+how to configure.</div></div></div><h2>Options</h2><ul class="nav nav-tabs"><li class="active"><a href="#options-human" data-toggle="tab">Documentation</a></li><li><a href="#options-source" data-toggle="tab">Source Code</a></li></ul><div class="tab-content"><div id="options-human" class="tab-pane active"><div class="well"><h3>title</h3><dl class="dl-horizontal"><dt>Type</dt><dd><code>Boolean</code></dd><dt>Default</dt><dd><code>true</code></dd></dl><p>Determines whether or not to include a title bar in the interface.</p></div><div class="well"><h3>menu</h3><dl class="dl-horizontal"><dt>Type</dt><dd><code>Boolean</code></dd><dt>Default</dt><dd><code>true</code></dd></dl><p>Determines whether or not to include a navigation/menu bar</p></div><h3>buttons</h3><p>Each key of the buttons hash represents one of the 4 generated
+buttons. These objects are passed directly to jQuery, giving you
+a lot of control over the resulting HTML by simply changing the
+properties of the default configuration object. (setting an entire
+button object here as <code>false</code> or <code>null</code> will cause that button to
+not be rendered at all)</p>
+
+<p>The <code>icons</code> parameter is an exception, that value is extracted
+before generating the button HTML and is handed off to the jQuery
+UI Button Widget initialization.</p><div class="well"><h4>buttons.cancel</h4><p>The cancel button is generated as a reset button, with an the
+<code>ui-priority-secondary</code> class for de-emphasis. It is also
+aligned furthest to the left.</p><pre>{
+  &quot;class&quot;: &quot;ui-priority-secondary&quot;,
+  text: &quot;Cancel&quot;,
+  type: &quot;reset&quot;,
+  icons: {
+    primary: &quot;ui-icon-circle-close&quot;
+  }
+}</pre></div><div class="well"><h4>buttons.prev</h4><p>The previous button is generated as a standard button, it is
+aligned to the left (but right of the cancel button)</p><pre>{
+  text: &quot;Previous&quot;,
+  type: &quot;button&quot;,
+  icons: {
+    primary: &quot;ui-icon-circle-triangle-w&quot;
+  }
+}</pre></div><div class="well"><h4>buttons.next</h4><p>The next button is generated as a standard button, it is aligned
+to the right.</p><pre>{
+  text: &quot;Next&quot;,
+  type: &quot;button&quot;,
+  icons: {
+    primary: &quot;ui-icon-circle-triangle-e&quot;
+  }
+}</pre></div><div class="well"><h4>buttons.finish</h4><p>The finish button is generated as a submit button, with both
+<code>ui-priority-primary</code> and <code>ui-state-highlight</code> classes for maximum
+emphasis. It is also aligned to the right.</p><pre class="pull-lift">{
+  &quot;class&quot;: &quot;ui-priority-primary ui-state-highlight&quot;,
+  text: &quot;Finish&quot;,
+  type: &quot;submit&quot;,
+  icons: {
+    secondary: &quot;ui-icon-circle-check&quot;
+  }
+}</pre></div><div class="well"><h3>progress</h3><p>These options configure the <a href="#progressbar">extended progressbar</a>.
+(formerly known as the counter)</p>
+
+<p>By setting this value to <code>false</code> or <code>null</code>, the progressbar will be
+ignored altogether.</p></div><div class="well"><h3>effects</h3><p>These options configure various transitions and effects used by
+jWizard. As of this writing, (v2.0) the only transitions applied
+are to the show and hide of steps. See the jQuery UI documentation
+for complete documentation on the available options.</p><pre>effects: {
+  steps: {
+    hide: {
+      effect:    &quot;blind&quot;,
+      direction: &quot;left&quot;,
+      duration:  250
+    },
+    show: {
+      effect:    &quot;blind&quot;,
+      direction: &quot;left&quot;,
+      duration:  250
+    }
+  }
+}</pre></div></div><div id="options-source" class="tab-pane"><pre>options: {
+    title: true,
+
+    menu: true,
+
+    buttons: {
+        cancel: {
+            "class": "ui-priority-secondary",
+            text: "Cancel",
+            type: "reset",
+            icons: {
+                primary: "ui-icon-circle-close"
+            }
+        },
+        prev: {
+            text: "Previous",
+            type: "button",
+            icons: {
+                primary: "ui-icon-circle-triangle-w"
+            }
+        },
+        next: {
+            text: "Next",
+            type: "button",
+            icons: {
+                secondary: "ui-icon-circle-triangle-e"
+            }
+        },
+        finish: {
+            "class": "ui-priority-primary ui-state-highlight",
+            text: "Finish",
+            type: "submit",
+            icons: {
+                secondary: "ui-icon-circle-check"
+            }
+        }
+    },
+
+    progress: {
+        label: "count",
+        append: "Complete"
+    },
+
+    effects: {
+        steps: {
+            hide: {
+                effect:    "blind",
+                direction: "left",
+                duration:  250
+            },
+            show: {
+                effect:    "blind",
+                direction: "left",
+                duration:  250
+            }
+        }
+    }
+}
+</pre></div></div><h2>Events </h2><h3>Wizard Events</h3><p>These events are triggered on the root element for the wizard itself.
+As such, they can be bound to as part of the configuration options of
+the wizard widget.</p>
+
+<p>The internal <code>widgetEventPrefix</code> is set as <code>wizard</code> (not <code>jWizard</code>) so
+remember that when binding to the <code>cancel</code> and <code>finish</code> events after
+the initialization.</p><div class="well"><h4><span class="muted">wizard</span>cancel</h4><p>Triggered when the user clicks the cancel button. If the button is also
+acting as a reset button (which is the default behavior) you can return
+<code>false</code> here to cancel the form reset. (or simply change the button type
+in the config)</p></div><div class="well"><h4><span class="muted">wizard</span>finish</h4><p>Triggered when the user clicks the finish button. If the button is also
+acting as a submit button (which is the default behavior) you can return
+<code>false</code> here to cancel the form submission.</p></div><h3>Step Events</h3><p>These events are triggered on the step elements <strong>directly</strong>, and while
+they will bubble up to the wizard widget, the typical pattern is to bind
+directly to the step elements.</p><div class="well"><h4><span class="muted">step</span>hide</h4><p>Triggered before a step is hidden. (which occurs when transitioning from
+one step to another) By cancelling this event, the transition will not
+be completed, leaving this step active.</p>
+
+<p>This event is expected to be used to validate form inputs, and to cancel
+the event when invalid data is found.</p></div><div class="well"><h4> <span class="muted">step</span>hidden</h4><p>Triggered after a step has been hidden, and before the next step is to
+be shown. It cannot be cancelled.</p></div><div class="well">   <h4><span class="muted">step</span>show</h4><p>Triggered before a step is to be shown, and after the previous step has
+been hidden. Cancelling this event will revert the wizard back to the
+previous step.</p>
+
+<p>This event is expected to be used to initialize the interface for the
+upcoming step.</p></div><div class="well"><h4><span class="muted">step</span>shown</h4><p>Triggered after a step has been shown. It cannot be cancelled.</p>
+
+<p>This event is expected to be used to refresh/reposition interface
+elements that may not be able to be positioned correctly when the
+elements are still hidden in the DOM.</p></div><h2>Extended Progressbar</h2><p>As of <code>v2.0</code>, jWizard comes bundled with a widget that extends the jQuery UI
+Progressbar widget. This extension unobtrusively adds a new feature, a label
+reflecting the value (in relation to max) that is positioned over the
+progressbar itself. This feature is &quot;opt-in&quot; only. (by setting the <code>label</code>
+option)</p>
+
+<p>That being said, if you have included jWizard, you have access to the enhanced
+progressbar without any additional work on your part. The eventual goal is to
+submit this feature to the jQuery UI team for inclusion.</p><h3>Configuration Options</h3><div class="alert alert-info">These options are in addition to the documented options of the&nbsp;<a href="http://jqueryui.com/progressbar/">jQuery UI Progressbar Widget</a></div><div class="well"><h4>label</h4><dl class="dl-horizontal"><dt>Type</dt><dd><code>String</code></dd><dt>Default</dt><dd><code>null</code></dd></dl><p>This option has 2 possible values, each adds a label to the progressbar:</p>
+
+<ul><li><code>&quot;count&quot;</code> adds a label that is formatted as <code>&quot;55 of 100&quot;</code></li><li><code>&quot;percentage&quot;</code> adds a label that is formatted as <code>&quot;55%&quot;</code></li></ul></div><div class="well"><h4>append</h4><dl class="dl-horizontal"><dt>Type</dt><dd><code>String</code></dd><dt>Default</dt><dd><code>null</code></dd></dl><p>This option specifies a &quot;suffix&quot; for the label, and appends the specified
+string to the generated label text.</p>
+
+<p>For example, jWizard appends &quot;Complete&quot; by default so the label would appear
+as <code>&quot;3 of 5 Complete&quot;</code>.</p></div><h2>Change Log</h2><table class="table table-bordered table-striped"><thead><tr><th>Version</th><th>Date</th><th>Comments</th></tr></thead><tbody><tr><td>v2.0.0</td><td>March 4, 2013</td><td><ul><li>Complete API and Internals Rewrite<ul><li>Counter rewritten as an extension of the jQuery UI Progressbar widget</li><li>Menu is now a jQuery UI Menu widget</li><li>Complete rewrite of events system</li><li>Available options simplified</li></ul></li><li>Test Suite<ul><li>jQuery 1.7+ compatible and automatically tested</li><li>jQuery UI 1.8.7+ compatible and automatically tested</li></ul></li></ul></td></tr><tr class="warning"><td colspan="3">Past versions are not recorded as v2 is a complete rewrite anyways,
+plus I never really kept a detailed change log anyways, sorry :(</td></tr></tbody></table><h2>Road Map / Upcoming Features</h2><ul><li>Finite State Machine internals, allowing for sophisticated navigation</li><li>Allow the user to define the structure of the interface</li><li>Improve the menu widget</li><li>Eventually do not require jQuery UI Button widget (especially helpful to Bootstrap users)</li><li>Improve the progressbar extensions (callback function for label generation)</li><li>Make the steps a separate widget altogether</li></ul><p>Make feature requests of your own on the
+<a href="http://github.com/dominicbarnes/jWizard/issues">Github Issues Page</a></p><h2>Developers</h2><p>For anyone who wants to hack on jWizard (would be much appreciated) with me,
+you should be able to get started pretty easily.</p>
+
+<h3>Dependencies</h3>
+
+<p>Install <a href="http://nodejs.org/">node.js</a>, (v0.8+) then install the dependencies:</p>
+
+<pre><code>npm install</code></pre>
+
+<h3>Running Tests</h3>
+
+<p>You&#39;ll need an internet connection to run the tests, this is because the
+jQuery and jQuery UI scripts are loaded via the Google CDN dynamically. In
+addition, the version of each of those dependencies can be changed on the fly
+as well to run the suite against various version combinations.</p>
+
+<p><strong>Grunt Tasks:</strong></p>
+
+<ul><li><strong>test</strong>: Runs the tests against whatever is defined in <code>test/dependencies.js</code></li><li><strong>test-latest</strong>: Runs the tests against the latest supported versions of
+jQuery/UI (currently 1.9.1 and 1.10.1 respectively)</li><li><strong>test-oldest</strong>: Runs the tests against the oldest supported versions of
+jQuery/UI (currently 1.7.0 and 1.8.7 respectively)</li></ul>
+
+<p>To run tests against a specific version combination of jQuery and jQuery UI,
+use the <code>testversions</code> task. It accepts the jQuery and jQuery UI version (in
+that order) as <code>:</code> separated arguments. For example:</p>
+
+<pre><code>grunt testversions:1.8.3:1.8.24</code></pre>
+
+<p>will run the test suite against <strong>jQuery 1.8.3</strong> and <strong>jQuery UI 1.8.24</strong>.</p>
+
+<p>Submit your patches as Github Pull Requests. Please modify the tests to reflect
+your changes, and make sure they all pass before submitting your PR. Also,
+there is no formal style guide, just follow the conventions that are in place.</p></div></div></div><div id="footer"><div class="container-fluid"><div class="well"><b>jWizard</b>&nbsp;&ndash;&nbsp;<a href="http://plugins.jquery.com/jWizard">jQuery Plugins Page</a>&nbsp;&ndash;&nbsp;<a href="http://github.com/dominicbarnes/jWizard">GitHub Repository</a>&nbsp;&ndash;&nbsp;<a href="http://github.com/dominicbarnes/jWizard/issues">Feature Requests</a>&nbsp;&ndash;&nbsp;<a href="http://github.com/dominicbarnes/jWizard/issues">Bug Reports</a><div class="pull-right text-right">&copy; Dominic Barnes 2013</div></div></div></div><script src="app.js"></script></body></html>

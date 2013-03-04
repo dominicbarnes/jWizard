@@ -1,0 +1,38 @@
+h2 Developers
+
+:markdown
+  For anyone who wants to hack on jWizard (would be much appreciated) with me,
+  you should be able to get started pretty easily.
+
+  ### Dependencies
+
+  Install [node.js](http://nodejs.org/), (v0.8+) then install the dependencies:
+
+      npm install
+
+  ### Running Tests
+
+  You'll need an internet connection to run the tests, this is because the
+  jQuery and jQuery UI scripts are loaded via the Google CDN dynamically. In
+  addition, the version of each of those dependencies can be changed on the fly
+  as well to run the suite against various version combinations.
+
+  **Grunt Tasks:**
+
+   * **test**: Runs the tests against whatever is defined in `test/dependencies.js`
+   * **test-latest**: Runs the tests against the latest supported versions of
+     jQuery/UI (currently 1.9.1 and 1.10.1 respectively)
+   * **test-oldest**: Runs the tests against the oldest supported versions of
+     jQuery/UI (currently 1.7.0 and 1.8.7 respectively)
+
+  To run tests against a specific version combination of jQuery and jQuery UI,
+  use the `testversions` task. It accepts the jQuery and jQuery UI version (in
+  that order) as `:` separated arguments. For example:
+
+      grunt testversions:1.8.3:1.8.24
+
+  will run the test suite against **jQuery 1.8.3** and **jQuery UI 1.8.24**.
+
+  Submit your patches as Github Pull Requests. Please modify the tests to reflect
+  your changes, and make sure they all pass before submitting your PR. Also,
+  there is no formal style guide, just follow the conventions that are in place.

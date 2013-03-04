@@ -1,0 +1,79 @@
+h2 Events 
+
+h3 Wizard Events
+:markdown
+  These events are triggered on the root element for the wizard itself.
+  As such, they can be bound to as part of the configuration options of
+  the wizard widget.
+  
+  The internal `widgetEventPrefix` is set as `wizard` (not `jWizard`) so
+  remember that when binding to the `cancel` and `finish` events after
+  the initialization.
+
+.well
+  h4
+    span.muted wizard
+    | cancel
+  :markdown
+    Triggered when the user clicks the cancel button. If the button is also
+    acting as a reset button (which is the default behavior) you can return
+    `false` here to cancel the form reset. (or simply change the button type
+    in the config)
+
+.well
+  h4
+    span.muted wizard
+    | finish
+  :markdown
+    Triggered when the user clicks the finish button. If the button is also
+    acting as a submit button (which is the default behavior) you can return
+    `false` here to cancel the form submission.
+    
+h3 Step Events
+:markdown
+  These events are triggered on the step elements **directly**, and while
+  they will bubble up to the wizard widget, the typical pattern is to bind
+  directly to the step elements.
+
+.well
+  h4
+    span.muted step
+    | hide
+  :markdown
+    Triggered before a step is hidden. (which occurs when transitioning from
+    one step to another) By cancelling this event, the transition will not
+    be completed, leaving this step active.
+    
+    This event is expected to be used to validate form inputs, and to cancel
+    the event when invalid data is found.
+
+.well
+  h4 
+    span.muted step
+    | hidden
+  :markdown
+    Triggered after a step has been hidden, and before the next step is to
+    be shown. It cannot be cancelled.
+    
+.well    
+  h4
+    span.muted step
+    | show
+  :markdown
+    Triggered before a step is to be shown, and after the previous step has
+    been hidden. Cancelling this event will revert the wizard back to the
+    previous step.
+    
+    This event is expected to be used to initialize the interface for the
+    upcoming step.
+    
+.well
+  h4
+    span.muted step
+    | shown
+  :markdown
+    Triggered after a step has been shown. It cannot be cancelled.
+    
+    This event is expected to be used to refresh/reposition interface
+    elements that may not be able to be positioned correctly when the
+    elements are still hidden in the DOM.

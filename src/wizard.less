@@ -1,0 +1,71 @@
+.jw-widget {
+    @padding: .5em;
+    @progressWidth: 10em;
+    @menuWidth: 10em;
+
+    //overflow: hidden;
+
+    .jw-header {
+        padding: @padding;
+
+        .jw-title {
+            margin: 0;
+        }
+    }
+
+    .jw-content {
+        padding: @padding;
+    }
+
+    &.jw-hasmenu {
+        .jw-steps-wrap {
+            margin-left: @menuWidth;
+        }
+
+        .jw-menu-wrap {
+            width: @menuWidth;
+            margin-right: -@menuWidth;
+            float: left;
+
+            .jw-menu {
+                width: 100%;
+            }
+        }
+    }
+
+    &.jw-hasprogress {
+        .jw-header {
+            .jw-title {
+                float: left;
+            }
+
+            .jw-progress {
+                float: right;
+                width: @progressWidth;
+            }
+        }
+    }
+
+    .jw-steps-wrap {
+        height: 15em;
+        overflow: auto;
+        padding: @padding;
+
+        fieldset {
+            border: none;
+
+            legend { display: none; }
+        }
+    }
+
+    .jw-footer {
+        padding: @padding;
+
+        .jw-buttons {
+            .jw-button-next,
+            .jw-button-finish {
+                float: right;
+            }
+        }
+    }
+}

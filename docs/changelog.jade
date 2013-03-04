@@ -1,0 +1,40 @@
+h2 Change Log
+table.table.table-bordered.table-striped
+  thead
+    tr
+      th Version
+      th Date
+      th Comments
+  tbody
+    tr
+      td v2.0.0
+      td March 4, 2013
+      td
+        ul
+          li Complete API and Internals Rewrite
+            ul
+              li Counter rewritten as an extension of the jQuery UI Progressbar widget
+              li Menu is now a jQuery UI Menu widget
+              li Complete rewrite of events system
+              li Available options simplified
+          li Test Suite
+            ul
+              li jQuery 1.7+ compatible and automatically tested
+              li jQuery UI 1.8.7+ compatible and automatically tested
+    tr.warning
+      td(colspan="3")
+        | Past versions are not recorded as v2 is a complete rewrite anyways,
+        | plus I never really kept a detailed change log anyways, sorry :(
+
+h2 Road Map / Upcoming Features
+ul
+  li Finite State Machine internals, allowing for sophisticated navigation
+  li Allow the user to define the structure of the interface
+  li Improve the menu widget
+  li Eventually do not require jQuery UI Button widget (especially helpful to Bootstrap users)
+  li Improve the progressbar extensions (callback function for label generation)
+  li Make the steps a separate widget altogether
+
+:markdown
+  Make feature requests of your own on the
+  [Github Issues Page](http://github.com/dominicbarnes/jWizard/issues)

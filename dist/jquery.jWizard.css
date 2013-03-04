@@ -1,0 +1,49 @@
+.ui-progressbar .ui-progressbar-label {
+  text-align: center;
+}
+
+.jw-widget .jw-header {
+  padding: 0.5em;
+}
+.jw-widget .jw-header .jw-title {
+  margin: 0;
+}
+.jw-widget .jw-content {
+  padding: 0.5em;
+}
+.jw-widget.jw-hasmenu .jw-steps-wrap {
+  margin-left: 10em;
+}
+.jw-widget.jw-hasmenu .jw-menu-wrap {
+  width: 10em;
+  margin-right: -10em;
+  float: left;
+}
+.jw-widget.jw-hasmenu .jw-menu-wrap .jw-menu {
+  width: 100%;
+}
+.jw-widget.jw-hasprogress .jw-header .jw-title {
+  float: left;
+}
+.jw-widget.jw-hasprogress .jw-header .jw-progress {
+  float: right;
+  width: 10em;
+}
+.jw-widget .jw-steps-wrap {
+  height: 15em;
+  overflow: auto;
+  padding: 0.5em;
+}
+.jw-widget .jw-steps-wrap fieldset {
+  border: none;
+}
+.jw-widget .jw-steps-wrap fieldset legend {
+  display: none;
+}
+.jw-widget .jw-footer {
+  padding: 0.5em;
+}
+.jw-widget .jw-footer .jw-buttons .jw-button-next,
+.jw-widget .jw-footer .jw-buttons .jw-button-finish {
+  float: right;
+}

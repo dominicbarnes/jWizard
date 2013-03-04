@@ -1,0 +1,32 @@
+!!! 5
+html(lang="en")
+  head
+    title jWizard &mdash; A jQuery UI Wizard Widget
+    meta(charset="utf-8")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
+    meta(name="author", content="Dominic Barnes <dominic@dbarnes.info>")
+    meta(name="description", content="jWizard is a jQuery UI Widget for creating a Wizard interface in web forms")
+    link(href="app.css", rel="stylesheet")
+  body
+    include nav
+    .container-fluid
+      .row
+        .span3
+          #toc
+        #main.span9
+          block content
+    #footer
+      .container-fluid
+        .well
+          b jWizard
+          | &nbsp;&ndash;&nbsp;
+          a(href="http://plugins.jquery.com/jWizard") jQuery Plugins Page
+          | &nbsp;&ndash;&nbsp;
+          a(href="http://github.com/dominicbarnes/jWizard") GitHub Repository
+          | &nbsp;&ndash;&nbsp;
+          a(href="http://github.com/dominicbarnes/jWizard/issues") Feature Requests
+          | &nbsp;&ndash;&nbsp;
+          a(href="http://github.com/dominicbarnes/jWizard/issues") Bug Reports
+          .pull-right.text-right &copy; Dominic Barnes 2013
+
+    script(src="app.js")

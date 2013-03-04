@@ -1,0 +1,132 @@
+h2 Options
+ul.nav.nav-tabs
+  li.active: a(href="#options-human", data-toggle="tab") Documentation
+  li: a(href="#options-source", data-toggle="tab") Source Code
+.tab-content
+  #options-human.tab-pane.active
+    .well
+      h3 title
+      dl.dl-horizontal
+        dt Type
+        dd: code Boolean
+        dt Default
+        dd: code true
+      p Determines whether or not to include a title bar in the interface.
+
+    .well
+      h3 menu
+      dl.dl-horizontal
+        dt Type
+        dd: code Boolean
+        dt Default
+        dd: code true
+      p Determines whether or not to include a navigation/menu bar
+
+    h3 buttons
+    :markdown
+      Each key of the buttons hash represents one of the 4 generated
+      buttons. These objects are passed directly to jQuery, giving you
+      a lot of control over the resulting HTML by simply changing the
+      properties of the default configuration object. (setting an entire
+      button object here as `false` or `null` will cause that button to
+      not be rendered at all)
+
+      The `icons` parameter is an exception, that value is extracted
+      before generating the button HTML and is handed off to the jQuery
+      UI Button Widget initialization.
+
+    .well
+      h4 buttons.cancel
+      :markdown
+        The cancel button is generated as a reset button, with an the
+        `ui-priority-secondary` class for de-emphasis. It is also
+        aligned furthest to the left.
+      pre
+        | {
+        |   "class": "ui-priority-secondary",
+        |   text: "Cancel",
+        |   type: "reset",
+        |   icons: {
+        |     primary: "ui-icon-circle-close"
+        |   }
+        | }
+
+    .well
+      h4 buttons.prev
+      p
+        | The previous button is generated as a standard button, it is
+        | aligned to the left (but right of the cancel button)
+      pre
+        | {
+        |   text: "Previous",
+        |   type: "button",
+        |   icons: {
+        |     primary: "ui-icon-circle-triangle-w"
+        |   }
+        | }
+
+    .well
+      h4 buttons.next
+      p
+        | The next button is generated as a standard button, it is aligned
+        | to the right.
+      pre
+        | {
+        |   text: "Next",
+        |   type: "button",
+        |   icons: {
+        |     primary: "ui-icon-circle-triangle-e"
+        |   }
+        | }
+
+    .well
+      h4 buttons.finish
+      :markdown
+        The finish button is generated as a submit button, with both
+        `ui-priority-primary` and `ui-state-highlight` classes for maximum
+        emphasis. It is also aligned to the right.
+      pre.pull-lift
+        | {
+        |   "class": "ui-priority-primary ui-state-highlight",
+        |   text: "Finish",
+        |   type: "submit",
+        |   icons: {
+        |     secondary: "ui-icon-circle-check"
+        |   }
+        | }
+
+    .well
+      h3 progress
+      :markdown
+        These options configure the [extended progressbar](#progressbar).
+        (formerly known as the counter)
+
+        By setting this value to `false` or `null`, the progressbar will be
+        ignored altogether.
+
+    .well
+      h3 effects
+      p
+        | These options configure various transitions and effects used by
+        | jWizard. As of this writing, (v2.0) the only transitions applied
+        | are to the show and hide of steps. See the jQuery UI documentation
+        | for complete documentation on the available options.
+      pre
+        | effects: {
+        |   steps: {
+        |     hide: {
+        |       effect:    "blind",
+        |       direction: "left",
+        |       duration:  250
+        |     },
+        |     show: {
+        |       effect:    "blind",
+        |       direction: "left",
+        |       duration:  250
+        |     }
+        |   }
+        | }
+
+  #options-source.tab-pane
+    pre
+      include options.txt

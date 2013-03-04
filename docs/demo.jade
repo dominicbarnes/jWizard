@@ -1,0 +1,51 @@
+h2 Demonstration
+.row-fluid
+  .span9
+    form#wizard.form-horizontal(method="POST")
+      fieldset
+        legend Identification
+        .control-group
+          label.control-label First Name
+          .controls
+            input(type="text", name="firstname", placeholder="John")
+        .control-group
+          label.control-label Middle Initial
+          .controls
+            input.input-small(type="text", name="middle", placeholder="A")
+        .control-group
+          label.control-label Last Name
+          .controls
+            input(type="text", name="lastname", placeholder="Smith")
+      fieldset
+        legend Contact Information
+        .control-group
+          label.control-label Phone Number
+          .controls
+            input(type="text", name="phone", placeholder="123-456-7890")
+        .control-group
+          label.control-label Email Address
+          .controls
+            input(type="email", name="email", placeholder="someone@example.com")
+      fieldset
+        legend Login
+        .control-group
+          label.control-label Username
+          .controls
+            input(type="text", name="username", placeholder="johnsmithy")
+        .control-group
+          label.control-label Password
+          .controls
+            input(type="password", name="password")
+        .control-group
+          label.control-label Confirm
+          .controls
+            input(type="password", name="confirm")
+  .span3
+    .btn-toolbar
+      button#demo-run.btn.btn-large.btn-block.btn-primary
+        i.icon-magic
+        =" Initialize jWizard"
+    .alert.alert-info.alert-block
+      | What you will see here is a what you get with no configuration options
+      | set during the initialization. See the available options below to learn
+      | how to configure.

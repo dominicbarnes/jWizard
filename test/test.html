@@ -4,33 +4,79 @@
 <head>
     <meta charset="utf-8">
 
-    <link rel="stylesheet" href="mocha.css">
-    <link type="text/css" rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/themes/base/jquery-ui.css">
-    <link rel="stylesheet/less" type="text/css" href="../jquery.jWizard.css">
+    <link rel="stylesheet" href="vendor/mocha.css">
+    <link rel="stylesheet/less" type="text/css" href="../src/wizard.less">
+    <link rel="stylesheet/less" type="text/css" href="../src/progressbar.less">
+    <script src="vendor/less.js"></script>
 </head>
 
 <body>
-    <div id="mocha"></div>
+    <div id="wizard">
+        <fieldset>
+            <legend>Step 1</legend>
 
-    <div id="wizard-basic">
-        <div id="basic-step1" title="Step 1">Step 1 Content</div>
-        <div id="basic-step2" title="Step 2">Step 2 Content</div>
-        <div id="basic-step3" data-jwizard-title="Step 3">Step 3 Content</div>
-        <div id="basic-step4" data-jwizard-title="Step 4">Step 4 Content</div>
+            <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam
+                malesuada ligula ut tellus tristique dapibus. Aenean convallis
+                ipsum nec mi tincidunt tristique. Nulla tempus, nunc eget
+                dapibus convallis, sapien augue condimentum massa, in molestie
+                ligula augue non turpis. Nam aliquet cursus tortor a
+                pellentesque. Integer felis lorem, rhoncus ac dapibus nec,
+                molestie in velit. Phasellus nunc eros, commodo ac sagittis
+                facilisis, auctor id turpis. Sed imperdiet, diam eu fermentum
+                bibendum, est est egestas libero, vel suscipit velit eros sed
+                risus. Quisque sagittis consectetur nisi non rhoncus. Sed
+                molestie faucibus massa sed bibendum.
+            </p>
+        </fieldset>
+        <div title="Step 2">
+            <p>
+                Fusce cursus rhoncus augue nec vestibulum. Sed lacus velit,
+                rhoncus id mattis eu, vulputate a quam. Fusce ullamcorper, diam
+                lobortis pellentesque lacinia, magna dui laoreet lacus, et
+                consectetur neque felis eget nulla. Cum sociis natoque penatibus
+                et magnis dis parturient montes, nascetur ridiculus mus. Nunc
+                in purus eu sapien egestas facilisis vel et tellus. Cras iaculis
+                eleifend nunc at condimentum. Nam mattis auctor massa, sit amet
+                gravida augue interdum non.
+            </p>
+        </div>
+        <div data-jwizard-title="Step 3">
+            <p>
+                Pellentesque pulvinar lacinia dui sed tincidunt. Duis dignissim,
+                sem eget pellentesque egestas, lectus est tristique sem, vel
+                dictum massa nisi a magna. Nunc varius, nunc id suscipit sodales,
+                eros neque mattis nunc, ut egestas ante metus at risus. Integer
+                accumsan luctus eros, sed venenatis erat hendrerit id. Aenean a
+                eros egestas erat consequat cursus id non nibh. Pellentesque
+                habitant morbi tristique senectus et netus et malesuada fames
+                ac turpis egestas. Nullam posuere sollicitudin rhoncus. Quisque
+                orci erat, ultrices sit amet tincidunt at, ornare quis nisl.
+                Fusce dictum elit quis libero cursus euismod. Vivamus sed enim
+                in arcu porta dignissim a et nulla. Class aptent taciti sociosqu
+                ad litora torquent per conubia nostra, per inceptos himenaeos.
+                Duis non nisl id metus ultrices imperdiet.
+            </p>
+        </div>
     </div>
 
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
-    <script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.9.0/jquery-ui.min.js"></script>
-    <script src="mocha.js"></script>
-    <script src="expect.js"></script>
-    <script src="jquery.expect.js"></script>
+    <div id="progressbar"></div>
+
+    <div id="mocha"></div>
+
+    <script src="dependencies.js"></script>
+    <script src="loader.js"></script>
+    <script src="vendor/mocha.js"></script>
+    <script src="vendor/expect.js"></script>
+    <script src="vendor/jquery.expect.js"></script>
     <script>
         mocha.ui("bdd");
         mocha.reporter("html");
     </script>
-    <script type="text/javascript" src="../jquery.jWizard.js"></script>
-    <script src="api.js"></script>
-    <script src="options.js"></script>
+    <script type="text/javascript" src="../src/wizard.js"></script>
+    <script type="text/javascript" src="../src/progressbar.js"></script>
+    <script src="wizard.js"></script>
+    <script src="progressbar.js"></script>
     <script>
         (window.mochaPhantomJS || mocha).run();
     </script>
