@@ -39,6 +39,52 @@
             releases as I get it back up to feature parity as well as keeping
             the test coverage as complete as possible.
           </div>
+          <h2>Usage</h2><p>Include the JS and CSS as you would expect:</p>
+
+<pre><code>&lt;script src=&quot;jquery.jWizard.js&quot;&gt;&lt;/script&gt;
+&lt;link href=&quot;jquery.jWizard.css&quot; rel=&quot;stylesheet&quot;&gt;</code></pre>
+
+<p>A wizard can be comprised of a <code>&lt;form&gt;</code>, but any other (block-level) element,
+like <code>&lt;div&gt;</code> will also work.</p>
+
+<pre><code>&lt;form id=&quot;wizard&quot;&gt;
+  &lt;!-- steps will go here --&gt;
+&lt;/form&gt;
+
+&lt;!-- or --&gt;
+
+&lt;div id=&quot;wizard&quot;&gt;
+    &lt;!-- steps will go here --&gt;
+&lt;/div&gt;</code></pre>
+
+<p>A step can also be made up of just about any (block-level) element as well.</p>
+
+<ul><li>If using a <code>&lt;fieldset&gt;</code>, the <code>&lt;legend&gt;</code> element will contain the step&#39;s title.</li><li>If using any other element, add a <code>title</code> or <code>data-jwizard-title</code> attribute to specify a title</li></ul>
+
+<p>For example:</p>
+
+<pre><code>&lt;fieldset&gt;
+    &lt;!-- step title --&gt;
+    &lt;legend&gt;Step 1&lt;/legend&gt;
+
+    &lt;!-- step content --&gt;
+&lt;/fieldset&gt;
+
+&lt;!-- or --&gt;
+
+&lt;div title=&quot;Step 1&quot;&gt;
+    &lt;!-- step content --&gt;
+&lt;/div&gt;
+
+&lt;!-- or --&gt;
+
+&lt;div data-jwizard-title=&quot;Step 1&quot;&gt;
+    &lt;!-- step content --&gt;
+&lt;/div&gt;</code></pre>
+
+<p>Lastly, initialize the wizard via JS:</p>
+
+<pre><code>$(&quot;#wizard&quot;).jWizard();</code></pre>
           <h2>Demonstration</h2>
           <div class="row-fluid">
             <div class="span9">
