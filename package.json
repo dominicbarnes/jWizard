@@ -1,14 +1,8 @@
 {
   "name": "jWizard",
-  "version": "1.7.0",
+  "version": "2.0.0",
+  "private": true,
   "description": "A wizard widget based on jQuery UI",
-  "main": "jquery.jWizard.js",
-  "directories": {
-    "test": "test"
-  },
-  "scripts": {
-    "test": "./node_modules/.bin/mocha-phantomjs test/test.html"
-  },
   "repository": {
     "type": "git",
     "url": "git://github.com/dominicbarnes/jWizard.git"
@@ -21,8 +15,6 @@
   ],
   "author": "Dominic Barnes <dominic@dbarnes.info>",
   "license": "MIT",
-  "readmeFilename": "README.md",
-  "gitHead": "1096b1bbfea68e97e29111364d5ca4d81a8b776c",
   "devDependencies": {
     "grunt": "~0.4.0",
     "grunt-cli": "~0.1.6",

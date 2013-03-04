@@ -147,7 +147,6 @@ module.exports = function (grunt) {
     ]);
 
     grunt.registerTask("test", [ "test-latest" ]);
-    grunt.registerTask("test-all", [ "test-oldest", "test-latest" ]);
     grunt.registerTask("test-latest", [ "testversions:1.9.1:1.10.1" ]);
     grunt.registerTask("test-oldest", [ "testversions:1.7.0:1.8.7" ]);
 };
