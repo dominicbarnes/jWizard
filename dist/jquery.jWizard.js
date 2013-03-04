@@ -2,7 +2,7 @@
  * jWizard: a jQuery UI Wizard Widget
  *
  * @author Dominic Barnes <dominic@dbarnes.info>
- * @version 1.7.0
+ * @version 2.0.0
  */
 (function ($, undefined) {
 
