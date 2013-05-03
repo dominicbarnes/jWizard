@@ -302,7 +302,8 @@ $.widget("db.jWizard", {
      * isolate them from the rest of the widget.
      */
     _buildSteps: function () {
-        var $steps = this.$steps = this.element.children();
+    	var o = this.options;
+    	var $steps = this.$steps = this.element.children(o.allowedStepTags);
 
         $steps.addClass("jw-step").each(function () {
             var $step = $(this), title;
@@ -585,6 +586,8 @@ $.widget("db.jWizard", {
     },
 
     options: {
+    	allowedStepTags: "div, fieldset, section, aside, article, table",
+
         title: true,
 
         menu: true,
