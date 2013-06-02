@@ -1,5 +1,8 @@
 /**
- * A minimal configuration wizard widget
+ * jWizard: a jQuery UI Wizard Widget
+ *
+ * @author Dominic Barnes <dominic@dbarnes.info>
+ * @version {{VERSION}}
  *
  * @required jQuery
  * @required jQuery UI Widget Factory
