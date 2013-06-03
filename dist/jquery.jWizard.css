@@ -1,7 +1,3 @@
-.ui-progressbar .ui-progressbar-label {
-  text-align: center;
-}
-
 .jw-widget .jw-header {
   padding: 0.5em;
 }
@@ -46,4 +42,7 @@
 .jw-widget .jw-footer .jw-buttons .jw-button-next,
 .jw-widget .jw-footer .jw-buttons .jw-button-finish {
   float: right;
+}
+.ui-progressbar .ui-progressbar-label {
+  text-align: center;
 }
