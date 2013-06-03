@@ -1,0 +1,20 @@
+extend ../layouts/example
+
+block content
+  h1 Custom Buttons
+  p
+    | Each button has a configuration hash that has full control over the
+    | generated HTML. (see main docs)
+  form#example-buttons
+    fieldset
+      legend Step 1
+      p Step 1
+    fieldset
+      legend Step 2
+      p Step 2
+    fieldset
+      legend Step 3
+      p Step 3
+
+block script
+  include buttons.js

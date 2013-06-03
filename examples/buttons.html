@@ -6,7 +6,12 @@
     <link rel="stylesheet" type="text/css" href="../dist/jquery.jWizard.css">
   </head>
   <body>
-    <form id="example">
+    <h1>Custom Buttons</h1>
+    <p>
+      Each button has a configuration hash that has full control over the
+      generated HTML. (see main docs)
+    </p>
+    <form id="example-buttons">
       <fieldset>
         <legend>Step 1</legend>
         <p>Step 1</p>
@@ -23,7 +28,30 @@
     <script src="http://code.jquery.com/jquery-1.10.0.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="../dist/jquery.jWizard.js"></script><script type="text/javascript">
-$("#example").jWizard();
+$("#example-buttons").jWizard({
+    buttons: {
+        // remove the cancel button altogether
+        cancel: false,
+
+        // override the default text only
+        prev: {
+            text: "Back"
+        },
+
+        // override the default text and icon
+        next: {
+            text: "Forward",
+            icons: {
+                secondary: "ui-icon-triangle-1-e"
+            }
+        },
+
+        // override the button type
+        finish: {
+            type: "submit"
+        }
+    }
+});
 </script>
   </body>
 </html>

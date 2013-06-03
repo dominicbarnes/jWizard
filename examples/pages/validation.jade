@@ -1,0 +1,28 @@
+extend ../layouts/example
+
+block content
+  h1 Form Validation
+  p
+    | Each button has a configuration hash that has full control over the
+    | generated HTML. (see main docs)
+  form#example
+    fieldset#account
+      legend Account
+      div
+        label Username
+        input(type="text", name="username", minlength=2, required)
+      div
+        label Password
+        input(type="password", name="password", minlength=5, required)
+    fieldset#contact
+      legend Contact Information
+      div
+        label Email
+        input(type="email", name="email", required)
+      div
+        label Phone
+        input(type="text", name="phone")
+
+block script
+  script(src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js")
+  include validation.js

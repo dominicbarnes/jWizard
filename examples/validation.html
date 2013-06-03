@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>jWizard Examples</title>
+    <link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.min.css">
+    <link rel="stylesheet" type="text/css" href="../dist/jquery.jWizard.css">
+  </head>
+  <body>
+    <h1>Form Validation</h1>
+    <p>
+      Each button has a configuration hash that has full control over the
+      generated HTML. (see main docs)
+    </p>
+    <form id="example">
+      <fieldset id="account">
+        <legend>Account</legend>
+        <div>
+          <label>Username</label>
+          <input type="text" name="username" minlength="2" required>
+        </div>
+        <div>
+          <label>Password</label>
+          <input type="password" name="password" minlength="5" required>
+        </div>
+      </fieldset>
+      <fieldset id="contact">
+        <legend>Contact Information</legend>
+        <div>
+          <label>Email</label>
+          <input type="email" name="email" required>
+        </div>
+        <div>
+          <label>Phone</label>
+          <input type="text" name="phone">
+        </div>
+      </fieldset>
+    </form>
+    <script src="http://code.jquery.com/jquery-1.10.0.js"></script>
+    <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+    <script src="../dist/jquery.jWizard.js"></script>
+    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.js"></script><script type="text/javascript">
+$("#example")
+    .jWizard()
+    .validate();
+
+$("#account").on("stephide", function (e) {
+    if (!$(this).find(":input").valid()) {
+        return false;
+    }
+});
+</script>
+  </body>
+</html>

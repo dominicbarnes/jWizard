@@ -6,7 +6,25 @@
     <link rel="stylesheet" type="text/css" href="../dist/jquery.jWizard.css">
   </head>
   <body>
-    <form id="example">
+    <h1>No Progressbar</h1>
+    <p>To remove the progressbar from the wizard, simply use "false" as the config option</p>
+    <form id="example-none">
+      <fieldset>
+        <legend>Step 1</legend>
+        <p>Step 1</p>
+      </fieldset>
+      <fieldset>
+        <legend>Step 2</legend>
+        <p>Step 2</p>
+      </fieldset>
+      <fieldset>
+        <legend>Step 3</legend>
+        <p>Step 3</p>
+      </fieldset>
+    </form>
+    <h1>Customized Progressbar</h1>
+    <p>There are 2 main options for the progressbar: label and append (see main docs)</p>
+    <form id="example-custom">
       <fieldset>
         <legend>Step 1</legend>
         <p>Step 1</p>
@@ -23,7 +41,16 @@
     <script src="http://code.jquery.com/jquery-1.10.0.js"></script>
     <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
     <script src="../dist/jquery.jWizard.js"></script><script type="text/javascript">
-$("#example").jWizard();
+$("#example-none").jWizard({
+    progress: false
+});
+
+$("#example-custom").jWizard({
+    progress: {
+        label: "percentage",
+        append: "Done"
+    }
+});
 </script>
   </body>
 </html>
