@@ -67,7 +67,11 @@ $.widget("db.jWizard", {
     },
 
     next: function () {
-        return this.step(this.$current.next());
+        var next = $.Event("stepnext")
+        this.$current.trigger(next);
+        if (!next.isDefaultPrevented()) {
+            return this.step(this.$current.next());
+        }
     },
 
     finish: function () {
@@ -84,6 +88,7 @@ $.widget("db.jWizard", {
         }
 
         function goback() {
+	        wizard._enableButtons();
             wizard._enter(wizard.$current).then(dfd.resolve, dfd.reject);
         }
 
@@ -254,7 +259,7 @@ $.widget("db.jWizard", {
         if (this.$menu) return;
 
         this.$menu = $("<ol>", {
-            class: "jw-menu",
+            "class": "jw-menu",
             html: $.map(this.$steps, function (step) {
                 var title = $(step).data("jwizard-title");
                 return '<li><a href="javascript:void(0);">' + title + '</a>';
@@ -342,11 +347,13 @@ $.widget("db.jWizard", {
 
             delete options.icons;
 
-            options.class = options["class"] || "";
-            options.class += " jw-button-" + type;
+            options["class"] = options["class"] || "";
+            options["class"] += " jw-button-" + type;
 
             if (data) {
-                wizard["$" + type] = $('<button>', options)
+                wizard["$" + type] = $('<button type="' + options.type + '">')
+                    .addClass(options["class"])
+                    .text(options.text)
                     .button({
                         icons: icons
                     })
