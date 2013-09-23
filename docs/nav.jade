@@ -1,13 +1,23 @@
-.navbar.navbar-static-top
-  .navbar-inner
-    .container-fluid
-      a.btn.btn-navbar(data-toggle="collapse", data-target=".nav-collapse")
-        span.icon-bar
-        span.icon-bar
-        span.icon-bar
-      a.brand(href="/") Dominic Barnes
-      .nav-collapse
-        ul.nav
-          li: a(href="/") About Me
-          li.active: a(href="/jWizard") jWizard
-          li: a(href="/node-couchdb-api") node-couchdb-api
+nav.navbar.navbar-default.navbar-fixed-top(role="navigation")
+  .navbar-header
+    button.navbar-toggle(type="button", data-toggle="collapse", data-target=".navbar-collapse")
+      span.sr-only Toggle Navigation
+      span.icon-bar
+      span.icon-bar
+      span.icon-bar
+    a.navbar-brand(href="/") Dominic Barnes
+  .collapse.navbar-collapse
+    ul.nav.navbar-nav
+      li: a(href="/") About Me
+      li.dropdown.active
+        a.dropdown-toggle(href="/jWizard", data-toggle="dropdown")="jWizard "
+          b.caret
+        ul.dropdown-menu
+          li: a(href="#demo") Demonstration
+          li: a(href="#options") Options
+          li: a(href="#events") Events
+          li: a(href="#progressbar") Progressbar
+          li: a(href="#examples") Examples
+          li: a(href="#changelog") Change History
+          li: a(href="#developers") Developers
+      li: a(href="/node-couchdb-api") node-couchdb-api

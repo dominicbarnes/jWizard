@@ -14,12 +14,7 @@ jQuery(function ($) {
                 alert("Finish");
             }
         });
-        
-        $(this).parent().remove();
-    });
-    
-    $("#toc").tocify({
-        context: "#main",
-        selectors: "h2,h3,h4"
+
+        $(this).remove();
     });
 });
