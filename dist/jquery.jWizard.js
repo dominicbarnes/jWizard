@@ -180,7 +180,7 @@ $.widget("db.jWizard", {
     _buildTitle: function () {
         if (this.$title) return;
 
-        this.$title = $('<h2 class="jw-title" />');
+        this.$title = $('<div class="jw-title" />');
 
         this.$header = $('<div class="jw-header ui-widget-header ui-corner-top ui-helper-clearfix">')
             .append(this.$title)
@@ -265,7 +265,7 @@ $.widget("db.jWizard", {
         if (this.$menu) return;
 
         this.$menu = $("<ol>", {
-            class: "jw-menu",
+            "class": "jw-menu",
             html: $.map(this.$steps, function (step) {
                 var title = $(step).data("jwizard-title");
                 return '<li><a href="javascript:void(0);">' + title + '</a>';
@@ -353,8 +353,8 @@ $.widget("db.jWizard", {
 
             delete options.icons;
 
-            options.class = options["class"] || "";
-            options.class += " jw-button-" + type;
+            options["class"] = options["class"] || "";
+            options["class"] += " jw-button-" + type;
 
             if (data) {
                 wizard["$" + type] = $('<button>', options)
@@ -362,6 +362,8 @@ $.widget("db.jWizard", {
                         icons: icons
                     })
                     .appendTo($footer.children(".jw-buttons"));
+            } else {
+                wizard["$" + type] = $(); // empty jQuery object
             }
         });
 
@@ -407,29 +409,23 @@ $.widget("db.jWizard", {
      * @see this._changeStep()
      */
     _updateButtons: function () {
-        var $steps   = this.$steps,
-            $current = this.$current,
-            $prev    = this.$prev,
-            $next    = this.$next,
-            $finish  = this.$finish;
-
-        switch ($current.index()) {
+        switch (this.$current.index()) {
         case 0:
-            $prev.hide();
-            $next.show();
-            $finish.hide();
+            this._hide(this.$prev);
+            this._show(this.$next);
+            this._hide(this.$finish);
             break;
 
-        case $steps.length - 1:
-            $prev.show();
-            $next.hide();
-            $finish.show();
+        case this.$steps.length - 1:
+            this._show(this.$prev);
+            this._hide(this.$next);
+            this._show(this.$finish);
             break;
 
         default:
-            $prev.show();
-            $next.show();
-            $finish.hide();
+            this._show(this.$prev);
+            this._show(this.$next);
+            this._hide(this.$finish);
             break;
         }
     },

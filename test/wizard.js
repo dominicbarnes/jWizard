@@ -30,7 +30,7 @@ describe("$.db.jWizard", function () {
         });
 
         it("should add 'ui-widget' and 'jw-widget' classes to root", function () {
-            $expect($wizard).to.have.class("ui-widget jw-widget");
+            $expect($wizard).to.have["class"]("ui-widget jw-widget");
         });
 
         describe(".jw-header", function () {
@@ -43,7 +43,7 @@ describe("$.db.jWizard", function () {
 
             it("should create a header", function () {
                 $expect($header).to.exist()
-                    .and.have.class("ui-widget-header ui-corner-top");
+                    .and.have["class"]("ui-widget-header ui-corner-top");
             });
 
             it("should create a title element", function () {
@@ -68,7 +68,7 @@ describe("$.db.jWizard", function () {
 
             it("should create a content region (with some utility classes)", function () {
                 $expect($content).to.exist()
-                    .and.have.class("ui-widget-content ui-helper-clearfix");
+                    .and.have["class"]("ui-widget-content ui-helper-clearfix");
             });
 
             it("should create a wrapper for steps", function () {
@@ -92,7 +92,7 @@ describe("$.db.jWizard", function () {
             });
 
             it("should create a menu widget", function () {
-                $expect($menu).to.have.class("ui-menu");
+                $expect($menu).to.have["class"]("ui-menu");
             });
         });
 
@@ -109,7 +109,7 @@ describe("$.db.jWizard", function () {
 
             it("should create a footer", function () {
                 $expect($footer).to.exist()
-                    .and.have.class("ui-widget-header ui-corner-bottom");
+                    .and.have["class"]("ui-widget-header ui-corner-bottom");
             });
 
             it("should create a wrapper for the buttons", function () {
@@ -126,8 +126,8 @@ describe("$.db.jWizard", function () {
                 it("should create a button element", function () {
                     $expect($cancel).to.exist()
                         .and.have.attr("type", "reset")
-                        .and.have.class("ui-state-default ui-corner-all")
-                        .and.have.class("ui-priority-secondary");
+                        .and.have["class"]("ui-state-default ui-corner-all")
+                        .and.have["class"]("ui-priority-secondary");
                 });
 
                 it("should trigger cancel when clicked", function (done) {
@@ -151,7 +151,7 @@ describe("$.db.jWizard", function () {
                 it("should create a button element", function () {
                     $expect($prev).to.exist()
                         .and.have.attr("type", "button")
-                        .and.have.class("ui-state-default ui-corner-all")
+                        .and.have["class"]("ui-state-default ui-corner-all")
                         .and.be.visible();
                 });
 
@@ -189,7 +189,7 @@ describe("$.db.jWizard", function () {
                 it("should create a button element", function () {
                     $expect($next).to.exist()
                         .and.have.attr("type", "button")
-                        .and.have.class("ui-state-default ui-corner-all")
+                        .and.have["class"]("ui-state-default ui-corner-all")
                         .and.be.visible();
                 });
 
@@ -225,8 +225,8 @@ describe("$.db.jWizard", function () {
                 it("should create a button element", function () {
                     $expect($finish).to.exist()
                         .and.have.attr("type", "submit")
-                        .and.have.class("ui-state-default ui-corner-all")
-                        .and.have.class("ui-state-highlight")
+                        .and.have["class"]("ui-state-default ui-corner-all")
+                        .and.have["class"]("ui-state-highlight")
                         .and.be.visible();
                 });
 
@@ -261,11 +261,11 @@ describe("$.db.jWizard", function () {
         });
 
         it("should remove the ui-widget and jw-widget classes", function () {
-            $expect($wizard).to.not.have.class("ui-widget jw-widget");
+            $expect($wizard).to.not.have["class"]("ui-widget jw-widget");
         });
 
         it("should remove the jw-hasprogress class", function () {
-            $expect($wizard).to.not.have.class("jw-hasprogress");
+            $expect($wizard).to.not.have["class"]("jw-hasprogress");
         });
 
         it("should remove the header region", function () {
@@ -375,18 +375,18 @@ describe("$.db.jWizard", function () {
 
             it("should not have any extra classes before the active step", function () {
                 $expect($items.slice(0, step))
-                    .to.not.have.class("ui-state-highlight ui-state-disabled");
+                    .to.not.have["class"]("ui-state-highlight ui-state-disabled");
             });
 
             it("should have both a highlight and disabled class on the active step", function () {
                 $expect($items.eq(1))
-                    .to.have.class("ui-state-highlight ui-state-disabled");
+                    .to.have["class"]("ui-state-highlight ui-state-disabled");
             });
 
             it("should have only a disabled class after the active step", function () {
                 $expect($items.slice(step + 1))
-                    .to.have.class("ui-state-disabled")
-                    .and.not.have.class("ui-state-highlight");
+                    .to.have["class"]("ui-state-disabled")
+                    .and.not.have["class"]("ui-state-highlight");
             });
         });
 
@@ -587,7 +587,7 @@ describe("$.db.jWizard", function () {
             });
 
             it("should not include the jw-hasmenu class on the root", function () {
-                $expect($wizard).to.not.have.class("jw-hasmenu");
+                $expect($wizard).to.not.have["class"]("jw-hasmenu");
             });
 
             it("should not create a menu element", function () {
@@ -610,31 +610,47 @@ describe("$.db.jWizard", function () {
 
         describe(".buttons", function () {
             describe(".cancel", function () {
-                before(function () {
-                    $wizard.jWizard({
-                        buttons: { cancel: false }
-                    });
-                });
-
-                after(function () {
+                afterEach(function () {
                     $wizard.jWizard("destroy");
                 });
 
                 it("should not add a cancel button", function () {
+                    $wizard.jWizard({
+                        buttons: { cancel: false }
+                    });
+
                     $expect($wizard).to.not.have("button.jw-button-cancel");
-                });
-
-                it("should restore the cancel button", function () {
-                    var original = $.db.jWizard.prototype.options.buttons.cancel;
-
-                    $wizard.jWizard("option", "buttons.cancel", original);
-
-                    $expect($wizard).to.have("button.jw-button-cancel");
                 });
             });
 
             describe(".prev", function () {
-                before(function () {
+                afterEach(function () {
+                    $wizard.jWizard("destroy");
+                });
+
+                it("should change attributes of the previous button", function () {
+                    $wizard.jWizard({
+                        buttons: {
+                            prev: { text: "Back" }
+                        }
+                    });
+
+                    $expect($wizard).to.have("button.jw-button-prev")
+                        .that.has.text("Back");
+                });
+
+                it("should not change other default attributes of the previous button", function () {
+                    $wizard.jWizard({
+                        buttons: {
+                            prev: {}
+                        }
+                    });
+
+                    $expect($wizard).to.have("button.jw-button-prev")
+                        .that.has.attr("type", "button");
+                });
+
+                it("should change the text of the button", function () {
                     $wizard.jWizard({
                         buttons: {
                             prev: {
@@ -642,115 +658,135 @@ describe("$.db.jWizard", function () {
                             }
                         }
                     });
-                });
 
-                after(function () {
-                    $wizard.jWizard("destroy");
-                });
-
-                it("should change attributes of the previous button", function () {
-                    $expect($wizard).to.have("button.jw-button-prev")
-                        .that.has.text("Back");
-                });
-
-                it("should not change other default attributes of the previous button", function () {
-                    $expect($wizard).to.have("button.jw-button-prev")
-                        .that.has.attr("type", "button");
-                });
-
-                it("should change the text of the button", function () {
                     $wizard.jWizard("option", "buttons.prev.text", "Go Back");
 
                     $expect($wizard).to.have("button.jw-button-prev").that.has.text("Go Back");
                 });
-            });
 
-            describe(".next", function () {
-                before(function () {
+                it("should still allow steps to be changed when removed", function () {
                     $wizard.jWizard({
                         buttons: {
-                            next: {
-                                text: "Forward"
-                            }
+                            prev: false
                         }
                     });
                 });
+            });
 
-                after(function () {
+            describe(".next", function () {
+                afterEach(function () {
                     $wizard.jWizard("destroy");
                 });
 
                 it("should change attributes of the next button", function () {
+                    $wizard.jWizard({
+                        buttons: {
+                            next: { text: "Forward" }
+                        }
+                    });
+
                     $expect($wizard).to.have("button.jw-button-next")
                         .that.has.text("Forward");
                 });
 
                 it("should not change default attributes of the next button", function () {
+                    $wizard.jWizard({
+                        buttons: {
+                            next: {}
+                        }
+                    });
+
                     $expect($wizard).to.have("button.jw-button-next")
                         .that.has.attr("type", "button");
+                });
+
+                it("should still allow steps to be changed when removed", function () {
+                    $wizard.jWizard({
+                        buttons: {
+                            next: false
+                        }
+                    });
                 });
             });
 
             describe(".finish", function () {
-                before(function () {
-                    $wizard.jWizard({
-                        buttons: {
-                            finish: {
-                                type: "button",
-                                class: ""
-                            }
-                        }
-                    });
-                });
-
-                after(function () {
+                afterEach(function () {
                     $wizard.jWizard("destroy");
                 });
 
                 it("should change the type of the finish button", function () {
+                    $wizard.jWizard({
+                        buttons: {
+                            finish: { type: "button" }
+                        }
+                    });
+
                     $expect($wizard).to.have("button.jw-button-finish")
                         .that.has.attr("type", "button");
                 });
 
                 it("should change the class of the finish button", function () {
+                    $wizard.jWizard({
+                        buttons: {
+                            finish: { "class": "" }
+                        }
+                    });
+
                     $expect($wizard).to.have("button.jw-button-finish")
-                        .that.not.have.class("ui-priority-primary ui-state-highlight");
+                        .that.not.have["class"]("ui-priority-primary ui-state-highlight");
                 });
 
                 it("should not change default attributes of the finish button", function () {
+                    $wizard.jWizard({
+                        buttons: {
+                            finish: {}
+                        }
+                    });
+
                     $expect($wizard).to.have("button.jw-button-finish")
                         .that.has.text("Finish");
+                });
+
+                it("should still allow steps to be changed when removed", function () {
+                    $wizard.jWizard({
+                        buttons: {
+                            finish: false
+                        }
+                    });
                 });
             });
         });
 
         describe(".progress", function () {
-            before(function () {
-                $wizard.jWizard({
-                    progress: {
-                        label:    "percentage",
-                        append:   "Done",
-                        location: ".jw-footer"
-                    }
-                });
-            });
-
-            after(function () {
+            afterEach(function () {
                 $wizard.jWizard("destroy");
             });
 
             it("should change the text (label and append)", function () {
+                $wizard.jWizard({
+                    progress: {
+                        label: "percentage",
+                        append: "Done"
+                    }
+                });
+
                 $expect($wizard).to.have(".ui-progressbar").that.has.text("0% Done");
             });
 
             it("should change the location", function () {
+                $wizard.jWizard({
+                    progress: { location: ".jw-footer" }
+                });
+
                 $expect($wizard).to.have(".jw-footer .ui-progressbar");
             });
 
             it("should change the progressbar options", function () {
-                $wizard.jWizard("option", "progress.label", "count");
+                $wizard.jWizard({
+                    progress: { label: "count" }
+                });
 
-                $expect($wizard).to.have(".ui-progressbar").that.has.text("0 of 3 Done");
+                $expect($wizard).to.have(".ui-progressbar").that.has.text("0 of 3 Complete");
             });
         });
 
@@ -764,7 +800,7 @@ describe("$.db.jWizard", function () {
             });
 
             it("should make the entire widget disabled after init", function () {
-                $expect($wizard).to.have.class("ui-state-disabled");
+                $expect($wizard).to.have["class"]("ui-state-disabled");
             });
         });
     });
