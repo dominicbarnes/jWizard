@@ -16,37 +16,50 @@ deps: node_modules
 node_modules: package.json
 	npm install
 
+
 dist: dist/jquery.jWizard.min.js dist/jquery.jWizard.min.css
 
-%.min.js: %.js
-	$(UGLIFY) $< > $@
-
-%.min.css: %.css
-	$(LESS) --compress $< > $@
-
 dist/jquery.jWizard.js: src/head.txt src/wizard.js src/progressbar.js src/foot.txt
+	mkdir -p dist/
 	cat $^ > $@
 
-dist/jquery.jWizard.css: src/wizard.less src/progressbar.less
+dist/jquery.jWizard.css: $(wildcard src/*.less)
 	cat $^ | $(LESS) - > $@
+
+%.min.js: %.js | node_modules
+	$(UGLIFY) $< > $@
+
+%.min.css: %.css | node_modules
+	$(LESS) --compress $< > $@
+
 
 jshint:
 	$(JSHINT) --config src/.jshintrc src/
 	$(JSHINT) --config test/.jshintrc test/*.js
 
-docs: docs/build/app.js docs/build/app.css docs/build/index.html
 
-docs/build/app.js: docs/js/jquery.js docs/js/jquery-ui.js docs/js/bootstrap.js docs/js/jquery.tocify.min.js dist/jquery.jWizard.min.js docs/js/app.js
+docs: docs/build/index.html docs/build/app.js docs/build/app.css docs/build/fonts docs/build/images
+
+docs/build/index.html: $(wildcard docs/*.jade) $(wildcard docs/examples/*)
+	mkdir -p docs/build/
+	$(JADE) --path docs/index.jade < docs/index.jade > $@
+
+docs/build/app.js: docs/js/jquery.js docs/js/jquery-ui.js docs/js/bootstrap.js dist/jquery.jWizard.min.js docs/js/app.js
 	$(UGLIFY) $^ > $@
 
-docs/build/app.css: docs/css/bootstrap.css docs/css/fontawesome.css docs/css/jquery-ui.css docs/css/jquery.tocify.css dist/jquery.jWizard.min.css docs/css/style.css
+docs/build/app.css: docs/css/bootstrap.css docs/css/bootstrap-theme.css docs/css/jquery-ui.css dist/jquery.jWizard.min.css docs/css/style.css
 	cat $^ | $(LESS) --compress - > $@
 
-docs/build/index.html: docs/index.jade
-	$(JADE) --path $< < $^ > $@
+docs/build/fonts: docs/fonts
+	cp -Rf $< $@
 
-examples:
-	$(JADE) examples/pages --out examples/ --pretty
+docs/build/images: docs/images
+	cp -Rf $< $@
+
+
+examples/%.html: docs/examples/%.jade
+	$(JADE) --path examples/ $< < $< > $@
+
 
 test: test/dependencies.js
 	$(MOCHA) -R dot test/runner.html
@@ -56,7 +69,5 @@ test/dependencies.js:
 	echo 'window.versions.jquery = "$(JQUERY)";' >> $@
 	echo 'window.versions.jqueryui = "$(JQUERYUI)";' >> $@
 
-clean:
-	rm -f $(HTML)
 
 .PHONY: all jshint examples test test/dependencies.js clean

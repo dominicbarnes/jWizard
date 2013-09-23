@@ -2,3 +2,5 @@ node_modules
 npm-debug.log
 
 test/dependencies.js
+
+docs/build/
