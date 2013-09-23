@@ -1,0 +1,25 @@
+.row.example
+  .col-md-3
+    .panel.panel-default
+      .panel-heading: b Validation Example
+      .panel-body: p
+        | Each button has a configuration hash that has full control over the
+        | generated HTML. (see main docs)
+  .col-md-9
+    form#example-validation
+      fieldset#account
+        legend Account
+        div
+          label Username
+          input(type="text", name="username", minlength=2, required)
+        div
+          label Password
+          input(type="password", name="password", minlength=5, required)
+      fieldset#contact
+        legend Contact Information
+        div
+          label Email
+          input(type="email", name="email", required)
+        div
+          label Phone
+          input(type="text", name="phone")
