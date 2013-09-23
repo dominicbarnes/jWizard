@@ -45,7 +45,6 @@
     "couch":        false,
     "devel":        true,
     "dojo":         false,
-    "es5":          true,
     "esnext":       false,
     "jquery":       true,
     "mootools":     false,

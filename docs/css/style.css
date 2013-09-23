@@ -1,5 +1,3 @@
-body > .container-fluid { padding-top: 1em; }
-.hero-unit .alert { margin: 0; }
-.jw-title { font-size: 1.2em; }
-dl.dl-horizontal dt { width: 5em; }
-dl.dl-horizontal dd { margin-left: 6em; }
+body { padding-top: 70px; }
+.row.example { margin-bottom: 10px; }
+.text-justify { text-align: justify; }

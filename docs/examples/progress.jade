@@ -1,0 +1,39 @@
+.row.example
+  .col-md-3
+    .panel.panel-default
+      .panel-heading: b No Progressbar
+      .panel-body
+        :markdown
+          To remove the progressbar from the wizard,
+          simply use `false` as the config option
+  .col-md-9
+    form#example-none
+      fieldset
+        legend Step 1
+        p Step 1
+      fieldset
+        legend Step 2
+        p Step 2
+      fieldset
+        legend Step 3
+        p Step 3
+
+.row.example
+  .col-md-3
+    .panel.panel-default
+      .panel-heading: b Custom Progressbar
+      .panel-body
+        :markdown
+          There are 2 main options for the progressbar:
+          `label` and `append` (see [progressbar](#progressbar) documentation)
+  .col-md-9
+    form#example-custom
+      fieldset
+        legend Step 1
+        p Step 1
+      fieldset
+        legend Step 2
+        p Step 2
+      fieldset
+        legend Step 3
+        p Step 3

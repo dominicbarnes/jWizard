@@ -1,4 +1,5 @@
-h2 Developers
+#developers.page-header
+  h2 Developers
 
 :markdown
   For anyone who wants to hack on jWizard (would be much appreciated) with me,
@@ -17,19 +18,12 @@ h2 Developers
   addition, the version of each of those dependencies can be changed on the fly
   as well to run the suite against various version combinations.
 
-  **Grunt Tasks:**
-
-   * **test**: Runs the tests against whatever is defined in `test/dependencies.js`
-   * **test-latest**: Runs the tests against the latest supported versions of
-     jQuery/UI (currently 1.9.1 and 1.10.1 respectively)
-   * **test-oldest**: Runs the tests against the oldest supported versions of
-     jQuery/UI (currently 1.7.0 and 1.8.7 respectively)
+      make test
 
   To run tests against a specific version combination of jQuery and jQuery UI,
-  use the `testversions` task. It accepts the jQuery and jQuery UI version (in
-  that order) as `:` separated arguments. For example:
+  which can be specified via the command line:
 
-      grunt testversions:1.8.3:1.8.24
+      make test JQUERY=1.8.3 JQUERYUI=1.8.24
 
   will run the test suite against **jQuery 1.8.3** and **jQuery UI 1.8.24**.
 

@@ -1,0 +1,1 @@
+$("#example-default").jWizard();
