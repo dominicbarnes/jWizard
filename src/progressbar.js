@@ -8,7 +8,7 @@
  * @requires jQuery UI Widget Factory
  * @requires jQuery UI ProgressBar
  */
-$.widget("db.progressbar", $.ui.progressbar, {
+jQuery.widget("db.progressbar", $.ui.progressbar, {
     _create: function () {
         if (this._super) {
             this._super();
